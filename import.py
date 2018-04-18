@@ -10,4 +10,4 @@ import numpy as np
 
 mat = h5py.File('A5_pipe1_32C.mat')
 pixel = mat["p1"]
-pixel = np.array(pixel)
+pixel = np.array(pixel) 

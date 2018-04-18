@@ -11,7 +11,7 @@ import os
 import loader
 #import settings
 if os.name == 'posix':
-    os.nice(10)
+    os.nice(10) 
 
 #x_train = np.zeros((4982,1500))
 #x_train = np.zeros((4235,1500)) #0.85*4982

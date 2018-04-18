@@ -29,7 +29,7 @@ loader.ensureFolder("./PiCam/Plots/MRTS") ): # maybe RTS
 if len(rtsList) != 0:
 	with  open('./PiCam/RTS_list.txt',"w+") as fname:
 		for each in rtsList:
-			fname.write((each+"\n").replace('.png','').replace('_',' '))	
+			fname.write((each+"\n").replace('.png','').replace('_',' '))
 else:
 	print("DEBUG: Nothing in the RTS folder")
 if len(nonrtsList)!=0:

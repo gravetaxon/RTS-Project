@@ -11,7 +11,7 @@ import numpy as np
 import os
 import loader
 import settings
-import sys
+import sys 
 
 if os.name == 'posix':
     os.nice(10)
