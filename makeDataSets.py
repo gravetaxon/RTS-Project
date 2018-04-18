@@ -10,8 +10,8 @@ import numpy as np
 import os
 import loader
 #import settings
-
-os.nice(10)
+if os.name == 'posix':
+    os.nice(10)
 
 #x_train = np.zeros((4982,1500))
 #x_train = np.zeros((4235,1500)) #0.85*4982
@@ -260,7 +260,7 @@ if (arrayLen > 0):
         poseValue = settingsData[posbValue:].find('\n')
         settingsData=settingsData[:posbValue]+'FilterSize='+out+'\n'+settingsData[(posbValue+poseValue):]
 
-    settingsFile = open('./settings.py','w)
+    settingsFile = open('./settings.py','w')
     settingsData.replace('\n\n','\n')
     print (settingsData)
     bytesWritten = settingsFile.write(settingsData)

@@ -11,7 +11,8 @@ import random
 import settings
 from sklearn.preprocessing import scale
 
-#os.nice(10)
+if os.name == 'posix':
+    os.nice(10)
 
 x_test = np.load('./PiCam/x_test.npy')
 x_train = np.load('./PiCam/x_train.npy')

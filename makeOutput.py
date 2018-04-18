@@ -13,8 +13,8 @@ import loader
 import settings
 import sys
 
-
-os.nice(10)
+if os.name == 'posix':
+    os.nice(10)
 
 RTSRes = open("./Picam/modelOut.txt","w+")
 

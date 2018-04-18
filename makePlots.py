@@ -7,7 +7,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import loader
 import settings
-os.nice(10)
+if os.name == 'posix':
+    os.nice(10)
 
 pixel = loader.load()
 x = np.arange(0,1500)
@@ -29,12 +30,12 @@ if response =="Yes" or response == "yes" or response == "y" or response == "Y" :
          plt.close()
 else:
  print ("exiting...")
-             
+
 fname.close()
-        
-        
-        
-        
+
+
+
+
 #x = np.arange(0,500)
 
 #plt.plot(x,p)

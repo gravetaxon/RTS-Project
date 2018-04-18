@@ -7,7 +7,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import loader
 import settings
-os.nice(10)
+if os.name == 'posix':
+    os.nice(10)
 
 pixel = loader.load()
 x = np.arange(0,1500)
@@ -27,14 +28,14 @@ for line in fname:
         plt.savefig('./PiCam/Plots/RTSGuess/%d_%d' % (row,column))
         plt.plot(x,p)
         plt.close()
-        print ("*")	
+        print ("*")
 
-            
+
 fname.close()
-        
-        
-        
-        
+
+
+
+
 #x = np.arange(0,500)
 
 #plt.plot(x,p)
