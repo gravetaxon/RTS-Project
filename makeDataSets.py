@@ -110,10 +110,15 @@ if (nrtsTestCount > nrtsLen):
     print ("DEBUG: Error has occured! Math error for array size for nrts")
 
 # y dataset completed after this
-y_train[rtsLen:mrtsLen+rtsLen] =1
-y_train[mrtsLen+rtsLen:]=2
-y_test[rtsTestCount:(rtsTestCount+mrtsTestCount)]=1
-y_test[(rtsTestCount+mrtsTestCount):]=2
+# 0 - rts
+# 1 - nrts
+# 2 - mrts
+#
+
+y_train[rtsLen:nrtsLen+rtsLen] =1
+y_train[nrtsLen+rtsLen:]=2
+y_test[rtsTestCount:(rtsTestCount+nrtsTestCount)]=1
+y_test[(rtsTestCount+nrtsTestCount):]=2
 
 # x dataset is compiled by going through each set in turn and loading the speific pixel into the training dataset
 tr_count = 0 # training data counter
@@ -125,7 +130,7 @@ for each in rtsList:
             tr_count+=1
         else:
             print("DEBUG: Double check to insure selections are in the range of the data that is going to be used")
-for each in mrtsList:
+for each in nrtsList:
     if (each != ''):
         (row,col)=each.split()
         if (int(row)< supRow and int(col)<supCol):
@@ -133,8 +138,7 @@ for each in mrtsList:
             tr_count+=1
         else:
             print("DEBUG: Double check to insure selections are in the range of the data that is going to be used")
-
-for each in nrtsList:
+for each in mrtsList:
     if (each != ''):
         (row,col)=each.split()
         if (int(row)< supRow and int(col)<supCol):
@@ -168,19 +172,6 @@ if (rtsTestCount>0):
 else:
     print("DEBUG: No rts signals in the test set!!")
 
-if (mrtsTestCount>0):
-    for i in range(0,mrtsTestCount):
-        each = mrtsList[i]
-        if each != '':
-            (row,col)= each.split()
-            if int(row)< supRow and int(col)<supCol:
-                x_test[td_count]=(pixel[0:1500,int(row),int(col)])
-                td_count+=1
-            else:
-                print("DEBUG: Double check to insure selections are in the range of the data that is going to be used")
-else:
-    print("DEBUG: No possible rts signals in the test set!!")
-
 if (nrtsTestCount>0):
     for i in range(0,nrtsTestCount):
         each = nrtsList[i]
@@ -195,6 +186,19 @@ else:
     print("DEBUG: No whitenoise signals in the test set!!")
 status = False # If this is false program does *NOT* write the new npy
                # outputs at the end
+
+if (mrtsTestCount>0):
+    for i in range(0,mrtsTestCount):
+        each = mrtsList[i]
+        if each != '':
+            (row,col)= each.split()
+            if int(row)< supRow and int(col)<supCol:
+                x_test[td_count]=(pixel[0:1500,int(row),int(col)])
+                td_count+=1
+            else:
+                print("DEBUG: Double check to insure selections are in the range of the data that is going to be used")
+else:
+    print("DEBUG: No possible rts signals in the test set!!")
 
 # Here we do the prime magic on the training dataset!
 # take the length of the training dataset and use prime factorization on it
