@@ -6,7 +6,7 @@ include/
 lib/
 Lib/
 pip-selfcheck.json
-
+*.mat
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
