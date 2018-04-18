@@ -41,6 +41,14 @@ else:
     print("we have a problem")
 
 # Open the input files
+
+# Add commandline parsing
+
+
+
+
+
+
 rtsFile = open('./PiCam/RTS_list.txt','r')
 mrtsFile = open('./PiCam/MRTS_list.txt','r')
 nrtsFile = open('./PiCam/NRTS_list.txt','r')
