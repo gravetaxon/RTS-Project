@@ -26,6 +26,8 @@ loader.ensureFolder("./PiCam/Plots/MRTS") ): # maybe RTS
             mrtsList = os.listdir('./PiCam/Plots/MRTS')
         else:
             print ('.') # debug tool to see if anything is happening at all
+    # clean each list of 'weird' files #_#.png or #_# only
+    
 if len(rtsList) != 0:
 	with  open('./PiCam/RTS_list.txt',"w+") as fname:
 		for each in rtsList:
@@ -35,12 +37,12 @@ else:
 if len(nonrtsList)!=0:
 	with open('./PiCam/NRTS_list.txt',"w+") as gname:
 		for each in nonrtsList:
-			gname.write((each+"\n").replace('_', ' '))
+			gname.write((each+"\n").replace('.png','').replace('_', ' '))
 else:
 	print("DEBUG: Nothing in the NRTS folder")
 if len(mrtsList)!=0:
 	with open('./PiCam/MRTS_list.txt',"w+") as hname:
 		for each in mrtsList:
-			hname.write((each+"\n").replace('_',' '))
+			hname.write((each+"\n").replace('.png','').replace('_',' '))
 else:
 	print("DEBUG: Nothing in the MRTS folder")
