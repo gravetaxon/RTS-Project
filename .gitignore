@@ -1,3 +1,7 @@
+#virtualenv files
+tcl/
+pip-selfcheck.json
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -14,6 +18,7 @@ dist/
 downloads/
 eggs/
 .eggs/
+Include
 lib/
 lib64/
 parts/
@@ -89,7 +94,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
-
+Scripts/
 # Spyder project settings
 .spyderproject
 .spyproject
