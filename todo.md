@@ -1,3 +1,3 @@
 - [ ]   add old list parsing into makeList.py 
-- [ x ] modify makeList to accept arguments
+- [x] modify makeList to accept arguments
 - [ ]   verify operation in binary mode
