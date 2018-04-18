@@ -1,7 +1,6 @@
 #!/usr/local/bin/python3
 import os
 import h5py
-import pylab
 import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
