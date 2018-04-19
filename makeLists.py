@@ -1,3 +1,7 @@
+# 
+#
+#
+#
 import matplotlib
 matplotlib.use('Agg')
 import pylab
@@ -27,7 +31,7 @@ loader.ensureFolder("./PiCam/Plots/MRTS") ): # maybe RTS
         else:
             print ('.') # debug tool to see if anything is happening at all
     # clean each list of 'weird' files #_#.png or #_# only
-    
+
 if len(rtsList) != 0:
 	with  open('./PiCam/RTS_list.txt',"w+") as fname:
 		for each in rtsList:
