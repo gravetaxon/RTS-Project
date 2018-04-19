@@ -46,6 +46,6 @@ def smallest_power(x,m):
         i+=1
         testCon = m**i
     if (i-1) >0:
-        return (i-1)
+        return m**(i-1)
     else:
-        return 1	
+        return m	
