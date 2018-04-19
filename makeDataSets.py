@@ -9,6 +9,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 import loader
+import argparse
+import os, os.path
+from pathlib import Path
+
 #import settings
 if os.name == 'posix':
     os.nice(10)
@@ -44,14 +48,52 @@ else:
 
 # Add commandline parsing
 
+parser = argparse.ArgumentParser(prog='makeDataSets.py', description="Creates the numpy dataset for train, testing, and running keras models")
+parser.add_argument("-r","--rtsPath",type=str, help="rtslist file that contains rts signals in col_row format")
+parser.add_argument("-n", "--nrtsPath",type=str, help="nrtslist file that contains whitenoise signals")
+parser.add_argument("-m", "--mrtsPath",type=str, help="mrtsList file that has possible rts signals")
+parser.add_argument("-tr","--testrtsPath",type=str, help="rtsTestlist file that contains rts signals in col_row format for the testing data")
+parser.add_argument("-tn", "--testnrtsPath",type=str, help="nrtsTestlist file that contains whitenoise signals for the testing data")
+parser.add_argument("-tm", "--testmrtsPath",type=str, help="mrtsTestList file that has possible rts signals for the testing data")
+args = parser.parse_args()
+
+if args.rtsPath != None:
+    print("DEBUG: rtsPath is {}".format(args.rtsPath) )
+    #print("DEBUG: type of rtsPath is {}".format(type(args.rtsPath)))
+    print("DEBUG: Checking if path is to a file!")
+    rtsPath = Path(args.rtsPath)
+    if rtsPath.is_file():
+        rtsFile = open(str(args.rtsPath), 'r')
+else:
+    print("DEBUG: rts will be built from files IN directory")
+    rtsFile = open('./PiCam/RTS_list.txt','r')
+
+if args.mrtsPath != None:
+    print("DEBUG: mrtsPath is {}".format(args.mrtsPath) )
+    #print("DEBUG: type of mrtsPath is {}".format(type(args.mrtsPath)))
+    print("DEBUG: Checking if path is to a file!")
+    mrtsPath = Path(args.mrtsPath)
+    if mrtsPath.is_file():
+        mrtsFile = open(str(args.mrtsPath),'r')
+else:
+    print("DEBUG: mrts will be built from files IN directory")
+    mrtsFile = open('./PiCam/MRTS_list.txt','r')
 
 
+if args.nrtsPath != None:
+    print("DEBUG: nrtsPath is {}".format(args.nrtsPath) )
+    #print("DEBUG: type of nrtsPath is {}".format(type(args.nrtsPath)))
+    print("DEBUG: Checking if path is to a file!")
+    nrtsPath = Path(args.nrtsPath)
+    if nrtsPath.is_file():
+        nrtsFile = open(str(args.nrtsPath),'r')
+else:
+    print("DEBUG: mrts will be built from files IN directory")
+    nrtsFile = open('./PiCam/NRTS_list.txt','r')
 
-
-
-rtsFile = open('./PiCam/RTS_list.txt','r')
-mrtsFile = open('./PiCam/MRTS_list.txt','r')
-nrtsFile = open('./PiCam/NRTS_list.txt','r')
+#rtsFile = open('./PiCam/RTS_list.txt','r')
+#mrtsFile = open('./PiCam/MRTS_list.txt','r')
+#nrtsFile = open('./PiCam/NRTS_list.txt','r')
 
 
 # seek to the 0th bytes
@@ -80,42 +122,100 @@ nrtsLen = len(nrtsList)
 # above method to load the testing dataset as well.
 """**************************************************"""
 
-
-# add the lengths and make the zeros arrays
 arrayLen = int(rtsLen + mrtsLen + nrtsLen)
-testLen = int(0.15*arrayLen)
-# Change ME!!!!!!
 
-if (arrayLen>=10):
+if (arrayLen>=100):
     x_train = np.zeros((arrayLen,1500))
     y_train = np.zeros(arrayLen)
 else:
     print("DEBUG: Too small of dataset")
-# Change ME TOO!!!!!!!!!!
-if (testLen>=1):
-    x_test = np.zeros((testLen,1500))
-    y_test = np.zeros(testLen)
+
+if args.testrtsPath != None or args.testmrtsPath != None or args.testnrtsPath != None:
+    # load the files if at lease rts and either mrts or nrts has been given
+    if (args.testrtsPath != None and args.testmrtsPath!= None) or (args.testrtsPath != None and args.testnrtsPath!= None):
+        if Path(args.testrtsPath).is_file():
+            rtstestFile = open(str(args.testrtsPath),',r')
+        else:
+            print ("DEBUG: Could not open the testing data list. Opening known good list")
+            rtstestFile = open("./PiCam/RTS_List_test.txt", 'r')
+        if args.testmrtsPath != None or args.testnrtsPath != None:
+            # check which if both are here
+            if Path(args.testnrtsPath).is_file():
+                nrtstestFile = open(str(args.testnrtsPath),'r')
+            else:
+                nrtstestFile = open("./PiCam/WN_ListSh_test.txt",'r')
+            if Path(args.testmrtsPath).is_file():
+                mrtstestFile = open(str(args.testmrtsPath),'r')
+            else:
+                mrtstestFile = open("./PiCam/WN_ListSh_test.txt",'r')
+    else:
+        # user provided only the maybe and non signal files, override users choice and use default files
+        if Path('./PiCam/RTS_List_test.txt').is_file() and Path('./PiCam/WN_ListSh_test.txt').is_file():
+            rtstestFile = open("./PiCam/RTS_List_test.txt", "r+")
+            nrtstestFile = open("./PiCam/WN_ListSh_test.txt",'r')
+            mrtstestFile = open("./PiCam/WN_ListSh_test.txt",'r')
+    # at this point all of the files have been opened just read them if __name__ == '__main__':
+    rtstestFile.seek(0)
+    nrtstestFile.seek(0)
+    mrtstestFile.seek(0)
+    rtstestList = rtstestFile.read().replace('\n\n','\n').split('\n') # each line in the file should be a single line and not split (yet...)
+    nrtstestList = nrtstestFile.read().replace('\n\n','\n').split('\n') # each line in the file should be a single line and not split (yet...)
+    mrtstestList = mrtstestFile.read().replace('\n\n','\n').split('\n') # each line in the file should be a single line and not split (yet...)
+    rtstestFile.close()
+    mrtstestFile.close()
+    nrtstestFile.close()
+    rtstestLen = len(rtstestList)
+    nrtstestLen = len(nrtstestList)
+    mrtstestLen = len(mrtstestList)
+    if rtstestlen >0 and rtstestlen <= rtsLen:
+        rtsTestCount = rtstestLen
+    else:
+        print("DEBUG: Error has occured with rts test data")
+    if nrtstestlen >0  and nrtstestlen <= nrtsLen:
+        nrtsTestCount = nrtstestLen
+    else:
+        print("DEBUG: Error has occured with nrts test data")
+    if mrtstestlen >0  and mrtstestlen <= mrtsLen:
+        mrtsTestCount = mrtstestLen
+    else:
+        print("DEBUG: Error has occured with mrts test data")
+
 else:
-    print("DEBUG: Too small of dataset")
+    # use the computation method
+    # add the lengths and make the zeros arrays
+    arrayLen = int(rtsLen + mrtsLen + nrtsLen)
+    testLen = int(0.15*arrayLen)
 
-# split the testLen into integer groups proportional to ratio of rts, mrts, nrts to the total lengths
+    if (arrayLen>=100):
+        x_train = np.zeros((arrayLen,1500))
+        y_train = np.zeros(arrayLen)
+    else:
+        print("DEBUG: Too small of dataset")
+    # Change ME TOO!!!!!!!!!!
+    if (testLen>=10):
+        x_test = np.zeros((testLen,1500))
+        y_test = np.zeros(testLen)
+    else:
+        print("DEBUG: Too small of dataset")
 
-rtsRatio = float(rtsLen)/float(arrayLen)
-mrtsRatio = float(mrtsLen)/float(arrayLen)
-nrtsRatio = float(nrtsLen)/float(arrayLen)
+    # split the testLen into integer groups proportional to ratio of rts, mrts, nrts to the total lengths
 
-rtsTestCount = int(rtsRatio*testLen)
-mrtsTestCount = int(mrtsRatio*testLen)
-nrtsTestCount = int(testLen- (rtsTestCount+mrtsTestCount)) # nrts is usually the largest group so we can afford to lose a few the data point from the test group.
+    rtsRatio = float(rtsLen)/float(arrayLen)
+    mrtsRatio = float(mrtsLen)/float(arrayLen)
+    nrtsRatio = float(nrtsLen)/float(arrayLen)
 
-if (rtsTestCount > rtsLen):
-    print ("DEBUG: Error has occured! Math error for array size for rts")
+    rtsTestCount = int(rtsRatio*testLen)
+    mrtsTestCount = int(mrtsRatio*testLen)
+    nrtsTestCount = int(testLen- (rtsTestCount+mrtsTestCount)) # nrts is usually the largest group so we can afford to lose a few the data point from the test group.
 
-if (mrtsTestCount > mrtsLen):
-    print ("DEBUG: Error has occured! Math error for array size for mrts")
+    if (rtsTestCount > rtsLen):
+        print ("DEBUG: Error has occured! Math error for array size for rts")
 
-if (nrtsTestCount > nrtsLen):
-    print ("DEBUG: Error has occured! Math error for array size for nrts")
+    if (mrtsTestCount > mrtsLen):
+        print ("DEBUG: Error has occured! Math error for array size for mrts")
+
+    if (nrtsTestCount > nrtsLen):
+        print ("DEBUG: Error has occured! Math error for array size for nrts")
 
 # y dataset completed after this
 # 0 - rts
