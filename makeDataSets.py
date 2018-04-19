@@ -63,6 +63,7 @@ if args.rtsPath != None:
     print("DEBUG: Checking if path is to a file!")
     rtsPath = Path(args.rtsPath)
     if rtsPath.is_file():
+        print("DEBUG: it is a file! Opening rtsFile")
         rtsFile = open(str(args.rtsPath), 'r')
 else:
     print("DEBUG: rts will be built from files IN directory")
@@ -74,6 +75,7 @@ if args.mrtsPath != None:
     print("DEBUG: Checking if path is to a file!")
     mrtsPath = Path(args.mrtsPath)
     if mrtsPath.is_file():
+        print("DEBUG: it is a file! Opening rtsFile")
         mrtsFile = open(str(args.mrtsPath),'r')
 else:
     print("DEBUG: mrts will be built from files IN directory")
@@ -86,6 +88,7 @@ if args.nrtsPath != None:
     print("DEBUG: Checking if path is to a file!")
     nrtsPath = Path(args.nrtsPath)
     if nrtsPath.is_file():
+        print("DEBUG: it is a file! Opening rtsFile")
         nrtsFile = open(str(args.nrtsPath),'r')
 else:
     print("DEBUG: mrts will be built from files IN directory")
