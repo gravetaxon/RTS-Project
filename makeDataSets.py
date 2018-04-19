@@ -55,7 +55,11 @@ parser.add_argument("-m", "--mrtsPath",type=str, help="mrtsList file that has po
 parser.add_argument("-s","--testrtsPath",type=str, help="rtsTestlist file that contains rts signals in col_row format for the testing data")
 parser.add_argument("-t", "--testnrtsPath",type=str, help="nrtsTestlist file that contains whitenoise signals for the testing data")
 parser.add_argument("-u", "--testmrtsPath",type=str, help="mrtsTestList file that has possible rts signals for the testing data")
+parser.add_argument("-o", "--oldMethod", action='store_true', help="Activates a special routine that uses binary mode rather than categorical")
 args = parser.parse_args()
+
+if args.oldMethod :
+    print("DEBUG: Activating old method!")
 
 if args.rtsPath != None:
     print("DEBUG: rtsPath is {}".format(args.rtsPath) )
@@ -107,8 +111,10 @@ nrtsFile.seek(0)
 # Let's read all of the files in and get the lengths to setup the initial arrays
 rtsList = rtsFile.read().replace('\n\n','\n').split('\n') # each line in the file should be a single line and not split (yet...)
 nrtsList = nrtsFile.read().replace('\n\n','\n').split('\n')
-mrtsList = mrtsFile.read().replace('\n\n','\n').split('\n')
-
+if args.oldMethod == False:
+    mrtsList = mrtsFile.read().replace('\n\n','\n').split('\n')
+else:
+    mrtsList = ""
 # close the files since we don't need them anymore
 rtsFile.close()
 mrtsFile.close()
@@ -126,7 +132,7 @@ nrtsLen = len(nrtsList)
 """**************************************************"""
 
 arrayLen = int(rtsLen + mrtsLen + nrtsLen)
-
+print ('DEBUG: arrayLen {}'.format(arrayLen))
 if (arrayLen>=100):
     x_train = np.zeros((arrayLen,1500))
     y_train = np.zeros(arrayLen)
@@ -137,7 +143,7 @@ if args.testrtsPath != None or args.testmrtsPath != None or args.testnrtsPath !=
     # load the files if at lease rts and either mrts or nrts has been given
     if (args.testrtsPath != None and args.testmrtsPath!= None) or (args.testrtsPath != None and args.testnrtsPath!= None):
         if Path(args.testrtsPath).is_file():
-            rtstestFile = open(str(args.testrtsPath),',r')
+            rtstestFile = open(str(args.testrtsPath),'r')
         else:
             print ("DEBUG: Could not open the testing data list. Opening known good list")
             rtstestFile = open("./PiCam/RTS_List_test.txt", 'r')
@@ -163,25 +169,31 @@ if args.testrtsPath != None or args.testmrtsPath != None or args.testnrtsPath !=
     mrtstestFile.seek(0)
     rtstestList = rtstestFile.read().replace('\n\n','\n').split('\n') # each line in the file should be a single line and not split (yet...)
     nrtstestList = nrtstestFile.read().replace('\n\n','\n').split('\n') # each line in the file should be a single line and not split (yet...)
-    mrtstestList = mrtstestFile.read().replace('\n\n','\n').split('\n') # each line in the file should be a single line and not split (yet...)
+    if args.oldMethod == False:
+        mrtstestList = mrtstestFile.read().replace('\n\n','\n').split('\n') # each line in the file should be a single line and not split (yet...)
+    else:
+        mrtstestList = ""
     rtstestFile.close()
     mrtstestFile.close()
     nrtstestFile.close()
     rtstestLen = len(rtstestList)
     nrtstestLen = len(nrtstestList)
     mrtstestLen = len(mrtstestList)
-    if rtstestlen >0 and rtstestlen <= rtsLen:
+    if rtstestLen >0 and rtstestLen <= rtsLen:
         rtsTestCount = rtstestLen
     else:
         print("DEBUG: Error has occured with rts test data")
-    if nrtstestlen >0  and nrtstestlen <= nrtsLen:
+        rtsTestCount = 0
+    if nrtstestLen >0  and nrtstestLen <= nrtsLen:
         nrtsTestCount = nrtstestLen
     else:
         print("DEBUG: Error has occured with nrts test data")
-    if mrtstestlen >0  and mrtstestlen <= mrtsLen:
+        nrtsTestCount = 0
+    if mrtstestLen >0  and mrtstestLen <= mrtsLen:
         mrtsTestCount = mrtstestLen
     else:
         print("DEBUG: Error has occured with mrts test data")
+        mrtsTestCount = 0
     testLen = int(rtstestLen + nrtstestLen + mrtstestLen)
     if (testLen>=10):
         x_test = np.zeros((testLen,1500))
@@ -217,13 +229,14 @@ else:
     mrtsTestCount = int(mrtsRatio*testLen)
     nrtsTestCount = int(testLen- (rtsTestCount+mrtsTestCount)) # nrts is usually the largest group so we can afford to lose a few the data point from the test group.
 
-    if (rtsTestCount > rtsLen):
+    if ( (rtsTestCount > rtsLen) and (rtsTestCount>0)):
         print ("DEBUG: Error has occured! Math error for array size for rts")
 
-    if (mrtsTestCount > mrtsLen):
+
+    if (mrtsTestCount > mrtsLen) and (mrtsTestCount>0):
         print ("DEBUG: Error has occured! Math error for array size for mrts")
 
-    if (nrtsTestCount > nrtsLen):
+    if (nrtsTestCount > nrtsLen) and (nrtsTestCount>0):
         print ("DEBUG: Error has occured! Math error for array size for nrts")
 
 # y dataset completed after this
