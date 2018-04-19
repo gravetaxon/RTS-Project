@@ -338,7 +338,7 @@ if (arrayLen > 0):
         # hidden layers exist! Use all the numbers from 0 to largest
         HiddenLayers_out = NumberHLayers_in
         FilterSize_Prod = 1
-        for each in factors[0:3]:
+        for each in factors[0:HiddenLayers_out]:
             FilterSize_Prod = FilterSize_Prod*int(each)
         FilterSize_out = int(loader.smallest_power(FilterSize_Prod,2))
 
