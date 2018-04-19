@@ -179,7 +179,13 @@ if args.testrtsPath != None or args.testmrtsPath != None or args.testnrtsPath !=
         mrtsTestCount = mrtstestLen
     else:
         print("DEBUG: Error has occured with mrts test data")
-
+    testLen = int(rtstestLen + nrtstestLen + mrtstestLen)
+    if (testLen>=10):
+        x_test = np.zeros((testLen,1500))
+        y_test = np.zeros(testLen)
+    else:
+        print("DEBUG: Too small of dataset")
+    
 else:
     # use the computation method
     # add the lengths and make the zeros arrays
