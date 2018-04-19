@@ -47,14 +47,14 @@ else:
 # Open the input files
 
 # Add commandline parsing
-
+# short codes are single char only!
 parser = argparse.ArgumentParser(prog='makeDataSets.py', description="Creates the numpy dataset for train, testing, and running keras models")
 parser.add_argument("-r","--rtsPath",type=str, help="rtslist file that contains rts signals in col_row format")
 parser.add_argument("-n", "--nrtsPath",type=str, help="nrtslist file that contains whitenoise signals")
 parser.add_argument("-m", "--mrtsPath",type=str, help="mrtsList file that has possible rts signals")
-parser.add_argument("-tr","--testrtsPath",type=str, help="rtsTestlist file that contains rts signals in col_row format for the testing data")
-parser.add_argument("-tn", "--testnrtsPath",type=str, help="nrtsTestlist file that contains whitenoise signals for the testing data")
-parser.add_argument("-tm", "--testmrtsPath",type=str, help="mrtsTestList file that has possible rts signals for the testing data")
+parser.add_argument("-s","--testrtsPath",type=str, help="rtsTestlist file that contains rts signals in col_row format for the testing data")
+parser.add_argument("-t", "--testnrtsPath",type=str, help="nrtsTestlist file that contains whitenoise signals for the testing data")
+parser.add_argument("-u", "--testmrtsPath",type=str, help="mrtsTestList file that has possible rts signals for the testing data")
 args = parser.parse_args()
 
 if args.rtsPath != None:
@@ -185,7 +185,7 @@ if args.testrtsPath != None or args.testmrtsPath != None or args.testnrtsPath !=
         y_test = np.zeros(testLen)
     else:
         print("DEBUG: Too small of dataset")
-    
+
 else:
     # use the computation method
     # add the lengths and make the zeros arrays
