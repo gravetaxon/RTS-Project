@@ -35,6 +35,9 @@ pixel = loader.load()
 #supCol = 1296 # col because it does *NOT* exist in the dataset.
 
 
+testingSizeTrain = 10
+testingSizeTest  = 1 
+
 if type(pixel)==np.ndarray:
     (dataMax, supRow, supCol) = pixel.shape
 #else if type(pixel) = list:
@@ -124,13 +127,14 @@ nrtsLen = len(nrtsList)
 
 arrayLen = int(rtsLen + mrtsLen + nrtsLen)
 
-if (arrayLen>=100):
+if (arrayLen>=testingTrainSize):
     x_train = np.zeros((arrayLen,1500))
     y_train = np.zeros(arrayLen)
 else:
-    print("DEBUG: Too small of dataset")
+    print("DEBUG: Too small of dataset, less than {} for all of the data types".format(testingTrainSize))
 
-if args.testrtsPath != None or args.testmrtsPath != None or args.testnrtsPath != None:
+
+if ((args.testrtsPath != None) or (args.testmrtsPath != None) or (args.testnrtsPath != None)):
     # load the files if at lease rts and either mrts or nrts has been given
     if (args.testrtsPath != None and args.testmrtsPath!= None) or (args.testrtsPath != None and args.testnrtsPath!= None):
         if Path(args.testrtsPath).is_file():
@@ -184,7 +188,7 @@ if args.testrtsPath != None or args.testmrtsPath != None or args.testnrtsPath !=
         x_test = np.zeros((testLen,1500))
         y_test = np.zeros(testLen)
     else:
-        print("DEBUG: Too small of dataset")
+        print("DEBUG: Too small of dataset, let than 10 in testset")
     
 else:
     # use the computation method
@@ -192,17 +196,17 @@ else:
     arrayLen = int(rtsLen + mrtsLen + nrtsLen)
     testLen = int(0.15*arrayLen)
 
-    if (arrayLen>=100):
+    if (arrayLen>=testingSizeTrain):
         x_train = np.zeros((arrayLen,1500))
         y_train = np.zeros(arrayLen)
     else:
-        print("DEBUG: Too small of dataset")
+        print("DEBUG: Too small of dataset, comp 199")
     # Change ME TOO!!!!!!!!!!
-    if (testLen>=10):
+    if (testLen>=testingSizeTest):
         x_test = np.zeros((testLen,1500))
         y_test = np.zeros(testLen)
     else:
-        print("DEBUG: Too small of dataset")
+        print("DEBUG: Too small of dataset, comp 205")
 
     # split the testLen into integer groups proportional to ratio of rts, mrts, nrts to the total lengths
 
