@@ -1,4 +1,4 @@
 SigmaStep = 1.5
-KernelSizes=[17,5,211,3]
+KernelSizes=[5,3,17,2]
 HiddenLayers=2
-FilterSize=[16384,16384,16384,16384]
+FilterSize=[8,8,8,8]

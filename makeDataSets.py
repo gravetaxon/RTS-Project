@@ -136,9 +136,9 @@ nrtsLen = len(nrtsList)
 
 arrayLen = int(rtsLen + mrtsLen + nrtsLen)
 
-if (arrayLen>=testingTrainSize):
+if (arrayLen>=testingSizeTrain):
     print ('DEBUG: arrayLen {}'.format(arrayLen))
-if (arrayLen>=testingTrainSize):
+if (arrayLen>=testingSizeTrain):
     x_train = np.zeros((arrayLen,dataMax))
     y_train = np.zeros(arrayLen)
 else:
