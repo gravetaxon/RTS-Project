@@ -40,4 +40,12 @@ def prime_factors(n):
     return factors
 
 def smallest_power(x,m):
-    return 1 if (x==0 or m==0) else (m**(x-1).bit_length())/2
+    i=1
+    testCon = m**i
+    while (testCon < x):
+        i+=1
+        testCon = m**i
+    if (i-1) >0:
+        return m**(i-1)
+    else:
+        return m	

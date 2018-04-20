@@ -7,9 +7,11 @@ parser = argparse.ArgumentParser(prog='makeDataSets.py', description="Creates th
 parser.add_argument("-r","--rtsPath",type=str, help="rtslist file that contains rts signals in col_row format")
 parser.add_argument("-n", "--nrtsPath",type=str, help="nrtslist file that contains whitenoise signals")
 parser.add_argument("-m", "--mrtsPath",type=str, help="mrtsList file that has possible rts signals")
-parser.add_argument("-tr","--testrtsPath",type=str, help="rtsTestlist file that contains rts signals in col_row format for the testing data")
-parser.add_argument("-tn", "--testnrtsPath",type=str, help="nrtsTestlist file that contains whitenoise signals for the testing data")
-parser.add_argument("-tm", "--testmrtsPath",type=str, help="mrtsTestList file that has possible rts signals for the testing data")
+parser.add_argument("-s","--testrtsPath",type=str, help="rtsTestlist file that contains rts signals in col_row format for the testing data")
+parser.add_argument("-t", "--testnrtsPath",type=str, help="nrtsTestlist file that contains whitenoise signals for the testing data")
+parser.add_argument("-u", "--testmrtsPath",type=str, help="mrtsTestList file that has possible rts signals for the testing data")
+parser.add_argument("-o", "--oldMethod", action='store_true',help="Activates a special routine that uses binary mode rather than categorical")
+
 args = parser.parse_args()
 if args.rtsPath != None:
     print("rtsPath is {}".format(args.rtsPath) )

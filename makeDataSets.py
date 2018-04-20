@@ -50,14 +50,10 @@ else:
 # Open the input files
 
 # Add commandline parsing
-
 parser = argparse.ArgumentParser(prog='makeDataSets.py', description="Creates the numpy dataset for train, testing, and running keras models")
 parser.add_argument("-r","--rtsPath",type=str, help="rtslist file that contains rts signals in col_row format")
 parser.add_argument("-n", "--nrtsPath",type=str, help="nrtslist file that contains whitenoise signals")
 parser.add_argument("-m", "--mrtsPath",type=str, help="mrtsList file that has possible rts signals")
-parser.add_argument("-tr","--testrtsPath",type=str, help="rtsTestlist file that contains rts signals in col_row format for the testing data")
-parser.add_argument("-tn", "--testnrtsPath",type=str, help="nrtsTestlist file that contains whitenoise signals for the testing data")
-parser.add_argument("-tm", "--testmrtsPath",type=str, help="mrtsTestList file that has possible rts signals for the testing data")
 args = parser.parse_args()
 
 if args.rtsPath != None:
@@ -126,8 +122,11 @@ nrtsLen = len(nrtsList)
 """**************************************************"""
 
 arrayLen = int(rtsLen + mrtsLen + nrtsLen)
+<<<<<<< HEAD
 
 if (arrayLen>=testingTrainSize):
+if (arrayLen>=100):
+>>>>>>> 953b1fa936fae6eb6cb8fb29eff6df9e25d90a26
     x_train = np.zeros((arrayLen,1500))
     y_train = np.zeros(arrayLen)
 else:
@@ -138,7 +137,6 @@ if ((args.testrtsPath != None) or (args.testmrtsPath != None) or (args.testnrtsP
     # load the files if at lease rts and either mrts or nrts has been given
     if (args.testrtsPath != None and args.testmrtsPath!= None) or (args.testrtsPath != None and args.testnrtsPath!= None):
         if Path(args.testrtsPath).is_file():
-            rtstestFile = open(str(args.testrtsPath),',r')
         else:
             print ("DEBUG: Could not open the testing data list. Opening known good list")
             rtstestFile = open("./PiCam/RTS_List_test.txt", 'r')
@@ -164,22 +162,18 @@ if ((args.testrtsPath != None) or (args.testmrtsPath != None) or (args.testnrtsP
     mrtstestFile.seek(0)
     rtstestList = rtstestFile.read().replace('\n\n','\n').split('\n') # each line in the file should be a single line and not split (yet...)
     nrtstestList = nrtstestFile.read().replace('\n\n','\n').split('\n') # each line in the file should be a single line and not split (yet...)
-    mrtstestList = mrtstestFile.read().replace('\n\n','\n').split('\n') # each line in the file should be a single line and not split (yet...)
     rtstestFile.close()
     mrtstestFile.close()
     nrtstestFile.close()
     rtstestLen = len(rtstestList)
     nrtstestLen = len(nrtstestList)
     mrtstestLen = len(mrtstestList)
-    if rtstestlen >0 and rtstestlen <= rtsLen:
         rtsTestCount = rtstestLen
     else:
         print("DEBUG: Error has occured with rts test data")
-    if nrtstestlen >0  and nrtstestlen <= nrtsLen:
         nrtsTestCount = nrtstestLen
     else:
         print("DEBUG: Error has occured with nrts test data")
-    if mrtstestlen >0  and mrtstestlen <= mrtsLen:
         mrtsTestCount = mrtstestLen
     else:
         print("DEBUG: Error has occured with mrts test data")
@@ -188,8 +182,13 @@ if ((args.testrtsPath != None) or (args.testmrtsPath != None) or (args.testnrtsP
         x_test = np.zeros((testLen,1500))
         y_test = np.zeros(testLen)
     else:
+<<<<<<< HEAD
         print("DEBUG: Too small of dataset, let than 10 in testset")
     
+=======
+        print("DEBUG: Too small of dataset")
+
+>>>>>>> 953b1fa936fae6eb6cb8fb29eff6df9e25d90a26
 else:
     # use the computation method
     # add the lengths and make the zeros arrays
@@ -218,13 +217,10 @@ else:
     mrtsTestCount = int(mrtsRatio*testLen)
     nrtsTestCount = int(testLen- (rtsTestCount+mrtsTestCount)) # nrts is usually the largest group so we can afford to lose a few the data point from the test group.
 
-    if (rtsTestCount > rtsLen):
         print ("DEBUG: Error has occured! Math error for array size for rts")
 
-    if (mrtsTestCount > mrtsLen):
         print ("DEBUG: Error has occured! Math error for array size for mrts")
 
-    if (nrtsTestCount > nrtsLen):
         print ("DEBUG: Error has occured! Math error for array size for nrts")
 
 # y dataset completed after this
@@ -342,7 +338,6 @@ if (arrayLen > 0):
         # hidden layers exist! Use all the numbers from 0 to largest
         HiddenLayers_out = NumberHLayers_in
         FilterSize_Prod = 1
-        for each in factors[0:3]:
             FilterSize_Prod = FilterSize_Prod*int(each)
         FilterSize_out = int(loader.smallest_power(FilterSize_Prod,2))
 
