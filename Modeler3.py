@@ -28,11 +28,12 @@ X_test = np.expand_dims(x_test, axis=2) # reshape (569, 30) to (569, 30, 1)
 NumberHLayers=settings.HiddenLayers
 FilterSize=settings.FilterSize
 KernelSize=settings.KernelSizes
-
+MaxLoss = 1.05
+MinAccuracy = 0.64
 #NumberHLayers = 4             # Number of hidden layers (excluding input and output layers
 #FilterSize=[62,62,62,62,62,62]      # Filter size for each of the layers
 #KernelSize=[11,7,5,5,11,3]          # The kernel size for each hidden layer plus
-							  # the input and output layers as the last two data points
+                              # the input and output layers as the last two data points
 
 
 
@@ -51,42 +52,49 @@ BatchSize = 16
 Epochs    = 5
 
 score = []
-
+savedModel = []
 #DEBUG: NumberRoutines was 50
 NumberRoutines = 2
-for each in range(NumberRoutines):
-	print (each)
-	model = Sequential()
-	random.seed()
-	# Input Layer
-	# input_shape means that we are expecting vectors of the form IxDxN where N is the number of data sets (i.e. each picture), I is the index length of the time/indep, and D is the index for the size of the data
-	# in our case the data is a 1500x1x4235 shape
-	model.add(Conv1D(filters= FilterSize[NumberHLayers], kernel_size= KernelSize[NumberHLayers], activation='relu', input_shape=(1500,1,)))
-	model.add(MaxPooling1D(3))
-	print ("adding input layer")
-	if NumberHLayers == 0:
-		print("No hidden layers")
-	for each in range(NumberHLayers):
-		model.add(Conv1D(filters=FilterSize[each],kernel_size=KernelSize[each], activation='relu'))
-		print("Adding Layer Conv1D("+str(FilterSize[each])+",  "+str(KernelSize[each])+")")
-		if each%2==0:
-			model.add(Dropout(DropPercent))
-			print("Adding dropout")
-		model.add(MaxPooling1D(3))
-		print("adding pooling")
+for rout in range(NumberRoutines):
+    print (rout)
+    model = Sequential()
+    random.seed()
+    # Input Layer
+    # input_shape means that we are expecting vectors of the form IxDxN where N is the number of data sets (i.e. each picture), I is the index length of the time/indep, and D is the index for the size of the data
+    # in our case the data is a 1500x1x4235 shape
+    model.add(Conv1D(filters= FilterSize[NumberHLayers], kernel_size= KernelSize[NumberHLayers], activation='relu', input_shape=(1500,1,)))
+    model.add(MaxPooling1D(3))
+    print ("adding input layer")
+    if NumberHLayers == 0:
+        print("No hidden layers")
+    for hnum in range(NumberHLayers):
+        model.add(Conv1D(filters=FilterSize[hnum],kernel_size=KernelSize[hnum], activation='relu'))
+        print("Adding Layer Conv1D("+str(FilterSize[hnum])+",  "+str(KernelSize[hnum])+")")
+        if hnum%2==0:
+            model.add(Dropout(DropPercent))
+            print("Adding dropout")
+        model.add(MaxPooling1D(3))
+        print("adding pooling")
 
-	# Output Layer
-	model.add(Conv1D(filters= FilterSize[NumberHLayers+1], kernel_size= KernelSize[NumberHLayers+1],activation='relu'))
-	model.add(GlobalAveragePooling1D())
-	model.add(Dense(units=AxisCount, activation='sigmoid'))
-	print("adding output layer")
+    # Output Layer
+    model.add(Conv1D(filters= FilterSize[NumberHLayers+1], kernel_size= KernelSize[NumberHLayers+1],activation='relu'))
+    model.add(GlobalAveragePooling1D())
+    model.add(Dense(units=AxisCount, activation='sigmoid'))
+    print("adding output layer")
 
-	model.compile(loss='binary_crossentropy',
+    model.compile(loss='binary_crossentropy',
               optimizer='rmsprop',
               metrics=['accuracy'])
 
-	model.fit(X_train, y_train, batch_size=BatchSize, epochs=Epochs)
-	scr = model.evaluate(X_test, y_test, batch_size=BatchSize)
-	print (scr)
-	score.append(scr)
+    model.fit(X_train, y_train, batch_size=BatchSize, epochs=Epochs)
+    scr = model.evaluate(X_test, y_test, batch_size=BatchSize)
+    scr = [rout] + scr
+
+    print (scr)
+    score.append(scr)
+    if (scr[1] < MaxLoss) and (scr[2] > MinAccuracy):
+        model.save('./PiCam/CNNlin_model'+str(rout)+'.h5')
+        print( "Model saved as {} with losses of {} and accuracy of {}".format(rout,scr[1],scr[2]))
+        savedModel.append(str(rout))
 print (score)
+print ("Models saved are {}".format(savedModel))

@@ -11,7 +11,7 @@ import numpy as np
 import os
 import loader
 import settings
-import sys 
+import sys
 
 if os.name == 'posix':
     os.nice(10)
@@ -22,7 +22,7 @@ arg = 2
 if len(sys.argv) > 1:
 	model_name = sys.argv[1]
 else:
-	model_name = raw_input("Please name model # you wish to use")
+	model_name = input("Please name model # you wish to use")
 model_name = './PiCam/CNNlin_model'+model_name+'.h5'
 model = load_model(model_name)
 pixel = loader.load()
