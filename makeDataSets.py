@@ -62,7 +62,9 @@ parser.add_argument("-o", "--oldMethod", action='store_true', help="Activates a 
 args = parser.parse_args()
 
 if args.oldMethod :
-    print("DEBUG: Activating old method!")
+    print("DEBUG: Activating old binary method!")
+else:
+    print("DEBUG: Categorical method active")
 
 if args.rtsPath != None:
     print("DEBUG: rtsPath is {}".format(args.rtsPath) )
@@ -98,7 +100,7 @@ if args.nrtsPath != None:
         print("DEBUG: it is a file! Opening rtsFile")
         nrtsFile = open(str(args.nrtsPath),'r')
 else:
-    print("DEBUG: mrts will be built from files IN directory")
+    print("DEBUG: nrts will be built from files IN directory")
     nrtsFile = open('./PiCam/NRTS_list.txt','r')
 
 rtsFile = open('./PiCam/RTS_list.txt','r')
@@ -162,6 +164,7 @@ else:
 
 if ((args.testrtsPath != None) or (args.testmrtsPath != None) or (args.testnrtsPath != None)):
     # load the files if at lease rts and either mrts or nrts has been given
+    print("DEBUG: loading from files given")
     if (args.testrtsPath != None and args.testmrtsPath!= None) or (args.testrtsPath != None and args.testnrtsPath!= None):
         if Path(args.testrtsPath).is_file():
             rtstestFile = open(str(args.testrtsPath),'r')
@@ -420,6 +423,21 @@ if (arrayLen > 0):
         posbValue = settingsData.find('FilterSize=')
         poseValue = settingsData[posbValue:].find('\n')
         settingsData=settingsData[:posbValue]+'FilterSize='+out+'\n'+settingsData[(posbValue+poseValue):]
+    if (settingsData.find('Loss=')<0):
+        settingsData +='Loss='
+        if (args.oldMethod):
+            settingsData +='binary_crossentropy\n'
+        else:
+            settingsData +='categorical_crossentropy\n'
+    else:
+        posbValue = settingsData.find('Loss=')
+        poseValue = settingsData[posbValue:].find('\n')
+        settingsData+='Loss='
+        if (args.oldMethod):
+            settingsData+="'binary_crossentropy'\n"
+        else:
+            settingsData +="'categorical_crossentropy'\n"
+
 
     settingsFile = open('./settings.py','w')
     settingsData= settingsData.replace('\n\n','\n')
@@ -440,5 +458,6 @@ if (status == True):
     np.save('./PiCam/x_test.npy',x_test)
     np.save('./PiCam/y_train.npy',y_train)
     np.save('./PiCam/y_test.npy',y_test)
+    print("DEBUG: run modeler next")
 else:
     print("DEBUG: We had an error in writing settings data and have not written incompatible training and/or testing data")
