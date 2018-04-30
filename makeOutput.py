@@ -11,7 +11,7 @@ import numpy as np
 import os
 import loader
 import settings
-import sys 
+import sys
 
 if os.name == 'posix':
     os.nice(10)
@@ -21,6 +21,8 @@ RTSRes = open("./Picam/modelOut.txt","w+")
 arg = 2
 if len(sys.argv) > 1:
 	model_name = sys.argv[1]
+elif sys.version_info >= (3,0):
+    model_name = input("Please name the model # you wish to use")
 else:
 	model_name = raw_input("Please name model # you wish to use")
 model_name = './PiCam/CNNlin_model'+model_name+'.h5'
