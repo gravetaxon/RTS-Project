@@ -12,7 +12,7 @@ import os
 import loader
 import settings
 import sys
-
+import random
 if os.name == 'posix':
     os.nice(10)
 
@@ -33,7 +33,7 @@ for i in range(1,DataShape[1]):
         pix = pixel[0:DataShape[0], i, j]
         ppix = pix[None,:,None]
         votes = []
-        for voter in models:
+        for voter in random.sample(models,5):
             mp = model.predict(ppix) # how does this work with multiple categories?
             if (mp[0] ==0):
                 # model voted yes
