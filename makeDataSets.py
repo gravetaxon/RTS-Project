@@ -426,19 +426,25 @@ if (arrayLen > 0):
     if (settingsData.find('Loss=')<0):
         settingsData +='Loss='
         if (args.oldMethod):
-            settingsData +='binary_crossentropy\n'
+            settingsData +="'binary_crossentropy'\n"
         else:
-            settingsData +='categorical_crossentropy\n'
+            settingsData +="'categorical_crossentropy'\n"
     else:
         posbValue = settingsData.find('Loss=')
         poseValue = settingsData[posbValue:].find('\n')
-        settingsData+='Loss='
+        out='Loss='
         if (args.oldMethod):
-            settingsData+="'binary_crossentropy'\n"
+            out+="'binary_crossentropy'\n"
         else:
-            settingsData +="'categorical_crossentropy'\n"
-
-
+            out +="'categorical_crossentropy'\n"
+        settingsData= settingsData[:posbValue]+out+settingsData[(posbValue+poseValue):]
+    if (settingsData.find('dataShape=')):
+        settingsData +="dataShape=({},{},{})".format(dataMax, supRow, supCol)+'\n'
+    elif (settingsData.find('dataShape=')):
+        posbValue = settingsData.find('dataShape=')
+        poseValue = settingsData[posbValue:].find('\n')
+        out = "dataShape=({},{},{})".format(dataMax, supRow, supCol)+'\n'
+        settingsData = settingsData[:posbValue]+out+settingsData[(posbValue+poseValue):]
     settingsFile = open('./settings.py','w')
     settingsData= settingsData.replace('\n\n','\n')
     print (settingsData)

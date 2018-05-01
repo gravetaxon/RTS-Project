@@ -52,9 +52,9 @@ BatchSize = 16
 Epochs    = 5
 
 score = []
-
+saved = []
 #DEBUG: NumberRoutines was 50
-NumberRoutines = 5
+NumberRoutines = settings.NumberRoutines
 for each in range(NumberRoutines):
     print (each)
     model = Sequential()
@@ -91,4 +91,25 @@ for each in range(NumberRoutines):
     if ((scr[1]>MinAccuracy) and (scr[0]<= MaxLosses)):
         print("DEBUG: Saving model #{}".format(each))
         model.save('./PiCam/CNNlin_model{}.h5'.format(str(each)))
+        saved.append(str(each))
 print (score)
+
+out = ''
+for each in saved:
+    out +=str(each)+','
+out = out[:-1]
+
+
+settingsFile = open('./settings.py','r')
+settingsData = settingsFile.read()
+settingsFile.close()
+if  (settingsData.find('Saved=')<0):
+    settingsData+='Saved=['+out+']'
+elif (settingsData.find('Saved=')>=0):
+    posbValue = settingsData.find("Saved=")
+    poseValue = settingsData[posbValue:].find('\n')
+    settingsData = settingsData[:posbValue]+'Saved=['+str(out) +']\n'+settingsData[(posbValue+poseValue):]
+
+settingsFile = open('./settings.py','w')
+settingsFile.write(settingsData)
+settingsFile.close()
