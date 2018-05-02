@@ -45,6 +45,8 @@ for i in range(1,DataShape[1]):
         if (VoterAve >=settings.DecisionStep):
             print(i,j)
             RTSRes.write("%d %d %d\r\n" %(i,j,VoterAve))
+        else:
+            print ("no vote")
         #print(i,j,mp[0])
         #if mp[0] == 0:
         #    print(i,j,mp[0])
@@ -55,7 +57,7 @@ for i in range(1,DataShape[1]):
 #            plt.plot(x,pix)
             #plt.close()
 
-
+RTSRes.close()
 
 
 #x = np.arange(0,500)
