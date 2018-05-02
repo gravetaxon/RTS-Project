@@ -59,7 +59,7 @@ NumberRoutines = settings.NumberRoutines
 for each in range(NumberRoutines):
     print (each)
     model = Sequential()
-    random.seed(InitialSeed+each) # each loop should have a different seed to generate slightly different models
+    random.seed() # each loop should have a different seed to generate slightly different models
     # Input Layer
     # input_shape means that we are expecting vectors of the form IxDxN where N is the number of data sets (i.e. each picture), I is the index length of the time/indep, and D is the index for the size of the data
     # in our case the data is a 1500x1x4235 shape
@@ -71,9 +71,9 @@ for each in range(NumberRoutines):
     for layer in range(NumberHLayers):
     	model.add(Conv1D(filters=FilterSize[layer],kernel_size=KernelSize[layer], activation='relu'))
     	print("Adding Layer Conv1D("+str(FilterSize[layer])+",  "+str(KernelSize[layer])+")")
-    	if layer%2==0:
-    		model.add(Dropout(DropPercent))
-    		print("Adding dropout")
+    	#if layer%2==0:
+    	model.add(Dropout(DropPercent))
+    	print("Adding dropout")
     	model.add(MaxPooling1D(3))
     	print("adding pooling")
 

@@ -20,6 +20,8 @@ RTSRes = open("./Picam/model_Out.txt","w+")
 SavedModels =settings.Saved
 NumModels = len(SavedModels)
 DataShape = settings.dataShape
+# For testing purposes reducing col and rows
+loopData = (int(DataShape[0]),int(DataShape[1]*.25),int(DataShape[2]*.25))
 models = []
 for each in SavedModels:
     model_name = './PiCam/CNNlin_model{}.h5'.format(str(each))
@@ -27,14 +29,15 @@ for each in SavedModels:
     models.append(model)
 
 pixel = loader.load()
-for i in range(1,DataShape[1]):
-    print("status ",(i/DataShape[1])*100,"%" )
-    for j in range(1,DataShape[2]):
-        pix = pixel[0:DataShape[0], i, j]
+for i in range(1,loopData[1]):
+    print("status ",(i/loopData[1])*100,"%" )
+    for j in range(1,loopData[2]):
+        pix = pixel[0:loopData[0], i, j]
         ppix = pix[None,:,None]
         votes = []
         for voter in random.sample(models,5):
             mp = model.predict(ppix) # how does this work with multiple categories?
+    #        print(mp)
             if (mp[0] ==0):
                 # model voted yes
                 votes.append(int(1))
@@ -46,7 +49,7 @@ for i in range(1,DataShape[1]):
             print(i,j)
             RTSRes.write("%d %d %d\r\n" %(i,j,VoterAve))
         else:
-            print ("no vote")
+            print ("Vote: {}\nWith {} voters".format(VoterAve, len(votes)))
         #print(i,j,mp[0])
         #if mp[0] == 0:
         #    print(i,j,mp[0])
