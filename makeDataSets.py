@@ -12,7 +12,7 @@ import loader
 import argparse
 import os, os.path
 from pathlib import Path
-
+import random
 #import settings
 if os.name == 'posix':
     os.nice(10)
@@ -86,7 +86,7 @@ if args.mrtsPath != None:
     if mrtsPath.is_file():
         print("DEBUG: it is a file! Opening rtsFile")
         mrtsFile = open(str(args.mrtsPath),'r')
-else:
+elif (( args.oldMethod ==False ) and (args.mrtsPath == None)):
     print("DEBUG: mrts will be built from files IN directory")
     mrtsFile = open('./PiCam/MRTS_list.txt','r')
 
@@ -265,16 +265,12 @@ else:
     if (nrtsTestCount > nrtsLen) and (nrtsTestCount>0):
         print ("DEBUG: Error has occured! Math error for array size for nrts")
 
-# y dataset completed after this
+# y dataset output
 # 0 - rts
 # 1 - nrts
 # 2 - mrts
 #
 
-y_train[rtsLen:nrtsLen+rtsLen] =1
-y_train[nrtsLen+rtsLen:]=2
-y_test[rtsTestCount:(rtsTestCount+nrtsTestCount)]=1
-y_test[(rtsTestCount+nrtsTestCount):]=2
 
 # add handling for empty mrts, errant dot files, random inf's, etc...
 # ideas: regex, filter by .png (looses ability to handle non-png files)
@@ -287,6 +283,7 @@ for each in rtsList:
         (row,col)=each.split()
         if (int(row)< supRow and int(col)<supCol):
             x_train[tr_count]=(pixel[0:dataMax,int(row),int(col)] )
+            y_train[tr_count]=0
             tr_count+=1
         else:
             print("DEBUG: Double check to insure selections are in the range of the data that is going to be used")
@@ -295,6 +292,7 @@ for each in nrtsList:
         (row,col)=each.split()
         if (int(row)< supRow and int(col)<supCol):
             x_train[tr_count]=(pixel[0:dataMax,int(row),int(col)] )
+            y_train[tr_count]=1
             tr_count+=1
         else:
             print("DEBUG: Double check to insure selections are in the range of the data that is going to be used")
@@ -303,10 +301,20 @@ for each in mrtsList:
         (row,col)=each.split()
         if (int(row)< supRow and int(col)<supCol):
             x_train[tr_count]=(pixel[0:dataMax,int(row),int(col)] )
+            y_train[tr_count]=2
             tr_count+=1
         else:
             print("DEBUG: Double check to insure selections are in the range of the data that is going to be used")
-
+if (tr_count < arrayLen):
+    print("DEBUG: we need to pad datasets (shrinking datasets to match selected datasets)")
+    x_train2 = np.zeros((tr_count,dataMax))
+    y_train2 = np.zeros(tr_count)
+    for i in range(0,tr_count):
+        x_train2[i]=x_train[i]
+        y_train2[i]=y_train[i]
+    x_train=x_train2
+    y_train=y_train2
+    arrayLen = tr_count
 if (tr_count > arrayLen ):
     print("DEBUG: A math error has occured! We have more data than array actually said that we had!!")
     tr_count =0
@@ -320,12 +328,12 @@ td_count = 0 # testing data counter
 # we know that data exists for this because of the fact that the testcounts are smaller than the array lengths for each of
 # the arrays
 if (rtsTestCount>0):
-    for i in range(0,rtsTestCount):
-        each = rtsList[i]
+    for each in random.sample(rtsList,rtsTestCount):
         if each != '':
             (row,col)= each.split()
             if int(row)< supRow and int(col)<supCol:
                 x_test[td_count]=(pixel[0:dataMax,int(row),int(col)])
+                y_test[td_count]=0
                 td_count+=1
             else:
                 print("DEBUG: Double check to insure selections are in the range of the data that is going to be used")
@@ -333,12 +341,12 @@ else:
     print("DEBUG: No rts signals in the test set!!")
 
 if (nrtsTestCount>0):
-    for i in range(0,nrtsTestCount):
-        each = nrtsList[i]
+    for each in random.sample(nrtsList,nrtsTestCount):
         if each != '':
             (row,col)= each.split()
             if int(row)< supRow and int(col)<supCol:
                 x_test[td_count]=(pixel[0:dataMax,int(row),int(col)])
+                y_test[td_count]=1
                 td_count+=1
             else:
                 print("DEBUG: Double check to insure selections are in the range of the data that is going to be used")
@@ -348,17 +356,31 @@ status = False # If this is false program does *NOT* write the new npy
                # outputs at the end
 
 if (mrtsTestCount>0):
-    for i in range(0,mrtsTestCount):
-        each = mrtsList[i]
+    for each in random.sample(mrtsList,mrtsTestCount):
         if each != '':
             (row,col)= each.split()
             if int(row)< supRow and int(col)<supCol:
                 x_test[td_count]=(pixel[0:dataMax,int(row),int(col)])
+                y_test[td_count]=2
                 td_count+=1
             else:
                 print("DEBUG: Double check to insure selections are in the range of the data that is going to be used")
 else:
     print("DEBUG: No possible rts signals in the test set!!")
+
+
+if (td_count < testLen):
+    print("DEBUG: we need to pad testing set")
+    x_test2 = np.zeros((td_count,dataMax))
+    y_test2 = np.zeros(td_count)
+    for i in range(0,td_count):
+        x_test2[i]=x_test[i]
+        y_test2[i]=y_test[i]
+    x_test=x_test2
+    y_test=y_test2
+    testLen = td_count
+
+
 
 # Here we do the prime magic on the training dataset!
 # take the length of the training dataset and use prime factorization on it
@@ -438,9 +460,9 @@ if (arrayLen > 0):
         else:
             out +="'categorical_crossentropy'\n"
         settingsData= settingsData[:posbValue]+out+settingsData[(posbValue+poseValue):]
-    if (settingsData.find('dataShape=')):
+    if (settingsData.find('dataShape=')<0):
         settingsData +="dataShape=({},{},{})".format(dataMax, supRow, supCol)+'\n'
-    elif (settingsData.find('dataShape=')):
+    else:
         posbValue = settingsData.find('dataShape=')
         poseValue = settingsData[posbValue:].find('\n')
         out = "dataShape=({},{},{})".format(dataMax, supRow, supCol)+'\n'
@@ -467,3 +489,5 @@ if (status == True):
     print("DEBUG: run modeler next")
 else:
     print("DEBUG: We had an error in writing settings data and have not written incompatible training and/or testing data")
+
+print("DEBUG: size of training and testing datasets (actual:expected)\nxtrain: {}:{}\nytrain: {}:{}\nxtest: {}:{}\nytest: {}:{}".format(tr_count,arrayLen,tr_count,arrayLen,td_count,testLen,td_count,testLen))
