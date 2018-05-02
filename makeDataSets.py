@@ -35,8 +35,8 @@ pixel = loader.load()
 #supCol = 1296 # col because it does *NOT* exist in the dataset.
 
 
-testingSizeTrain = 10
-testingSizeTest  = 1
+testingSizeTrain = 300
+testingSizeTest  = 100
 
 if type(pixel)==np.ndarray:
     (dataMax, supRow, supCol) = pixel.shape
@@ -388,7 +388,7 @@ if (arrayLen > 0):
     DataFactor = loader.prime_factors(int(round(arrayLen)))
     ArrayFactor = loader.prime_factors(int(round(dataMax*0.85)))
     factors = DataFactor+ArrayFactor
-    factors = list(set(factors)) # remove all the duplicates and then get it
+    #factors = list(set(factors)) # remove all the duplicates and then get it
                      # back to a list to manipulate it
     factors.sort(reverse=True)
     if (len(factors)>2):

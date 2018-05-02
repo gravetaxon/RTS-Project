@@ -28,16 +28,16 @@ X_test = np.expand_dims(x_test, axis=2) # reshape (569, 30) to (569, 30, 1)
 NumberHLayers=settings.HiddenLayers
 FilterSize=settings.FilterSize
 KernelSize=settings.KernelSizes
-MaxLoss = 1.05
-MinAccuracy = 0.64
+
 #NumberHLayers = 4             # Number of hidden layers (excluding input and output layers
 #FilterSize=[62,62,62,62,62,62]      # Filter size for each of the layers
 #KernelSize=[11,7,5,5,11,3]          # The kernel size for each hidden layer plus
                               # the input and output layers as the last two data points
 
 MinAccuracy = 0.85
-MaxLosses   = 2.5
+MaxLosses   = 1.05
 InitialSeed = 311967 # semi-random number to have stablity in the model
+
 # Control group - Ben's initial attempt.
 # Input  32  12
 # Layer  64  12
