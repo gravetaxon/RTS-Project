@@ -35,8 +35,9 @@ MinAccuracy = 0.64
 #KernelSize=[11,7,5,5,11,3]          # The kernel size for each hidden layer plus
                               # the input and output layers as the last two data points
 
-
-
+MinAccuracy = 0.85
+MaxLosses   = 2.5
+InitialSeed = 311967 # semi-random number to have stablity in the model
 # Control group - Ben's initial attempt.
 # Input  32  12
 # Layer  64  12
@@ -52,13 +53,13 @@ BatchSize = 16
 Epochs    = 5
 
 score = []
-savedModel = []
+saved = []
 #DEBUG: NumberRoutines was 50
-NumberRoutines = 2
-for rout in range(NumberRoutines):
-    print (rout)
+NumberRoutines = settings.NumberRoutines
+for each in range(NumberRoutines):
+    print (each)
     model = Sequential()
-    random.seed()
+    random.seed(InitialSeed+each) # each loop should have a different seed to generate slightly different models
     # Input Layer
     # input_shape means that we are expecting vectors of the form IxDxN where N is the number of data sets (i.e. each picture), I is the index length of the time/indep, and D is the index for the size of the data
     # in our case the data is a 1500x1x4235 shape
@@ -66,35 +67,50 @@ for rout in range(NumberRoutines):
     model.add(MaxPooling1D(3))
     print ("adding input layer")
     if NumberHLayers == 0:
-        print("No hidden layers")
-    for hnum in range(NumberHLayers):
-        model.add(Conv1D(filters=FilterSize[hnum],kernel_size=KernelSize[hnum], activation='relu'))
-        print("Adding Layer Conv1D("+str(FilterSize[hnum])+",  "+str(KernelSize[hnum])+")")
-        if hnum%2==0:
-            model.add(Dropout(DropPercent))
-            print("Adding dropout")
-        model.add(MaxPooling1D(3))
-        print("adding pooling")
+    	print("No hidden layers")
+    for layer in range(NumberHLayers):
+    	model.add(Conv1D(filters=FilterSize[layer],kernel_size=KernelSize[layer], activation='relu'))
+    	print("Adding Layer Conv1D("+str(FilterSize[layer])+",  "+str(KernelSize[layer])+")")
+    	if layer%2==0:
+    		model.add(Dropout(DropPercent))
+    		print("Adding dropout")
+    	model.add(MaxPooling1D(3))
+    	print("adding pooling")
 
     # Output Layer
     model.add(Conv1D(filters= FilterSize[NumberHLayers+1], kernel_size= KernelSize[NumberHLayers+1],activation='relu'))
     model.add(GlobalAveragePooling1D())
     model.add(Dense(units=AxisCount, activation='sigmoid'))
     print("adding output layer")
-
-    model.compile(loss='binary_crossentropy',
+    model.compile(loss=settings.Loss,
               optimizer='rmsprop',
               metrics=['accuracy'])
-
     model.fit(X_train, y_train, batch_size=BatchSize, epochs=Epochs)
     scr = model.evaluate(X_test, y_test, batch_size=BatchSize)
-    scr = [rout] + scr
-
-    print (scr)
+    print ([each]+scr)
     score.append(scr)
-    if (scr[1] < MaxLoss) and (scr[2] > MinAccuracy):
-        model.save('./PiCam/CNNlin_model'+str(rout)+'.h5')
-        print( "Model saved as {} with losses of {} and accuracy of {}".format(rout,scr[1],scr[2]))
-        savedModel.append(str(rout))
+    if ((scr[1]>MinAccuracy) and (scr[0]<= MaxLosses)):
+        print("DEBUG: Saving model #{}".format(each))
+        model.save('./PiCam/CNNlin_model{}.h5'.format(str(each)))
+        saved.append(str(each))
 print (score)
-print ("Models saved are {}".format(savedModel))
+
+out = ''
+for each in saved:
+    out +=str(each)+','
+out = out[:-1]
+
+
+settingsFile = open('./settings.py','r')
+settingsData = settingsFile.read()
+settingsFile.close()
+if  (settingsData.find('Saved=')<0):
+    settingsData+='Saved=['+out+']'
+elif (settingsData.find('Saved=')>=0):
+    posbValue = settingsData.find("Saved=")
+    poseValue = settingsData[posbValue:].find('\n')
+    settingsData = settingsData[:posbValue]+'Saved=['+str(out) +']\n'+settingsData[(posbValue+poseValue):]
+
+settingsFile = open('./settings.py','w')
+settingsFile.write(settingsData)
+settingsFile.close()

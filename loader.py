@@ -3,7 +3,7 @@ import h5py
 import numpy as np
 import os
 import errno
- 
+
 def ensureFolder(file_path):
     if file_path[len(file_path)-1]!='/':
         #print(dir)
@@ -48,4 +48,6 @@ def smallest_power(x,m):
     if (i-1) >0:
         return m**(i-1)
     else:
-        return m	
+        return m
+def mean(x):
+    return float(sum(numbers)) / max(len(numbers), 1)
