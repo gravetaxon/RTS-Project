@@ -62,7 +62,9 @@ parser.add_argument("-o", "--oldMethod", action='store_true', help="Activates a 
 args = parser.parse_args()
 
 if args.oldMethod :
-    print("DEBUG: Activating old method!")
+    print("DEBUG: Activating old binary method!")
+else:
+    print("DEBUG: Categorical method active")
 
 if args.rtsPath != None:
     print("DEBUG: rtsPath is {}".format(args.rtsPath) )
@@ -98,12 +100,12 @@ if args.nrtsPath != None:
         print("DEBUG: it is a file! Opening rtsFile")
         nrtsFile = open(str(args.nrtsPath),'r')
 else:
-    print("DEBUG: mrts will be built from files IN directory")
+    print("DEBUG: nrts will be built from files IN directory")
     nrtsFile = open('./PiCam/NRTS_list.txt','r')
 
-#rtsFile = open('./PiCam/RTS_list.txt','r')
-#mrtsFile = open('./PiCam/MRTS_list.txt','r')
-#nrtsFile = open('./PiCam/NRTS_list.txt','r')
+rtsFile = open('./PiCam/RTS_list.txt','r')
+mrtsFile = open('./PiCam/MRTS_list.txt','r')
+nrtsFile = open('./PiCam/NRTS_list.txt','r')
 
 
 # seek to the 0th bytes
@@ -122,6 +124,21 @@ else:
 rtsFile.close()
 mrtsFile.close()
 nrtsFile.close()
+
+# clean the lists
+
+for i in range(0,len(rtsList)):
+    if rtsList[i]==".DS Store":
+        rtsList[i]=''
+
+for i in range(0,len(mrtsList)):
+    if mrtsList[i]==".DS Store":
+        mrtsList[i]=''
+for i in range(0,len(nrtsList)):
+    if nrtsList[i]==".DS Store":
+        nrtsList[i]=''
+
+
 
 # Let's get the lengths of each of the lists
 
@@ -147,6 +164,7 @@ else:
 
 if ((args.testrtsPath != None) or (args.testmrtsPath != None) or (args.testnrtsPath != None)):
     # load the files if at lease rts and either mrts or nrts has been given
+    print("DEBUG: loading from files given")
     if (args.testrtsPath != None and args.testmrtsPath!= None) or (args.testrtsPath != None and args.testnrtsPath!= None):
         if Path(args.testrtsPath).is_file():
             rtstestFile = open(str(args.testrtsPath),'r')
@@ -166,6 +184,7 @@ if ((args.testrtsPath != None) or (args.testmrtsPath != None) or (args.testnrtsP
     else:
         # user provided only the maybe and non signal files, override users choice and use default files
         if Path('./PiCam/RTS_List_test.txt').is_file() and Path('./PiCam/WN_ListSh_test.txt').is_file():
+            print("Using old rts lists for testing")
             rtstestFile = open("./PiCam/RTS_List_test.txt", "r+")
             nrtstestFile = open("./PiCam/WN_ListSh_test.txt",'r')
             mrtstestFile = open("./PiCam/WN_ListSh_test.txt",'r')
@@ -210,6 +229,7 @@ if ((args.testrtsPath != None) or (args.testmrtsPath != None) or (args.testnrtsP
 else:
     # use the computation method
     # add the lengths and make the zeros arrays
+    print("DEBUG: Computing test dataset")
     arrayLen = int(rtsLen + mrtsLen + nrtsLen)
     testLen = int(0.15*arrayLen)
 
@@ -255,6 +275,10 @@ y_train[rtsLen:nrtsLen+rtsLen] =1
 y_train[nrtsLen+rtsLen:]=2
 y_test[rtsTestCount:(rtsTestCount+nrtsTestCount)]=1
 y_test[(rtsTestCount+nrtsTestCount):]=2
+
+# add handling for empty mrts, errant dot files, random inf's, etc...
+# ideas: regex, filter by .png (looses ability to handle non-png files)
+
 
 # x dataset is compiled by going through each set in turn and loading the speific pixel into the training dataset
 tr_count = 0 # training data counter
@@ -399,7 +423,28 @@ if (arrayLen > 0):
         posbValue = settingsData.find('FilterSize=')
         poseValue = settingsData[posbValue:].find('\n')
         settingsData=settingsData[:posbValue]+'FilterSize='+out+'\n'+settingsData[(posbValue+poseValue):]
-
+    if (settingsData.find('Loss=')<0):
+        settingsData +='Loss='
+        if (args.oldMethod):
+            settingsData +="'binary_crossentropy'\n"
+        else:
+            settingsData +="'categorical_crossentropy'\n"
+    else:
+        posbValue = settingsData.find('Loss=')
+        poseValue = settingsData[posbValue:].find('\n')
+        out='Loss='
+        if (args.oldMethod):
+            out+="'binary_crossentropy'\n"
+        else:
+            out +="'categorical_crossentropy'\n"
+        settingsData= settingsData[:posbValue]+out+settingsData[(posbValue+poseValue):]
+    if (settingsData.find('dataShape=')):
+        settingsData +="dataShape=({},{},{})".format(dataMax, supRow, supCol)+'\n'
+    elif (settingsData.find('dataShape=')):
+        posbValue = settingsData.find('dataShape=')
+        poseValue = settingsData[posbValue:].find('\n')
+        out = "dataShape=({},{},{})".format(dataMax, supRow, supCol)+'\n'
+        settingsData = settingsData[:posbValue]+out+settingsData[(posbValue+poseValue):]
     settingsFile = open('./settings.py','w')
     settingsData= settingsData.replace('\n\n','\n')
     print (settingsData)
@@ -419,5 +464,6 @@ if (status == True):
     np.save('./PiCam/x_test.npy',x_test)
     np.save('./PiCam/y_train.npy',y_train)
     np.save('./PiCam/y_test.npy',y_test)
+    print("DEBUG: run modeler next")
 else:
     print("DEBUG: We had an error in writing settings data and have not written incompatible training and/or testing data")

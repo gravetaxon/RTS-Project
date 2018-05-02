@@ -12,30 +12,43 @@ import os
 import loader
 import settings
 import sys
-
+import random
 if os.name == 'posix':
     os.nice(10)
 
-RTSRes = open("./Picam/modelOut.txt","w+")
+RTSRes = open("./Picam/model_Out.txt","w+")
+SavedModels =settings.Saved
+NumModels = len(SavedModels)
+DataShape = settings.dataShape
+models = []
+for each in SavedModels:
+    model_name = './PiCam/CNNlin_model{}.h5'.format(str(each))
+    model = load_model(model_name)
+    models.append(model)
 
-arg = 2
-if len(sys.argv) > 1:
-	model_name = sys.argv[1]
-else:
-	model_name = input("Please name model # you wish to use")
-model_name = './PiCam/CNNlin_model'+model_name+'.h5'
-model = load_model(model_name)
 pixel = loader.load()
-for i in range(1,972):
-    print("status ",(i/972)*100,"%" )
-    for j in range(1,1296):
-        pix = pixel[0:1500, i, j]
+for i in range(1,DataShape[1]):
+    print("status ",(i/DataShape[1])*100,"%" )
+    for j in range(1,DataShape[2]):
+        pix = pixel[0:DataShape[0], i, j]
         ppix = pix[None,:,None]
-        mp = model.predict(ppix) # how does this work with multiple categories?
+        votes = []
+        for voter in random.sample(models,5):
+            mp = model.predict(ppix) # how does this work with multiple categories?
+            if (mp[0] ==0):
+                # model voted yes
+                votes.append(int(1))
+            else:
+                votes.append(int(0))
+        # mean of votes
+        VoterAve = np.mean(votes)
+        if (VoterAve >=settings.DecisionStep):
+            print(i,j)
+            RTSRes.write("%d %d %d\r\n" %(i,j,VoterAve))
         #print(i,j,mp[0])
-        if mp[0] == 0:
-            print(i,j,mp[0])
-            RTSRes.write("%d %d %d\r\n" %(i,j,mp[0]))
+        #if mp[0] == 0:
+        #    print(i,j,mp[0])
+    #        RTSRes.write("%d %d %d\r\n" %(i,j,mp[0]))
             #x = np.arange(0,1500)
             #plt.plot(x,pix)
             #plt.savefig('./PiCam/RTS_CNN2demo/%d_%d' % (i,j))

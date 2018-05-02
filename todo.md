@@ -2,9 +2,9 @@
 
 - [x]   add old list parsing into makeList.py 
 - [x] modify makeList to accept arguments
-- [ ]   verify operation in binary (rts/non-rts) mode
+- [x ]   verify operation in binary (rts/non-rts) mode
 - [ ]   verify operation in categorical mode
-- [ ] add flags in Settings.py to allow the makeDataSets to change how the model is fit 
+- [x ] add flags in Settings.py to allow the makeDataSets to change how the model is fit 
           i.e. the switch between 'binary_crossentropy' and 'categorical
 - [ ] in orignal version verify if categorical accuracy is as high as binary via the code snippet 
 Code snippit:
