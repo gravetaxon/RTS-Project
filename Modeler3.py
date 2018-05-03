@@ -71,9 +71,9 @@ for each in range(NumberRoutines):
     for layer in range(NumberHLayers):
     	model.add(Conv1D(filters=FilterSize[layer],kernel_size=KernelSize[layer], activation='relu'))
     	print("Adding Layer Conv1D("+str(FilterSize[layer])+",  "+str(KernelSize[layer])+")")
-    	#if layer%2==0:
-    	model.add(Dropout(DropPercent))
-    	print("Adding dropout")
+    	if layer%2==0:
+    	       model.add(Dropout(DropPercent))
+    	       print("Adding dropout")
     	model.add(MaxPooling1D(3))
     	print("adding pooling")
 
@@ -89,10 +89,10 @@ for each in range(NumberRoutines):
     scr = model.evaluate(X_test, y_test, batch_size=BatchSize)
     print ([each]+scr)
     score.append(scr)
-    if ((scr[1]>MinAccuracy) and (scr[0]<= MaxLosses)):
-        print("DEBUG: Saving model #{}".format(each))
-        model.save('./PiCam/CNNlin_model{}.h5'.format(str(each)))
-        saved.append(str(each))
+    #if ((scr[1]>MinAccuracy) and (scr[0]<= MaxLosses)):
+    print("DEBUG: Saving model #{}".format(each))
+    model.save('./PiCam/CNNlin_model{}.h5'.format(str(each)))
+    saved.append(str(each))
 print (score)
 
 out = ''

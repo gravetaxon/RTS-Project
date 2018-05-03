@@ -1,12 +1,14 @@
 # TODO list
 
-- [x]   add old list parsing into makeList.py 
+- [x]   add old list parsing into makeList.py
 - [x] modify makeList to accept arguments
 - [x ]   verify operation in binary (rts/non-rts) mode
 - [ ]   verify operation in categorical mode
-- [x ] add flags in Settings.py to allow the makeDataSets to change how the model is fit 
-          i.e. the switch between 'binary_crossentropy' and 'categorical
-- [ ] in orignal version verify if categorical accuracy is as high as binary via the code snippet 
+- [x ] add flags in Settings.py to allow the makeDataSets to change how the model is fit
+          i.e. the switch between 'binary_crossentropy' and 'categorical_crossentropy'
+- [ ] Change testing data to old dataset for now
+- [ ] split model training into primary (rts/nrts) and secondary ({m,e,g}rts/nrts) models
+- [ ] in orignal version verify if categorical accuracy is as high as binary via the code snippet
 Code snippit:
 ```python
 from keras.metrics import categorical_accuracy
