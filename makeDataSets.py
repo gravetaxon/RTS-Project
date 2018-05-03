@@ -388,16 +388,27 @@ if (arrayLen > 0):
     DataFactor = loader.prime_factors(int(round(arrayLen)))
     ArrayFactor = loader.prime_factors(int(round(dataMax*0.85)))
     factors = DataFactor+ArrayFactor
-    #factors = list(set(factors)) # remove all the duplicates and then get it
+    ProdFactors = list(set(factors)) # remove all the duplicates and then get it
                      # back to a list to manipulate it
     factors.sort(reverse=True)
+    ProdFactors.sort(reverse=True)
     if (len(factors)>2):
         largest = factors.pop(0)
         smallest = factors.pop()
+        ProdFactors.pop(0)
+        ProdFactors.pop()
         factors.append(largest)
         factors.append(smallest)
-    print ("DEBUG: Factors:")
-    print (factors)
+    # check if negatives are generated from the hidden layer Factors
+    crouchingLayers = factors[:-2]+[factors[-1]] # hidden layers plus output layer
+    head = initVal = crouchingLayers.pop(0)
+    for idx in range(len(crouchingLayers)):
+        initVal -= int( crouchingLayers[idx])
+        if (initVal < 0) and (idx < len(crouchingLayers)):
+            crouchingLayers.pop(idx-1)
+
+    factors = [head]+crouchingLayers[:-1] + factors[-2:]
+    print ("DEBUG: Factors:{}".format(factors))
     # FilterSize is determined by the product of the hidden layers
     # KernelSize is determined by the prime factors themselves
     NumberHLayers_in = len(factors)-2
@@ -406,7 +417,7 @@ if (arrayLen > 0):
         # hidden layers exist! Use all the numbers from 0 to largest
         HiddenLayers_out = NumberHLayers_in
         FilterSize_Prod = 1
-        for each in factors[0:HiddenLayers_out]:
+        for each in ProdFactors[0:HiddenLayers_out]:
             FilterSize_Prod = FilterSize_Prod*int(each)
         FilterSize_out = int(loader.smallest_power(FilterSize_Prod,2))
 
@@ -419,7 +430,7 @@ if (arrayLen > 0):
     print("DEBUG: Filter Size: "+str(FilterSize_out))
     settingsFile = open('./settings.py','r')
     settingsData = settingsFile.read()
-    print(settingsData)
+    print("Current settings data:\n{}".format(settingsData))
     settingsFile.close()
     if (settingsData.find('KernelSizes=')<0):
         settingsData+="KernelSizes="+KernelSizes+'\n'
@@ -451,7 +462,7 @@ if (arrayLen > 0):
             settingsData +="'binary_crossentropy'\n"
         else:
             settingsData +="'categorical_crossentropy'\n"
-    else:
+    elif (settingsData.find('Loss=')>=0):
         posbValue = settingsData.find('Loss=')
         poseValue = settingsData[posbValue:].find('\n')
         out='Loss='
@@ -462,14 +473,15 @@ if (arrayLen > 0):
         settingsData= settingsData[:posbValue]+out+settingsData[(posbValue+poseValue):]
     if (settingsData.find('dataShape=')<0):
         settingsData +="dataShape=({},{},{})".format(dataMax, supRow, supCol)+'\n'
-    else:
+    elif (settingsData.find('dataShape=')>=0):
+
         posbValue = settingsData.find('dataShape=')
         poseValue = settingsData[posbValue:].find('\n')
         out = "dataShape=({},{},{})".format(dataMax, supRow, supCol)+'\n'
         settingsData = settingsData[:posbValue]+out+settingsData[(posbValue+poseValue):]
     settingsFile = open('./settings.py','w')
-    settingsData= settingsData.replace('\n\n','\n')
-    print (settingsData)
+    settingsData= settingsData.replace('\n\n','\n').replace('\n \n','\n')
+    print ("Data to be written:\n{}".format(settingsData))
     bytesWritten = settingsFile.write(settingsData)
     settingsFile.close()
     if (len(settingsData)==bytesWritten):
