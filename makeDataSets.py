@@ -560,14 +560,18 @@ def main ():
 
     testingSizeTest  = 100
     testingSizeTrain = 500
+    
 
     pixel = loader.load()
     (dataMax, supRow, supCol) = pixel.shape
 
     (trainStatus, x_train,y_train)  = makeTrainingData(args,pixel,testingSizeTrain)
     (testStatus, x_test,y_test)     = makeTestingData(args,pixel,testingSizeTest)
-    arrayLen = x_train.shape[0]
-    statusFactor                    = dataFactors (arrayLen, dataMax,  supRow, supCol)
+    if type(x_train) == numpy.ndarray:
+        arrayLen = x_train.shape[0]
+        statusFactor                    = dataFactors (arrayLen, dataMax,  supRow, supCol)
+    else:
+        statusFactor = False
     if trainStatus :
         # save the training data
         statusTraining = True
