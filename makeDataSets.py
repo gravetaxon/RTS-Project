@@ -1,7 +1,9 @@
+#!/usr/bin/env python3
+
 """
 There are 2,313 RTS candidates, so add 2,637 WN signals to create np.array(4950,1500)
 """
-#!/usr/local/bin/python3
+
 import matplotlib
 matplotlib.use('Agg')
 import pylab
@@ -17,35 +19,6 @@ import random
 if os.name == 'posix':
     os.nice(10)
 
-#x_train = np.zeros((4982,1500))
-#x_train = np.zeros((4235,1500)) #0.85*4982
-#x_test = np.zeros((747,1500))
-
-#y_train = np.zeros(4235)
-#y_test  = np.zeros(747)
-
-#y_train[1976:4235]=1
-#y_test[347:747]=1
-#                   data   row   col
-# pixel dimensions 1500 x 972 x 1296
-# pixel[0:1500,0:972,0:1296]
-pixel = loader.load()
-# Hard coded values (need to find way to get values programmatically)
-#supRow = 972  # Cannot reach these values for either row or
-#supCol = 1296 # col because it does *NOT* exist in the dataset.
-
-
-testingSizeTrain = 300
-testingSizeTest  = 100
-
-if type(pixel)==np.ndarray:
-    (dataMax, supRow, supCol) = pixel.shape
-#else if type(pixel) = list:
-#    ndims = np.ndim(pixel)
-#    print("And magic needs to occur, not here yet")
-#    break
-else:
-    print("we have a problem")
 
 # Open the input files
 
@@ -103,26 +76,57 @@ else:
     print("DEBUG: nrts will be built from files IN directory")
     nrtsFile = open('./PiCam/NRTS_list.txt','r')
 
-rtsFile = open('./PiCam/RTS_list.txt','r')
-mrtsFile = open('./PiCam/MRTS_list.txt','r')
-nrtsFile = open('./PiCam/NRTS_list.txt','r')
 
 
-# seek to the 0th bytes
-rtsFile.seek(0)
-mrtsFile.seek(0)
-nrtsFile.seek(0)
+#x_train = np.zeros((4982,1500))
+#x_train = np.zeros((4235,1500)) #0.85*4982
+#x_test = np.zeros((747,1500))
+
+#y_train = np.zeros(4235)
+#y_test  = np.zeros(747)
+
+#y_train[1976:4235]=1
+#y_test[347:747]=1
+#                   data   row   col
+# pixel dimensions 1500 x 972 x 1296
+# pixel[0:1500,0:972,0:1296]
+pixel = loader.load()
+# Hard coded values (need to find way to get values programmatically)
+#supRow = 972  # Cannot reach these values for either row or
+#supCol = 1296 # col because it does *NOT* exist in the dataset.
+
+
+testingSizeTrain = 300
+testingSizeTest  = 100
+
+if type(pixel)==np.ndarray:
+    (dataMax, supRow, supCol) = pixel.shape
+#else if type(pixel) = list:
+#    ndims = np.ndim(pixel)
+#    print("And magic needs to occur, not here yet")
+#    break
+else:
+    print("we have a problem")
+
+
+
+
+#rtsFile = open('./PiCam/RTS_list.txt','r')
+#mrtsFile = open('./PiCam/MRTS_list.txt','r')
+#nrtsFile = open('./PiCam/NRTS_list.txt','r')
+
 
 # Let's read all of the files in and get the lengths to setup the initial arrays
 rtsList = rtsFile.read().replace('\n\n','\n').split('\n') # each line in the file should be a single line and not split (yet...)
 nrtsList = nrtsFile.read().replace('\n\n','\n').split('\n')
 if args.oldMethod == False:
     mrtsList = mrtsFile.read().replace('\n\n','\n').split('\n')
+    mrtsFile.close()
 else:
     mrtsList = ""
 # close the files since we don't need them anymore
 rtsFile.close()
-mrtsFile.close()
+
 nrtsFile.close()
 
 # clean the lists
@@ -173,11 +177,11 @@ if ((args.testrtsPath != None) or (args.testmrtsPath != None) or (args.testnrtsP
             rtstestFile = open("./PiCam/RTS_List_test.txt", 'r')
         if args.testmrtsPath != None or args.testnrtsPath != None:
             # check which if both are here
-            if Path(args.testnrtsPath).is_file():
+            if (args.testnrtsPath != None) and (Path(args.testnrtsPath).is_file()):
                 nrtstestFile = open(str(args.testnrtsPath),'r')
             else:
                 nrtstestFile = open("./PiCam/WN_ListSh_test.txt",'r')
-            if Path(args.testmrtsPath).is_file():
+            if (args.testmrtsPath != None) and (Path(args.testmrtsPath).is_file()):
                 mrtstestFile = open(str(args.testmrtsPath),'r')
             else:
                 mrtstestFile = open("./PiCam/WN_ListSh_test.txt",'r')
@@ -196,11 +200,12 @@ if ((args.testrtsPath != None) or (args.testmrtsPath != None) or (args.testnrtsP
     nrtstestList = nrtstestFile.read().replace('\n\n','\n').split('\n') # each line in the file should be a single line and not split (yet...)
     if args.oldMethod == False:
         mrtstestList = mrtstestFile.read().replace('\n\n','\n').split('\n') # each line in the file should be a single line and not split (yet...)
+        nrtstestFile.close()
     else:
         mrtstestList = ""
     rtstestFile.close()
     mrtstestFile.close()
-    nrtstestFile.close()
+
     rtstestLen = len(rtstestList)
     nrtstestLen = len(nrtstestList)
     mrtstestLen = len(mrtstestList)
