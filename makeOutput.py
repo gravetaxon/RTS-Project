@@ -35,17 +35,18 @@ for i in range(1,loopData[1]):
         pix = pixel[0:loopData[0], i, j]
         ppix = pix[None,:,None]
         votes = []
-        for voter in random.sample(models,5):
+        for voter in random.sample(models,9):
             mp = model.predict(ppix) # how does this work with multiple categories?
     #        print(mp)
             if (mp[0] ==0):
                 # model voted yes
                 votes.append(int(1))
             else:
+                # model voted no
                 votes.append(int(0))
         # mean of votes
         VoterAve = np.mean(votes)
-        if (VoterAve >=settings.DecisionStep):
+        if (VoterAve >=0.1):
             print(i,j)
             RTSRes.write("%d %d %d\r\n" %(i,j,VoterAve))
         else:

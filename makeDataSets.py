@@ -1,7 +1,9 @@
+#!/usr/bin/env python3
+
 """
 There are 2,313 RTS candidates, so add 2,637 WN signals to create np.array(4950,1500)
 """
-#!/usr/local/bin/python3
+
 import matplotlib
 matplotlib.use('Agg')
 import pylab
@@ -13,39 +15,161 @@ import argparse
 import os, os.path
 from pathlib import Path
 import random
+
+def dataFactors (arrayLen, dataMax,  supRow, supCol):
+    # Here we do the prime magic on the training dataset!
+    # take the length of the training dataset and use prime factorization on it
+    if (arrayLen > 0):
+        DataFactor = loader.prime_factors(int(round(arrayLen)))
+        ArrayFactor = loader.prime_factors(int(round(dataMax*0.85)))
+        factors = DataFactor+ArrayFactor
+        ProdFactors = list(set(factors)) # remove all the duplicates and then get it
+                         # back to a list to manipulate it
+        factors.sort(reverse=True)
+        ProdFactors.sort(reverse=True)
+        if (len(factors)>2):
+            largest = factors.pop(0)
+            smallest = factors.pop()
+            ProdFactors.pop(0)
+            ProdFactors.pop()
+            factors.append(largest)
+            factors.append(smallest)
+        # check if negatives are generated from the hidden layer Factors
+        crouchingLayers = factors[:-2]+[factors[-1]] # hidden layers plus output layer
+        head = initVal = crouchingLayers.pop(0)
+        for idx in range(len(crouchingLayers)):
+            initVal -= int( crouchingLayers[idx])
+            if (initVal < 0) and (idx < len(crouchingLayers)):
+                crouchingLayers.pop(idx-1)
+
+        factors = [head]+crouchingLayers[:-1] + factors[-2:]
+        print ("DEBUG: Factors:{}".format(factors))
+        # FilterSize is determined by the product of the hidden layers
+        # KernelSize is determined by the prime factors themselves
+        NumberHLayers_in = len(factors)-2
+        print("DEBUG: Possible Hidden Layer count:"+str(NumberHLayers_in))
+        if (NumberHLayers_in >0):
+            # hidden layers exist! Use all the numbers from 0 to largest
+            HiddenLayers_out = NumberHLayers_in
+            FilterSize_Prod = 1
+            for each in ProdFactors[0:HiddenLayers_out]:
+                FilterSize_Prod = FilterSize_Prod*int(each)
+            FilterSize_out = int(loader.smallest_power(FilterSize_Prod,2))
+
+        KernelSizes='['
+        for each in factors:
+            KernelSizes+=str(each)+','
+        KernelSizes=KernelSizes[:-1]
+        KernelSizes+=']'
+        print("DEBUG: Kernel Size: "+KernelSizes)
+        print("DEBUG: Filter Size: "+str(FilterSize_out))
+        settingsFile = open('./settings.py','r')
+        settingsData = settingsFile.read()
+        print("Current settings data:\n{}".format(settingsData))
+        settingsFile.close()
+        if (settingsData.find('KernelSizes=')<0):
+            settingsData+="KernelSizes="+KernelSizes+'\n'
+        elif (settingsData.find('KernelSizes=')>=0):
+            posbValue=settingsData.find('KernelSizes=') # What position does the string start
+            poseValue=settingsData[posbValue:].find('\n')        # and where does it end? On the first newline
+            settingsData=settingsData[:posbValue]+"KernelSizes="+KernelSizes+'\n'+settingsData[(posbValue+poseValue):]
+
+        if (settingsData.find('HiddenLayers=')<0):
+            settingsData+="HiddenLayers="+str(HiddenLayers_out)+'\n'
+        elif (settingsData.find('HiddenLayers=')>=0):
+            posbValue = settingsData.find('HiddenLayers=')
+            poseValue = settingsData[posbValue:].find('\n')
+            settingsData = settingsData[:posbValue]+"HiddenLayers="+str(HiddenLayers_out)+'\n'+settingsData[(posbValue+poseValue):]
+
+        if (settingsData.find('FilterSize=')<0):
+            out = (str(FilterSize_out)+',')*(len(factors))
+            out = '['+out[:-1]+']'
+            settingsData+="FilterSize="+out+'\n'
+        elif (settingsData.find('FilterSize=')>=0):
+            out = (str(FilterSize_out)+',')*(len(factors))
+            out = '['+out[:-1]+']'
+            posbValue = settingsData.find('FilterSize=')
+            poseValue = settingsData[posbValue:].find('\n')
+            settingsData=settingsData[:posbValue]+'FilterSize='+out+'\n'+settingsData[(posbValue+poseValue):]
+        if (settingsData.find('Loss=')<0):
+            settingsData +='Loss='
+            if (args.oldMethod):
+                settingsData +="'binary_crossentropy'\n"
+            else:
+                settingsData +="'categorical_crossentropy'\n"
+        elif (settingsData.find('Loss=')>=0):
+            posbValue = settingsData.find('Loss=')
+            poseValue = settingsData[posbValue:].find('\n')
+            out='Loss='
+            if (args.oldMethod):
+                out+="'binary_crossentropy'\n"
+            else:
+                out +="'categorical_crossentropy'\n"
+            settingsData= settingsData[:posbValue]+out+settingsData[(posbValue+poseValue):]
+        if (settingsData.find('dataShape=')<0):
+            settingsData +="dataShape=({},{},{})".format(dataMax, supRow, supCol)+'\n'
+        elif (settingsData.find('dataShape=')>=0):
+
+            posbValue = settingsData.find('dataShape=')
+            poseValue = settingsData[posbValue:].find('\n')
+            out = "dataShape=({},{},{})".format(dataMax, supRow, supCol)+'\n'
+            settingsData = settingsData[:posbValue]+out+settingsData[(posbValue+poseValue):]
+        settingsFile = open('./settings.py','w')
+        settingsData= settingsData.replace('\n\n','\n').replace('\n \n','\n')
+        print ("Data to be written:\n{}".format(settingsData))
+        bytesWritten = settingsFile.write(settingsData)
+        settingsFile.close()
+        if (len(settingsData)==bytesWritten):
+            status = True
+        return status
+    else:
+        print("DEBUG: we had a failure to communicate...")
+        return False
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #import settings
 if os.name == 'posix':
     os.nice(10)
 
-#x_train = np.zeros((4982,1500))
-#x_train = np.zeros((4235,1500)) #0.85*4982
-#x_test = np.zeros((747,1500))
-
-#y_train = np.zeros(4235)
-#y_test  = np.zeros(747)
-
-#y_train[1976:4235]=1
-#y_test[347:747]=1
-#                   data   row   col
-# pixel dimensions 1500 x 972 x 1296
-# pixel[0:1500,0:972,0:1296]
-pixel = loader.load()
-# Hard coded values (need to find way to get values programmatically)
-#supRow = 972  # Cannot reach these values for either row or
-#supCol = 1296 # col because it does *NOT* exist in the dataset.
 
 
-testingSizeTrain = 300
-testingSizeTest  = 100
 
-if type(pixel)==np.ndarray:
-    (dataMax, supRow, supCol) = pixel.shape
-#else if type(pixel) = list:
-#    ndims = np.ndim(pixel)
-#    print("And magic needs to occur, not here yet")
-#    break
-else:
-    print("we have a problem")
+
+
+
+
+
+
+
+
+
+
+
 
 # Open the input files
 
@@ -103,26 +227,57 @@ else:
     print("DEBUG: nrts will be built from files IN directory")
     nrtsFile = open('./PiCam/NRTS_list.txt','r')
 
-rtsFile = open('./PiCam/RTS_list.txt','r')
-mrtsFile = open('./PiCam/MRTS_list.txt','r')
-nrtsFile = open('./PiCam/NRTS_list.txt','r')
 
 
-# seek to the 0th bytes
-rtsFile.seek(0)
-mrtsFile.seek(0)
-nrtsFile.seek(0)
+#x_train = np.zeros((4982,1500))
+#x_train = np.zeros((4235,1500)) #0.85*4982
+#x_test = np.zeros((747,1500))
+
+#y_train = np.zeros(4235)
+#y_test  = np.zeros(747)
+
+#y_train[1976:4235]=1
+#y_test[347:747]=1
+#                   data   row   col
+# pixel dimensions 1500 x 972 x 1296
+# pixel[0:1500,0:972,0:1296]
+pixel = loader.load()
+# Hard coded values (need to find way to get values programmatically)
+#supRow = 972  # Cannot reach these values for either row or
+#supCol = 1296 # col because it does *NOT* exist in the dataset.
+
+
+testingSizeTrain = 300
+testingSizeTest  = 100
+
+if type(pixel)==np.ndarray:
+    (dataMax, supRow, supCol) = pixel.shape
+#else if type(pixel) = list:
+#    ndims = np.ndim(pixel)
+#    print("And magic needs to occur, not here yet")
+#    break
+else:
+    print("we have a problem")
+
+
+
+
+#rtsFile = open('./PiCam/RTS_list.txt','r')
+#mrtsFile = open('./PiCam/MRTS_list.txt','r')
+#nrtsFile = open('./PiCam/NRTS_list.txt','r')
+
 
 # Let's read all of the files in and get the lengths to setup the initial arrays
 rtsList = rtsFile.read().replace('\n\n','\n').split('\n') # each line in the file should be a single line and not split (yet...)
 nrtsList = nrtsFile.read().replace('\n\n','\n').split('\n')
 if args.oldMethod == False:
     mrtsList = mrtsFile.read().replace('\n\n','\n').split('\n')
+    mrtsFile.close()
 else:
     mrtsList = ""
 # close the files since we don't need them anymore
 rtsFile.close()
-mrtsFile.close()
+
 nrtsFile.close()
 
 # clean the lists
@@ -173,11 +328,11 @@ if ((args.testrtsPath != None) or (args.testmrtsPath != None) or (args.testnrtsP
             rtstestFile = open("./PiCam/RTS_List_test.txt", 'r')
         if args.testmrtsPath != None or args.testnrtsPath != None:
             # check which if both are here
-            if Path(args.testnrtsPath).is_file():
+            if (args.testnrtsPath != None) and (Path(args.testnrtsPath).is_file()):
                 nrtstestFile = open(str(args.testnrtsPath),'r')
             else:
                 nrtstestFile = open("./PiCam/WN_ListSh_test.txt",'r')
-            if Path(args.testmrtsPath).is_file():
+            if (args.testmrtsPath != None) and (Path(args.testmrtsPath).is_file()):
                 mrtstestFile = open(str(args.testmrtsPath),'r')
             else:
                 mrtstestFile = open("./PiCam/WN_ListSh_test.txt",'r')
@@ -196,11 +351,12 @@ if ((args.testrtsPath != None) or (args.testmrtsPath != None) or (args.testnrtsP
     nrtstestList = nrtstestFile.read().replace('\n\n','\n').split('\n') # each line in the file should be a single line and not split (yet...)
     if args.oldMethod == False:
         mrtstestList = mrtstestFile.read().replace('\n\n','\n').split('\n') # each line in the file should be a single line and not split (yet...)
+        nrtstestFile.close()
     else:
         mrtstestList = ""
     rtstestFile.close()
     mrtstestFile.close()
-    nrtstestFile.close()
+
     rtstestLen = len(rtstestList)
     nrtstestLen = len(nrtstestList)
     mrtstestLen = len(mrtstestList)
@@ -382,113 +538,6 @@ if (td_count < testLen):
 
 
 
-# Here we do the prime magic on the training dataset!
-# take the length of the training dataset and use prime factorization on it
-if (arrayLen > 0):
-    DataFactor = loader.prime_factors(int(round(arrayLen)))
-    ArrayFactor = loader.prime_factors(int(round(dataMax*0.85)))
-    factors = DataFactor+ArrayFactor
-    ProdFactors = list(set(factors)) # remove all the duplicates and then get it
-                     # back to a list to manipulate it
-    factors.sort(reverse=True)
-    ProdFactors.sort(reverse=True)
-    if (len(factors)>2):
-        largest = factors.pop(0)
-        smallest = factors.pop()
-        ProdFactors.pop(0)
-        ProdFactors.pop()
-        factors.append(largest)
-        factors.append(smallest)
-    # check if negatives are generated from the hidden layer Factors
-    crouchingLayers = factors[:-2]+[factors[-1]] # hidden layers plus output layer
-    head = initVal = crouchingLayers.pop(0)
-    for idx in range(len(crouchingLayers)):
-        initVal -= int( crouchingLayers[idx])
-        if (initVal < 0) and (idx < len(crouchingLayers)):
-            crouchingLayers.pop(idx-1)
-
-    factors = [head]+crouchingLayers[:-1] + factors[-2:]
-    print ("DEBUG: Factors:{}".format(factors))
-    # FilterSize is determined by the product of the hidden layers
-    # KernelSize is determined by the prime factors themselves
-    NumberHLayers_in = len(factors)-2
-    print("DEBUG: Possible Hidden Layer count:"+str(NumberHLayers_in))
-    if (NumberHLayers_in >0):
-        # hidden layers exist! Use all the numbers from 0 to largest
-        HiddenLayers_out = NumberHLayers_in
-        FilterSize_Prod = 1
-        for each in ProdFactors[0:HiddenLayers_out]:
-            FilterSize_Prod = FilterSize_Prod*int(each)
-        FilterSize_out = int(loader.smallest_power(FilterSize_Prod,2))
-
-    KernelSizes='['
-    for each in factors:
-        KernelSizes+=str(each)+','
-    KernelSizes=KernelSizes[:-1]
-    KernelSizes+=']'
-    print("DEBUG: Kernel Size: "+KernelSizes)
-    print("DEBUG: Filter Size: "+str(FilterSize_out))
-    settingsFile = open('./settings.py','r')
-    settingsData = settingsFile.read()
-    print("Current settings data:\n{}".format(settingsData))
-    settingsFile.close()
-    if (settingsData.find('KernelSizes=')<0):
-        settingsData+="KernelSizes="+KernelSizes+'\n'
-    elif (settingsData.find('KernelSizes=')>=0):
-        posbValue=settingsData.find('KernelSizes=') # What position does the string start
-        poseValue=settingsData[posbValue:].find('\n')        # and where does it end? On the first newline
-        settingsData=settingsData[:posbValue]+"KernelSizes="+KernelSizes+'\n'+settingsData[(posbValue+poseValue):]
-
-    if (settingsData.find('HiddenLayers=')<0):
-        settingsData+="HiddenLayers="+str(HiddenLayers_out)+'\n'
-    elif (settingsData.find('HiddenLayers=')>=0):
-        posbValue = settingsData.find('HiddenLayers=')
-        poseValue = settingsData[posbValue:].find('\n')
-        settingsData = settingsData[:posbValue]+"HiddenLayers="+str(HiddenLayers_out)+'\n'+settingsData[(posbValue+poseValue):]
-
-    if (settingsData.find('FilterSize=')<0):
-        out = (str(FilterSize_out)+',')*(len(factors))
-        out = '['+out[:-1]+']'
-        settingsData+="FilterSize="+out+'\n'
-    elif (settingsData.find('FilterSize=')>=0):
-        out = (str(FilterSize_out)+',')*(len(factors))
-        out = '['+out[:-1]+']'
-        posbValue = settingsData.find('FilterSize=')
-        poseValue = settingsData[posbValue:].find('\n')
-        settingsData=settingsData[:posbValue]+'FilterSize='+out+'\n'+settingsData[(posbValue+poseValue):]
-    if (settingsData.find('Loss=')<0):
-        settingsData +='Loss='
-        if (args.oldMethod):
-            settingsData +="'binary_crossentropy'\n"
-        else:
-            settingsData +="'categorical_crossentropy'\n"
-    elif (settingsData.find('Loss=')>=0):
-        posbValue = settingsData.find('Loss=')
-        poseValue = settingsData[posbValue:].find('\n')
-        out='Loss='
-        if (args.oldMethod):
-            out+="'binary_crossentropy'\n"
-        else:
-            out +="'categorical_crossentropy'\n"
-        settingsData= settingsData[:posbValue]+out+settingsData[(posbValue+poseValue):]
-    if (settingsData.find('dataShape=')<0):
-        settingsData +="dataShape=({},{},{})".format(dataMax, supRow, supCol)+'\n'
-    elif (settingsData.find('dataShape=')>=0):
-
-        posbValue = settingsData.find('dataShape=')
-        poseValue = settingsData[posbValue:].find('\n')
-        out = "dataShape=({},{},{})".format(dataMax, supRow, supCol)+'\n'
-        settingsData = settingsData[:posbValue]+out+settingsData[(posbValue+poseValue):]
-    settingsFile = open('./settings.py','w')
-    settingsData= settingsData.replace('\n\n','\n').replace('\n \n','\n')
-    print ("Data to be written:\n{}".format(settingsData))
-    bytesWritten = settingsFile.write(settingsData)
-    settingsFile.close()
-    if (len(settingsData)==bytesWritten):
-        status = True
-
-else:
-    print("DEBUG: we had a failure to communicate...")
 # only update the numpy arrays if and only if the above algorithm has
 # succeeded!
 
