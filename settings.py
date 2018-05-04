@@ -6,5 +6,4 @@ HiddenLayers=3
 FilterSize=[64,64,64,64,64]
 Loss='binary_crossentropy'
 Saved=[0,1,2,3,4,5,6,7,8,9]
-
 dataShape=(1500,972,1296)
