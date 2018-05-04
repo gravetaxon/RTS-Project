@@ -80,8 +80,8 @@ def makeTrainingData(args, pixel, minSize):
             for each in rtsList:
                 if (each != ''):
                     (row,col)=each.split()
-                    if (row<=supRow) and (col<=supCol):
-                        x_train[tr_count] = (pixel[0:dataMax,row,col])
+                    if (int(row)<=supRow) and (int(col)<=supCol):
+                        x_train[tr_count] = (pixel[0:dataMax,int(row),int(col)])
                         y_train[tr_count] = 0
                         tr_count +=1
                     else:
@@ -91,8 +91,8 @@ def makeTrainingData(args, pixel, minSize):
             for each in nrtsList:
                 if (each != ''):
                     (row,col)=each.split()
-                    if (row<=supRow) and (col<=supCol):
-                        x_train[tr_count] = (pixel[0:dataMax,row,col])
+                    if (int(row)<=supRow) and (int(col)<=supCol):
+                        x_train[tr_count] = (pixel[0:dataMax,int(row),int(col)])
                         y_train[tr_count] = 1
                         tr_count +=1
                     else:
@@ -180,8 +180,8 @@ def makeTrainingData(args, pixel, minSize):
             for each in rtsList:
                 if (each != ''):
                     (row,col)=each.split()
-                    if (row<=supRow) and (col<=supCol):
-                        x_train[tr_count] = (pixel[0:dataMax,row,col])
+                    if (int(row)<=supRow) and (int(col)<=supCol):
+                        x_train[tr_count] = (pixel[0:dataMax,int(row),int(col)])
                         y_train[tr_count] = 0
                         tr_count +=1
                     else:
@@ -191,8 +191,8 @@ def makeTrainingData(args, pixel, minSize):
             for each in nrtsList:
                 if (each != ''):
                     (row,col)=each.split()
-                    if (row<=supRow) and (col<=supCol):
-                        x_train[tr_count] = (pixel[0:dataMax,row,col])
+                    if (int(row)<=supRow) and (int(col)<=supCol):
+                        x_train[tr_count] = (pixel[0:dataMax,int(row),int(col)])
                         y_train[tr_count] = 1
                         tr_count +=1
                     else:
@@ -202,8 +202,8 @@ def makeTrainingData(args, pixel, minSize):
             for each in mrtsList:
                 if (each != ''):
                     (row,col)=each.split()
-                    if (row<=supRow) and (col<=supCol):
-                        x_train[tr_count] = (pixel[0:dataMax,row,col])
+                    if (int(row)<=supRow) and (int(col)<=supCol):
+                        x_train[tr_count] = (pixel[0:dataMax,int(row),int(col)])
                         y_train[tr_count] = 2
                         tr_count +=1
                     else:
@@ -254,15 +254,15 @@ def makeTestingData (args, pixel, minSize):
         if args.testnrtsPath != None:
             print("DEBUG: nrtsPath is {}".format(args.testnrtsPath))
             sztestNrtsPath = Path(args.testnrtsPath)
-            if szNrtsPath.is_fle():
+            if sztestNrtsPath.is_file():
                 print("DEBUG: It is a file! Opening nrtsFile")
                 nrtstestFile = open(str(args.testnrtsPath),'r')
             else:
                 print ("File not found, opening backup")
-                nrtstestFile = open('./PiCam/NRTS_list.txt','r')
+                nrtstestFile = open('./PiCam/WN_ListSh_test.txt','r')
         else:
             print("DEBUG: Nrts will be built from directory listing")
-            nrtsFile = open('./PiCam/NRTS_list.txt','r')
+            nrtstestFile = open('./PiCam/NRTS_list.txt','r')
         rtstestList  =  rtstestFile.read().replace('\n\n','\n').split('\n')
         nrtstestList = nrtstestFile.read().replace('\n\n','\n').split('\n')
         rtstestFile.close()
@@ -286,8 +286,8 @@ def makeTestingData (args, pixel, minSize):
             for each in rtstestList:
                 if (each != ''):
                     (row,col)=each.split()
-                    if (row<=supRow) and (col<=supCol):
-                        x_test[td_count] = (pixel[0:dataMax,row,col]
+                    if (int(row)<=supRow) and (int(col)<=supCol):
+                        x_test[td_count] = (pixel[0:dataMax,int(row),int(col)])
                         y_test[td_count] = 0
                         td_count +=1
                     else:
@@ -297,15 +297,15 @@ def makeTestingData (args, pixel, minSize):
             for each in nrtstestList:
                 if (each != ''):
                     (row,col)=each.split()
-                    if (row<=supRow) and (col<=supCol):
-                        x_test[td_count] = (pixel[0:dataMax,row,col]
+                    if (int(row)<=supRow) and (int(col)<=supCol):
+                        x_test[td_count] = (pixel[0:dataMax,int(row),int(col)])
                         y_test[td_count] = 1
                         td_count +=1
                     else:
                         print("DEBUG: Error data out of range")
                         break
 
-            if (tr_count != testLen) :
+            if (td_count != testLen) :
                 print("DEBUG: We have lost data!!!!")
                 return (False, 0,0)
             else:
@@ -386,8 +386,8 @@ def makeTestingData (args, pixel, minSize):
             for each in testrtsList:
                 if (each != ''):
                     (row,col)=each.split()
-                    if (row<=supRow) and (col<=supCol):
-                        x_test[tr_count] = (pixel[0:dataMax,row,col]
+                    if (int(row)<=supRow) and (int(col)<=supCol):
+                        x_test[tr_count] = (pixel[0:dataMax,int(row),int(col)])
                         y_test[tr_count] = 0
                         tr_count +=1
                     else:
@@ -397,8 +397,8 @@ def makeTestingData (args, pixel, minSize):
             for each in testnrtsList:
                 if (each != ''):
                     (row,col)=each.split()
-                    if (row<=supRow) and (col<=supCol):
-                        x_test[tr_count] = (pixel[0:dataMax,row,col]
+                    if (int(row)<=supRow) and (int(col)<=supCol):
+                        x_test[tr_count] = (pixel[0:dataMax,int(row),int(col)])
                         y_test[tr_count] = 1
                         tr_count +=1
                     else:
@@ -408,8 +408,8 @@ def makeTestingData (args, pixel, minSize):
             for each in testmrtsList:
                 if (each != ''):
                     (row,col)=each.split()
-                    if (row<=supRow) and (col<=supCol):
-                        x_test[tr_count] = (pixel[0:dataMax,row,col]
+                    if (int(row)<=supRow) and (int(col)<=supCol):
+                        x_test[tr_count] = (pixel[0:dataMax,int(row),int(col)])
                         y_test[tr_count] = 2
                         tr_count +=1
                     else:
@@ -538,57 +538,62 @@ def dataFactors (arrayLen, dataMax,  supRow, supCol):
         print("DEBUG: we had a failure to communicate...")
         return False
 
-
-#import settings
-if os.name == 'posix':
-    os.nice(10)
-
-
-# Open the input files
-
-# Add commandline parsing
-# short codes are single char only!
-parser = argparse.ArgumentParser(prog='makeDataSets.py', description="Creates the numpy dataset for train, testing, and running keras models")
-parser.add_argument("-r","--rtsPath",type=str, help="rtslist file that contains rts signals in col_row format")
-parser.add_argument("-n", "--nrtsPath",type=str, help="nrtslist file that contains whitenoise signals")
-parser.add_argument("-m", "--mrtsPath",type=str, help="mrtsList file that has possible rts signals")
-parser.add_argument("-s","--testrtsPath",type=str, help="rtsTestlist file that contains rts signals in col_row format for the testing data")
-parser.add_argument("-t", "--testnrtsPath",type=str, help="nrtsTestlist file that contains whitenoise signals for the testing data")
-parser.add_argument("-u", "--testmrtsPath",type=str, help="mrtsTestList file that has possible rts signals for the testing data")
-parser.add_argument("-o", "--oldMethod", action='store_true', help="Activates a special routine that uses binary mode rather than categorical")
-args = parser.parse_args()
+def main ():
+    #import settings
+    if os.name == 'posix':
+        os.nice(10)
 
 
-pixel = loader.load()
-(dataMax, supRow, supCol) = pixel.shape
+    # Open the input files
 
-(trainStatus, x_train,y_train)  = makeTrainingData(args,pixel,testingSizeTrain)
-(testStatus, x_test,y_test)     = makeTestingData(args,pixel,testingSizeTest)
-arrayLen = x_train.shape[0]
-statusFactor                    = dataFactors (arrayLen, dataMax,  supRow, supCol)
-if trainStatus :
-    # save the training data
-    statusTraining = True
-else:
-    # complain
-    statusTraining = False
-    print("DEBUG: Training data failed!")
-if testStatus :
-    # save the testing data
-    statusTest = True
-else:
-    # complain
-    statusTest = False
-    print("DEBUG: Testing data failed!")
+    # Add commandline parsing
+    # short codes are single char only!
+    parser = argparse.ArgumentParser(prog='makeDataSets.py', description="Creates the numpy dataset for train, testing, and running keras models")
+    parser.add_argument("-r","--rtsPath",type=str, help="rtslist file that contains rts signals in col_row format")
+    parser.add_argument("-n", "--nrtsPath",type=str, help="nrtslist file that contains whitenoise signals")
+    parser.add_argument("-m", "--mrtsPath",type=str, help="mrtsList file that has possible rts signals")
+    parser.add_argument("-s","--testrtsPath",type=str, help="rtsTestlist file that contains rts signals in col_row format for the testing data")
+    parser.add_argument("-t", "--testnrtsPath",type=str, help="nrtsTestlist file that contains whitenoise signals for the testing data")
+    parser.add_argument("-u", "--testmrtsPath",type=str, help="mrtsTestList file that has possible rts signals for the testing data")
+    parser.add_argument("-o", "--oldMethod", action='store_true', help="Activates a special routine that uses binary mode rather than categorical")
+    args = parser.parse_args()
 
-status = statusFactor & statusTest & statusTraining
+    testingSizeTest  = 100
+    testingSizeTrain = 500
 
-if (status == True):
-    print("DEBUG: Saving new numpy datasets")
-    np.save('./PiCam/x_train.npy',x_train)
-    np.save('./PiCam/x_test.npy',x_test)
-    np.save('./PiCam/y_train.npy',y_train)
-    np.save('./PiCam/y_test.npy',y_test)
-    print("DEBUG: run modeler next")
-else:
-    print("DEBUG: We had an error in writing settings data and have not written incompatible training and/or testing data")
+    pixel = loader.load()
+    (dataMax, supRow, supCol) = pixel.shape
+
+    (trainStatus, x_train,y_train)  = makeTrainingData(args,pixel,testingSizeTrain)
+    (testStatus, x_test,y_test)     = makeTestingData(args,pixel,testingSizeTest)
+    arrayLen = x_train.shape[0]
+    statusFactor                    = dataFactors (arrayLen, dataMax,  supRow, supCol)
+    if trainStatus :
+        # save the training data
+        statusTraining = True
+    else:
+        # complain
+        statusTraining = False
+        print("DEBUG: Training data failed!")
+    if testStatus :
+        # save the testing data
+        statusTest = True
+    else:
+        # complain
+        statusTest = False
+        print("DEBUG: Testing data failed!")
+
+    status = statusFactor & statusTest & statusTraining
+
+    if (status == True):
+        print("DEBUG: Saving new numpy datasets")
+        np.save('./PiCam/x_train.npy',x_train)
+        np.save('./PiCam/x_test.npy',x_test)
+        np.save('./PiCam/y_train.npy',y_train)
+        np.save('./PiCam/y_test.npy',y_test)
+        print("DEBUG: run modeler next")
+    else:
+        print("DEBUG: We had an error in writing settings data and have not written incompatible training and/or testing data")
+
+
+main()
