@@ -127,48 +127,9 @@ def dataFactors (arrayLen, dataMax,  supRow, supCol):
         return False
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #import settings
 if os.name == 'posix':
     os.nice(10)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 # Open the input files
@@ -229,42 +190,13 @@ else:
 
 
 
-#x_train = np.zeros((4982,1500))
-#x_train = np.zeros((4235,1500)) #0.85*4982
-#x_test = np.zeros((747,1500))
-
-#y_train = np.zeros(4235)
-#y_test  = np.zeros(747)
-
-#y_train[1976:4235]=1
-#y_test[347:747]=1
-#                   data   row   col
-# pixel dimensions 1500 x 972 x 1296
-# pixel[0:1500,0:972,0:1296]
 pixel = loader.load()
-# Hard coded values (need to find way to get values programmatically)
-#supRow = 972  # Cannot reach these values for either row or
-#supCol = 1296 # col because it does *NOT* exist in the dataset.
-
-
-testingSizeTrain = 300
-testingSizeTest  = 100
-
 if type(pixel)==np.ndarray:
     (dataMax, supRow, supCol) = pixel.shape
-#else if type(pixel) = list:
-#    ndims = np.ndim(pixel)
-#    print("And magic needs to occur, not here yet")
-#    break
 else:
     print("we have a problem")
 
 
-
-
-#rtsFile = open('./PiCam/RTS_list.txt','r')
-#mrtsFile = open('./PiCam/MRTS_list.txt','r')
-#nrtsFile = open('./PiCam/NRTS_list.txt','r')
 
 
 # Let's read all of the files in and get the lengths to setup the initial arrays
@@ -538,8 +470,7 @@ if (td_count < testLen):
 
 
 
-# only update the numpy arrays if and only if the above algorithm has
-# succeeded!
+
 
 if (status == True):
     print("DEBUG: Saving new numpy datasets")
