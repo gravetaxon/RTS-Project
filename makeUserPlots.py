@@ -10,6 +10,7 @@
 import os
 import h5py
 import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import numpy as np
 import loader
@@ -22,10 +23,10 @@ pixel = loader.load()
 (dataMax,supRow,supCol)=pixel.shape
 t = np.arange(0,dataMax)
 status =True
-while(status)
+while(status):
     print ("Please choose between opening a file of (1) (g)raph data, (2) (u)ser input, (e) exit")
     choice= input("Enter choice: ")
-    if str(choice) =="1" or str(choice) =="graph" orstr(choice) =="g" :
+    if str(choice) =="1" or str(choice) =="graph" or str(choice) =="g" :
         fileName = input("Enter path and filename of the file to be opened, (ex. './PiCam/output.txt')")
         if Path(fileName).is_file():
             fname = open(str(fileName),'r')
@@ -41,14 +42,15 @@ while(status)
                  plt.plot(t,p)
                  plt.close()
             status=False # program complete
+	    fname.close()
         else:
             status=True
     elif str(choice) == "2" or str(choice) =="user" or str(choice) =="u":
-        (row,col)=input("Enter the row and column of the pixel graph separated by _ (ex. '10_4')").split('_')
-        if (0< row <supRow) and (0<col<supCol):
-            p = pixel[0:dataMax,row,col]
+        (row,col)=input("Enter the row and column of the pixel graph separated by _ (ex. '10_4'):  ").split('_')
+        if (0<int( row) <supRow) and (0< int(col) <supCol):
+            p = pixel[0:dataMax,int(row),int(col)]
             plt.plot(t,p)
-            plt.savefig('./PiCam/Plots/%d_%d' % (row,column))
+            plt.savefig('./PiCam/Plots/%d_%d' % (int(row),int(column)))
             plt.plot(t,p)
             plt.close()
         response = input("Wish to print another plot?")
@@ -60,4 +62,3 @@ while(status)
             status=False
 
 
-fname.close()
