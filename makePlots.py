@@ -13,7 +13,7 @@ pixel = loader.load()
 x = np.arange(0,1500)
 fname = open("./PiCam/samp_WN_List.txt", "r+")
 fname.seek(0)
-print ("This will create plots assoicated with white noise, approx 300 mb, are you sure you wish to continue?")
+print ("This will create plots associated with white noise, approx 300 mb, are you sure you wish to continue?")
 response = input("[Y]es/[N]o? ")
 if response =="Yes" or response == "yes" or response == "y" or response == "Y" :
  for line in fname:
