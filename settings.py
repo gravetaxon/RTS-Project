@@ -1,9 +1,9 @@
 SigmaStep = 1.5
 DecisionStep =0.50
 NumberRoutines=10
-KernelSizes=[17,5,5,463,3]
-HiddenLayers=3
-FilterSize=[64,64,64,64,64]
+KernelSizes=[5,3,13,2]
+HiddenLayers=2
+FilterSize=[8,8,8,8]
 Loss='binary_crossentropy'
-Saved=[0,1,2,3,4,5,6,7,8,9]
+Saved=[1]
 dataShape=(1500,972,1296)
