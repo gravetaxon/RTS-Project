@@ -16,6 +16,8 @@ import os, os.path
 from pathlib import Path
 import random
 
+delta = loader.Delta
+
 def makeTrainingData(args, pixel, minSize):
     #inputs:
     # args     -> all commandline arguments
@@ -48,7 +50,7 @@ def makeTrainingData(args, pixel, minSize):
         if args.nrtsPath != None:
             print("DEBUG: nrtsPath is {}".format(args.nrtsPath))
             szNrtsPath = Path(args.nrtsPath)
-            if szNrtsPath.is_fle():
+            if szNrtsPath.is_file():
                 print("DEBUG: It is a file! Opening nrtsFile")
                 nrtsFile = open(str(args.nrtsPath),'r')
             else:
@@ -57,58 +59,56 @@ def makeTrainingData(args, pixel, minSize):
         else:
             print("DEBUG: Nrts will be built from directory listing")
             nrtsFile = open('./PiCam/NRTS_list.txt','r')
-        rtsList  =  rtsFile.read().replace('\n\n','\n').split('\n')
-        nrtsList = nrtsFile.read().replace('\n\n','\n').split('\n')
+        rtsList  =  rtsFile.read().replace('\n\n','\n').replace('\n\n','\n').replace('\n\n','\n').split('\n')
+        nrtsList = nrtsFile.read().replace('\n\n','\n').replace('\n\n','\n').replace('\n\n','\n').split('\n')
         rtsFile.close()
         nrtsFile.close()
-        for i in range(0,len(rtsList)):
-            if rtsList[i]==".DS Store":
-                rtsList[i]=''
-
-        for i in range(0,len(nrtsList)):
-            if nrtsList[i]==".DS Store":
-                nrtsList[i]=''
-
+        deadList = 1
         rtsLen  = len(rtsList)
         nrtsLen = len(nrtsList)
         arrayLen = int(rtsLen + nrtsLen)
+
         if (arrayLen >= minSize):
             # we have enough data to do stuff
             x_train = np.zeros((arrayLen,dataMax))
             y_train = np.zeros(arrayLen)
             tr_count = 0
             for each in rtsList:
-                if (each != ''):
+                if (each != '') and (each != '.DS Store'):
                     (row,col)=each.split()
                     if (int(row)<=supRow) and (int(col)<=supCol):
                         x_train[tr_count] = (pixel[0:dataMax,int(row),int(col)])
                         y_train[tr_count] = 0
                         tr_count +=1
                     else:
-                        print("DEBUG: Error data out of range")
+                        print("DEBUG: Error data out of range (training rts bin)")
                         break
-
+                else:
+                    deadList +=1
             for each in nrtsList:
-                if (each != ''):
+                if (each != '') and (each != '.DS Store'):
                     (row,col)=each.split()
                     if (int(row)<=supRow) and (int(col)<=supCol):
                         x_train[tr_count] = (pixel[0:dataMax,int(row),int(col)])
                         y_train[tr_count] = 1
                         tr_count +=1
                     else:
-                        print("DEBUG: Error data out of range")
+                        print("DEBUG: Error data out of range (training nrts bin)")
                         break
-
-            if (tr_count != arrayLen) :
-                print("DEBUG: We have lost data!!!!")
-                return (False, 0,0)
+                else:
+                    deadList +=1
+            if abs(tr_count - arrayLen) >= delta :
+                print("DEBUG: We have lost data!!!! (bin)")
+                print("DEBUG: Sizes:\n\t [dataWritten:dataExpected]\n{}:{}".format(tr_count,arrayLen))
+                return (False, 0,0,0)
             else:
                 print ("DEBUG: Dataset complete")
-                return (True, x_train,y_train)
+                return (True, x_train,y_train, tr_count)
 
         else:
             # uhhh we need more data
-            print("DEBUG: Too small of dataset, less than {} for all of the data types".format(testingTrainSize))
+            print("DEBUG: Too small of dataset, less than {} for all of the data types (bin)".format(testingTrainSize))
+            return(False,0,0,0)
     else:
         # Categorical method
         # rts, nrts, and mrts lists
@@ -128,7 +128,7 @@ def makeTrainingData(args, pixel, minSize):
         if args.nrtsPath != None:
             print("DEBUG: nrtsPath is {}".format(args.nrtsPath))
             szNrtsPath = Path(args.nrtsPath)
-            if szNrtsPath.is_fle():
+            if szNrtsPath.is_file():
                 print("DEBUG: It is a file! Opening nrtsFile")
                 nrtsFile = open(str(args.nrtsPath),'r')
             else:
@@ -140,7 +140,7 @@ def makeTrainingData(args, pixel, minSize):
         if args.mrtsPath != None:
             print("DEBUG: mrtsPath is {}".format(args.mrtsPath))
             szMrtsPath = Path(args.mrtsPath)
-            if szMrtsPath.is_fle():
+            if szMrtsPath.is_file():
                 print("DEBUG: It is a file! Opening mrtsFile")
                 mrtsFile = open(str(args.mrtsPath),'r')
             else:
@@ -150,24 +150,13 @@ def makeTrainingData(args, pixel, minSize):
             print("DEBUG: Mrts will be built from directory listing")
             mrtsFile = open('./PiCam/MRTS_list.txt','r')
 
-        rtsList  =  rtsFile.read().replace('\n\n','\n').split('\n')
-        nrtsList = nrtsFile.read().replace('\n\n','\n').split('\n')
-        mrtsList = mrtsFile.read().replace('\n\n','\n').split('\n')
+        rtsList  =  rtsFile.read().replace('\n\n','\n').replace('\n\n','\n').replace('\n\n','\n').split('\n')
+        nrtsList = nrtsFile.read().replace('\n\n','\n').replace('\n\n','\n').replace('\n\n','\n').split('\n')
+        mrtsList = mrtsFile.read().replace('\n\n','\n').replace('\n\n','\n').replace('\n\n','\n').split('\n')
         rtsFile.close()
         nrtsFile.close()
         mrtsFile.close()
-        for i in range(0,len(rtsList)):
-            if rtsList[i]==".DS Store":
-                rtsList[i]=''
-
-        for i in range(0,len(nrtsList)):
-            if nrtsList[i]==".DS Store":
-                nrtsList[i]=''
-
-        for i in range(0,len(mrtsList)):
-            if mrtsList[i]==".DS Store":
-                mrtsList[i]=''
-
+        deadList = 1
         rtsLen  = len(rtsList)
         nrtsLen = len(nrtsList)
         mrtsLen = len(mrtsList)
@@ -178,48 +167,54 @@ def makeTrainingData(args, pixel, minSize):
             y_train = np.zeros(arrayLen)
             tr_count = 0
             for each in rtsList:
-                if (each != ''):
+                if (each != '') and (each != '.DS Store'):
                     (row,col)=each.split()
                     if (int(row)<=supRow) and (int(col)<=supCol):
                         x_train[tr_count] = (pixel[0:dataMax,int(row),int(col)])
                         y_train[tr_count] = 0
                         tr_count +=1
                     else:
-                        print("DEBUG: Error data out of range")
+                        print("DEBUG: Error data out of range (training rts cat)")
                         break
-
+                else:
+                    deadList +=1
             for each in nrtsList:
-                if (each != ''):
+                if (each != '') and (each != '.DS Store'):
                     (row,col)=each.split()
                     if (int(row)<=supRow) and (int(col)<=supCol):
                         x_train[tr_count] = (pixel[0:dataMax,int(row),int(col)])
                         y_train[tr_count] = 1
                         tr_count +=1
                     else:
-                        print("DEBUG: Error data out of range")
+                        print("DEBUG: Error data out of range (training nts cat)")
                         break
-
+                else:
+                    deadList +=1
             for each in mrtsList:
-                if (each != ''):
+                if (each != '') and (each != '.DS Store'):
                     (row,col)=each.split()
                     if (int(row)<=supRow) and (int(col)<=supCol):
                         x_train[tr_count] = (pixel[0:dataMax,int(row),int(col)])
                         y_train[tr_count] = 2
                         tr_count +=1
                     else:
-                        print("DEBUG: Error data out of range")
+                        print("DEBUG: Error data out of range (training mrts cat)")
                         break
+                else:
+                    deadList +=1
+            if abs(tr_count -arrayLen) >= delta :
+                print("DEBUG: We have lost data!!!! (cat)")
+                print("DEBUG: Sizes:\n\t [dataWritten:dataExpected]\n{}:{}".format(tr_count,arrayLen))
 
-            if (tr_count != arrayLen) :
-                print("DEBUG: We have lost data!!!!")
-                return (False, 0,0)
+                return (False, 0,0,0)
             else:
                 print ("DEBUG: Dataset complete")
-                return (True, x_train,y_train)
+                return (True, x_train,y_train, tr_count)
 
         else:
             # uhhh we need more data
-            print("DEBUG: Too small of dataset, less than {} for all of the data types".format(testingTrainSize))
+            print("DEBUG: Too small of dataset, less than {} for all of the data types (cat)".format(testingTrainSize))
+            return (False,0,0,0)
 
 
 def makeTestingData (args, pixel, minSize):
@@ -250,7 +245,7 @@ def makeTestingData (args, pixel, minSize):
                 rtstestFile = open(('./PiCam/RTS_list_test.txt'),'r')
         else:
             print("DEBUG: RtsList will be built from directory listing")
-            rtstestFile = open(('./PiCam/RTS_list_test.txt'),'r')
+            rtstestFile = open(('./PiCam/RTS_list_t.txt'),'r')
         if args.testnrtsPath != None:
             print("DEBUG: nrtsPath is {}".format(args.testnrtsPath))
             sztestNrtsPath = Path(args.testnrtsPath)
@@ -262,59 +257,57 @@ def makeTestingData (args, pixel, minSize):
                 nrtstestFile = open('./PiCam/WN_ListSh_test.txt','r')
         else:
             print("DEBUG: Nrts will be built from directory listing")
-            nrtstestFile = open('./PiCam/NRTS_list.txt','r')
-        rtstestList  =  rtstestFile.read().replace('\n\n','\n').split('\n')
-        nrtstestList = nrtstestFile.read().replace('\n\n','\n').split('\n')
+            nrtstestFile = open('./PiCam/NRTS_list_t.txt','r')
+        rtstestList  =  rtstestFile.read().replace('\n\n','\n').replace('\n\n','\n').replace('\n\n','\n').split('\n')
+        nrtstestList = nrtstestFile.read().replace('\n\n','\n').replace('\n\n','\n').replace('\n\n','\n').split('\n')
         rtstestFile.close()
         nrtstestFile.close()
-        for i in range(0,len(rtstestList)):
-            if rtstestList[i]==".DS Store":
-                rtstestList[i]=''
-
-        for i in range(0,len(nrtstestList)):
-            if nrtstestList[i]==".DS Store":
-                nrtstestList[i]=''
-
+        deadList =1
         rtstestLen  = len(rtstestList)
         nrtstestLen = len(nrtstestList)
-        testLen = int(rtstestLen + nrtstestLen)
+        testLen = int(rtstestLen + nrtstestLen) - deadList
         if (testLen >= minSize):
             # we have enough data to do stuff
             x_test = np.zeros((testLen,dataMax))
             y_test = np.zeros(testLen)
             td_count = 0
             for each in rtstestList:
-                if (each != ''):
+                if (each != '') and (each != '.DS Store'):
                     (row,col)=each.split()
                     if (int(row)<=supRow) and (int(col)<=supCol):
                         x_test[td_count] = (pixel[0:dataMax,int(row),int(col)])
                         y_test[td_count] = 0
                         td_count +=1
                     else:
-                        print("DEBUG: Error data out of range")
+                        print("DEBUG: Error data out of range (testing rts bin)")
                         break
+                else:
+                    deadList +=1
 
             for each in nrtstestList:
-                if (each != ''):
+                if (each != '') and (each != '.DS Store'):
                     (row,col)=each.split()
                     if (int(row)<=supRow) and (int(col)<=supCol):
                         x_test[td_count] = (pixel[0:dataMax,int(row),int(col)])
                         y_test[td_count] = 1
                         td_count +=1
                     else:
-                        print("DEBUG: Error data out of range")
+                        print("DEBUG: Error data out of range (testing nrts bin)")
                         break
+                else:
+                    deadList +=1
 
-            if (td_count != testLen) :
-                print("DEBUG: We have lost data!!!!")
+            if abs(td_count - testLen) >=delta :
+                print("DEBUG: We have lost data!!!! (testing bin)")
+                print("DEBUG: Sizes:\n\t [dataWritten:dataExpected]\n{}:{}".format(td_count,testLen))
                 return (False, 0,0)
             else:
-                print ("DEBUG: Dataset complete")
+                print ("DEBUG: Dataset complete (testing bin)")
                 return (True, x_test,y_test)
 
         else:
             # uhhh we need more data
-            print("DEBUG: Too small of dataset, less than {} for all of the data types".format(testingTrainSize))
+            print("DEBUG: Too small of dataset, less than {} for all of the data types (testing bin)".format(testingTrainSize))
     else:
         # Categorical method
         # rts, nrts, and mrts lists
@@ -330,7 +323,7 @@ def makeTestingData (args, pixel, minSize):
                 testrtsFile = open(('./PiCam/RTS_list_test.txt'),'r')
         else:
             print("DEBUG: RtsList will be built from directory listing")
-            testrtsFile = open(('./PiCam/RTS_list_test.txt'),'r')
+            testrtsFile = open(('./PiCam/RTS_list_t.txt'),'r')
         if args.testnrtsPath != None:
             print("DEBUG: nrtsPath is {}".format(args.testnrtsPath))
             sztestNrtsPath = Path(args.testnrtsPath)
@@ -342,7 +335,7 @@ def makeTestingData (args, pixel, minSize):
                 testnrtsFile = open('./PiCam/WN_ListSh_test.txt','r')
         else:
             print("DEBUG: Nrts will be built from directory listing")
-            testnrtsFile = open('./PiCam/NRTS_list.txt','r')
+            testnrtsFile = open('./PiCam/NRTS_list_t.txt','r')
         if args.testmrtsPath != None:
             print("DEBUG: mrtsPath is {}".format(args.testmrtsPath))
             sztestMrtsPath = Path(args.testmrtsPath)
@@ -351,76 +344,70 @@ def makeTestingData (args, pixel, minSize):
                 testmrtsFile = open(str(args.testmrtsPath),'r')
             else:
                 print ("File not found, opening backup")
-                testmrtsFile = open('./PiCam/MRTS_list.txt','r')
+                testmrtsFile = open('./PiCam/WN_ListSh_test.txt','r')
         else:
             print("DEBUG: Mrts will be built from directory listing")
-            testmrtsFile = open('./PiCam/MRTS_list.txt','r')
+            testmrtsFile = open('./PiCam/MRTS_list_t.txt','r')
 
-        testrtsList  =  testrtsFile.read().replace('\n\n','\n').split('\n')
-        testnrtsList = testnrtsFile.read().replace('\n\n','\n').split('\n')
-        testmrtsList = testmrtsFile.read().replace('\n\n','\n').split('\n')
+        rtstestList  =  testrtsFile.read().replace('\n\n','\n').replace('\n\n','\n').replace('\n\n','\n').split('\n')
+        nrtstestList = testnrtsFile.read().replace('\n\n','\n').replace('\n\n','\n').replace('\n\n','\n').split('\n')
+        mrtstestList = testmrtsFile.read().replace('\n\n','\n').replace('\n\n','\n').replace('\n\n','\n').split('\n')
         testrtsFile.close()
         testnrtsFile.close()
         testmrtsFile.close()
-        for i in range(0,len(testrtsList)):
-            if testrtsList[i]==".DS Store":
-                testrtsList[i]=''
-
-        for i in range(0,len(testnrtsList)):
-            if testnrtsList[i]==".DS Store":
-                testnrtsList[i]=''
-
-        for i in range(0,len(testmrtsList)):
-            if testmrtsList[i]==".DS Store":
-                testmrtsList[i]=''
-
-        testrtsLen  = len(testrtsList)
-        testnrtsLen = len(testnrtsList)
-        testmrtsLen = len(testmrtsList)
-        testLen = int(testrtsLen + testnrtsLen + testmrtsLen)
+        deadList =1
+        testrtsLen  = len(rtstestList)
+        testnrtsLen = len(nrtstestList)
+        testmrtsLen = len(mrtstestList)
+        testLen = int(testrtsLen + testnrtsLen + testmrtsLen) - deadList
         if (testLen >= minSize):
             # we have enough data to do stuff
             x_test = np.zeros((testLen,dataMax))
             y_test= np.zeros(testLen)
             tr_count = 0
-            for each in testrtsList:
-                if (each != ''):
+            for each in rtstestList:
+                if (each != '') and (each !='.DS Store'):
                     (row,col)=each.split()
                     if (int(row)<=supRow) and (int(col)<=supCol):
                         x_test[tr_count] = (pixel[0:dataMax,int(row),int(col)])
                         y_test[tr_count] = 0
                         tr_count +=1
                     else:
-                        print("DEBUG: Error data out of range")
+                        print("DEBUG: Error data out of range (testing rts bin)")
                         break
-
-            for each in testnrtsList:
-                if (each != ''):
+                else:
+                    deadList +=1
+            for each in nrtstestList:
+                if (each != '') and (each != '.DS Store'):
                     (row,col)=each.split()
                     if (int(row)<=supRow) and (int(col)<=supCol):
                         x_test[tr_count] = (pixel[0:dataMax,int(row),int(col)])
                         y_test[tr_count] = 1
                         tr_count +=1
                     else:
-                        print("DEBUG: Error data out of range")
+                        print("DEBUG: Error data out of range (testing nrts bin)")
                         break
-
-            for each in testmrtsList:
-                if (each != ''):
+                else:
+                    deadList +=1
+            for each in mrtstestList:
+                if (each != '') and (each != '.DS Store'):
                     (row,col)=each.split()
                     if (int(row)<=supRow) and (int(col)<=supCol):
                         x_test[tr_count] = (pixel[0:dataMax,int(row),int(col)])
                         y_test[tr_count] = 2
                         tr_count +=1
                     else:
-                        print("DEBUG: Error data out of range")
+                        print("DEBUG: Error data out of range (testing mrts bin)")
                         break
+                else:
+                    deadList +=1
 
-            if (tr_count != testLen) :
-                print("DEBUG: We have lost data!!!!")
+            if abs(tr_count - testLen) >= delta :
+                print("DEBUG: We have lost data!!!! (testing bin)")
+                print("DEBUG: Sizes:\n\t [dataWritten:dataExpected]\n{}:{}".format(td_count,testLen))
                 return (False, 0,0)
             else:
-                print ("DEBUG: Dataset complete")
+                print ("DEBUG: Dataset complete (testing bin)")
                 return (True, x_test,y_test)
 
         else:
@@ -428,44 +415,36 @@ def makeTestingData (args, pixel, minSize):
             print("DEBUG: Too small of dataset, less than {} for all of the data types".format(testingTestSize))
 
 
-def dataFactors (arrayLen, dataMax,  supRow, supCol):
+def dataFactors (args, arrayLen, dataMax,  supRow, supCol):
     # Here we do the prime magic on the training dataset!
     # take the length of the training dataset and use prime factorization on it
     if (arrayLen > 0):
         DataFactor = loader.prime_factors(int(round(arrayLen)))
-        ArrayFactor = loader.prime_factors(int(round(dataMax*0.85)))
+        ArrayFactor = loader.prime_factors(int(round(dataMax)))
         factors = DataFactor+ArrayFactor
-        ProdFactors = list(set(factors)) # remove all the duplicates and then get it
+        factors = list(set(factors)) # remove all the duplicates and then get it
                          # back to a list to manipulate it
         factors.sort(reverse=True)
-        ProdFactors.sort(reverse=True)
-        if (len(factors)>2):
-            largest = factors.pop(0)
-            smallest = factors.pop()
-            ProdFactors.pop(0)
-            ProdFactors.pop()
-            factors.append(largest)
-            factors.append(smallest)
-        # check if negatives are generated from the hidden layer Factors
-        crouchingLayers = factors[:-2]+[factors[-1]] # hidden layers plus output layer
-        head = initVal = crouchingLayers.pop(0)
-        for idx in range(len(crouchingLayers)):
-            initVal -= int( crouchingLayers[idx])
-            if (initVal < 0) and (idx < len(crouchingLayers)):
-                crouchingLayers.pop(idx-1)
 
-        factors = [head]+crouchingLayers[:-1] + factors[-2:]
+        if (len(factors)>2):
+            l=factors.pop(0) # pop the head
+            s=factors.pop()  # pop the tail
+            ProdFactors =factors # factors without the largest and smallest values
+            factors = factors+[l]+[s] # [hidden,head,tail]
+
         print ("DEBUG: Factors:{}".format(factors))
         # FilterSize is determined by the product of the hidden layers
         # KernelSize is determined by the prime factors themselves
         NumberHLayers_in = len(factors)-2
         print("DEBUG: Possible Hidden Layer count:"+str(NumberHLayers_in))
+        print("DEBUG: Prod Factors: {}".format(ProdFactors))
         if (NumberHLayers_in >0):
             # hidden layers exist! Use all the numbers from 0 to largest
             HiddenLayers_out = NumberHLayers_in
             FilterSize_Prod = 1
-            for each in ProdFactors[0:HiddenLayers_out]:
+            for each in ProdFactors:
                 FilterSize_Prod = FilterSize_Prod*int(each)
+            print("DEBUG: FilterSize raw: {}".format(FilterSize_Prod))
             FilterSize_out = int(loader.smallest_power(FilterSize_Prod,2))
 
         KernelSizes='['
@@ -565,11 +544,12 @@ def main ():
     pixel = loader.load()
     (dataMax, supRow, supCol) = pixel.shape
 
-    (trainStatus, x_train,y_train)  = makeTrainingData(args,pixel,testingSizeTrain)
+    (trainStatus, x_train,y_train, dataCount)  = makeTrainingData(args,pixel,testingSizeTrain)
     (testStatus, x_test,y_test)     = makeTestingData(args,pixel,testingSizeTest)
-    if type(x_train) == numpy.ndarray:
+    print ("DEBUG: \n\tSize of training data:\n{} ".format(dataCount))
+    if type(x_train) == np.ndarray:
         arrayLen = x_train.shape[0]
-        statusFactor                    = dataFactors (arrayLen, dataMax,  supRow, supCol)
+        statusFactor                    = dataFactors (args,dataCount, dataMax,  supRow, supCol)
     else:
         statusFactor = False
     if trainStatus :

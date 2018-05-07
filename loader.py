@@ -4,6 +4,8 @@ import numpy as np
 import os
 import errno
 
+Delta = 5
+
 def ensureFolder(file_path):
     if file_path[len(file_path)-1]!='/':
         #print(dir)
@@ -21,10 +23,13 @@ def ensureFolder(file_path):
         return True
 
 def load():
-	mat = h5py.File('A5_pipe1_32C.mat')
-	matpixel = mat["p1"]
-	pixel = np.array(matpixel)
-	return (pixel)
+    print ("Loading dataset, please wait...")
+    mat = h5py.File('A5_pipe1_32C.mat')
+    print ("Converting matlab dataset into numpy")
+    matpixel = mat["p1"]
+    pixel = np.array(matpixel)
+    print("Done loading and coverting dataset")
+    return (pixel)
 
 def prime_factors(n):
     i = 2
