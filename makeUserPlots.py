@@ -42,7 +42,7 @@ while(status):
                  plt.plot(t,p)
                  plt.close()
             status=False # program complete
-	    fname.close()
+            fname.close()
         else:
             status=True
     elif str(choice) == "2" or str(choice) =="user" or str(choice) =="u":
@@ -60,5 +60,3 @@ while(status):
             status=False
     elif str(choice)=='e' or str(choice)=='exit':
             status=False
-
-
