@@ -19,3 +19,8 @@ https://gist.github.com/gravetaxon/67c2891f5d665f07589fae576b802ee6
 
 - [ ] Verify that the output DENSE function is of the correct for multi-class operations.
 - [ ] https://machinelearningmastery.com/multi-class-classification-tutorial-keras-deep-learning-library/
+
+
+- [ ] Add amplitude calculations
+
+
