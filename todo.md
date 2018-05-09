@@ -20,7 +20,11 @@ https://gist.github.com/gravetaxon/67c2891f5d665f07589fae576b802ee6
 - [ ] Verify that the output DENSE function is of the correct for multi-class operations.
 - [ ] https://machinelearningmastery.com/multi-class-classification-tutorial-keras-deep-learning-library/
 
-
-- [ ] Add amplitude calculations
+RE: Meeting May 9th:
+- [ ] Add amplitude calculations for a graph
+- [ ] Train multiple models: N v N, R v N, M v N, E v N 
+   + [ ] Compare output relative to actual graphs
+   + [ ] Use voter model to ident which of the categories match best
+   + [ ] For RTS-Ident graphs use amp calc to determine the quantity of specific amplitutde ranges
 
 
