@@ -16,7 +16,7 @@ import random
 if os.name == 'posix':
     os.nice(10)
 
-RTSRes = open("./Picam/model_Out.txt","w+")
+RTSRes = open("./PiCam/model_Out.txt","w")
 SavedModels =settings.Saved
 NumModels = len(SavedModels)
 DataShape = settings.dataShape
@@ -49,8 +49,8 @@ for i in range(1,loopData[1]):
         votes = []
         for voter in random.sample(models,voterCount):
             mp = model.predict(ppix) # how does this work with multiple categories?
-    #        print(mp)
-            if (mp[0] ==0):
+            print(mp)
+            if (mp[0] <settings.DecisionStep):
                 # model voted yes
                 votes.append(int(1))
             else:
@@ -58,7 +58,7 @@ for i in range(1,loopData[1]):
                 votes.append(int(0))
         # mean of votes
         VoterAve = np.mean(votes)
-        if (VoterAve >=0.1):
+        if (VoterAve >=0.54):
             print(i,j)
             RTSRes.write("%d %d\r\n" %(i,j))
         #else:

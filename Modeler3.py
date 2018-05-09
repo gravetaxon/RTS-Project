@@ -34,7 +34,7 @@ KernelSize=settings.KernelSizes
 #KernelSize=[11,7,5,5,11,3]          # The kernel size for each hidden layer plus
                               # the input and output layers as the last two data points
 
-MinAccuracy = 0.85
+MinAccuracy = 0.75
 MaxLosses   = 1.05
 InitialSeed = 311967 # semi-random number to have stablity in the model
 
@@ -114,3 +114,6 @@ elif (settingsData.find('Saved=')>=0):
 settingsFile = open('./settings.py','w')
 settingsFile.write(settingsData)
 settingsFile.close()
+
+
+print("Run makeOutput.py next to generate output list")
