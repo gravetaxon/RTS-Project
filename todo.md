@@ -26,6 +26,10 @@ RE: Meeting May 9th:
    + [ ] Compare output relative to actual graphs (human vs models)
    + [ ] Use voter model to ident which of the categories match best
    + [ ] For RTS-Ident graphs use amp calc to determine the quantity of specific amplitutde ranges
-- [ ] modify model voting to allow for non perfect matches (mp[0]==1 => this pix is 100% a RTS graph) 
+- [X ] modify model voting to allow for non perfect matches (mp[0]==0 => 
+this pix is 100% a RTS graph) [ low*catNum < mp[0] < high*catNum ] where 
+catNum has value of 0 for rts graphs, 1 for non-rts, 2+ for other 
+categories
+ 
 
 
