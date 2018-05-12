@@ -10,6 +10,11 @@ import sys
 import random
 import settings
 from sklearn.preprocessing import scale
+from timeit import default_timer as timer
+from scipy import stats
+import math
+
+timeStart = timer()
 
 if os.name == 'posix':
     os.nice(10)
@@ -54,6 +59,9 @@ Epochs    = 5
 
 score = []
 saved = []
+losses =[]
+accuracy=[]
+
 #DEBUG: NumberRoutines was 50
 NumberRoutines = settings.NumberRoutines
 for each in range(NumberRoutines):
@@ -87,13 +95,29 @@ for each in range(NumberRoutines):
               metrics=['accuracy'])
     model.fit(X_train, y_train, batch_size=BatchSize, epochs=Epochs)
     scr = model.evaluate(X_test, y_test, batch_size=BatchSize)
+    losses.append(scr[0])
+    accuracy.append(scr[1])
     print ([each]+scr)
     score.append(scr)
     if ((scr[1]>MinAccuracy) and (scr[0]<= MaxLosses)):
         print("DEBUG: Saving model #{}".format(each))
         model.save('./PiCam/CNNlin_model{}.h5'.format(str(each)))
         saved.append(str(each))
+
 print (score)
+
+lossesMean = np.mean(losses)
+lossesVar = np.var(losses)
+accuracyMean = np.mean(accuracy)
+accuracyVar = np.var(accuracy)
+
+print ("Statistics of model:\n\tLosses:\n\t\tMean: {}\tVariance: {}\n\tAccuracy:\n\t\tMean: {}\tVaiance:{}".format(lossesMean,lossesVar,accuracyMean,accuracyVar))
+df=NumberRoutines-1
+cv=1.660 # T-stat with n=100, alpha =0.05 -> 95% CI
+ciLosses=[lossesMean-cv*(math.sqrt(lossesVar/NumberRoutines)) ,lossesMean+cv*(math.sqrt(lossesVar/NumberRoutines))]
+ciAccuracy=[accuracyMean-cv*(math.sqrt(accuracyVar/NumberRoutines)) ,accuracyMean+cv*(math.sqrt(accuracyVar/NumberRoutines))]
+
+print ("95% CI Losses: {}\nAccuracy: {}".format(ciLosses,ciAccuracy))
 
 out = ''
 for each in saved:
@@ -114,6 +138,7 @@ elif (settingsData.find('Saved=')>=0):
 settingsFile = open('./settings.py','w')
 settingsFile.write(settingsData)
 settingsFile.close()
-
+timeEnd = timer()
+print("Total time elapsed: {}".format(timeEnd-timeStart))
 
 print("Run makeOutput.py next to generate output list")
