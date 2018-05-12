@@ -1,7 +1,9 @@
 SigmaStep = 1.5
 DecisionStep =0.51
 NumberRoutines=10
+<<<<<<< HEAD
 KernelSizes=[97,47,179,17]
+=======
 HiddenLayers=2
 FilterSize=[256,256,256,64]
 Loss='binary_crossentropy'
