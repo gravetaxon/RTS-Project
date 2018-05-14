@@ -55,7 +55,7 @@ InitialSeed = 311967 # semi-random number to have stablity in the model
 DropPercent =0.5                    # Dropout rate is 50%
 AxisCount = 1
 BatchSize = 16
-Epochs    = 5
+Epochs    = 50
 
 score = []
 saved = []
@@ -111,13 +111,15 @@ lossesVar = np.var(losses)
 accuracyMean = np.mean(accuracy)
 accuracyVar = np.var(accuracy)
 
-print ("Statistics of model:\n\tLosses:\n\t\tMean: {}\tVariance: {}\n\tAccuracy:\n\t\tMean: {}\tVaiance:{}".format(lossesMean,lossesVar,accuracyMean,accuracyVar))
-df=NumberRoutines-1
-cv=1.660 # T-stat with n=100, alpha =0.05 -> 95% CI
+print ("Statistics of model:\n\tLosses:\n\t\tMean: {}\t\tVariance: {}\n\tAccuracy:\n\t\tMean: {}\t\tVariance:{}".format(lossesMean,lossesVar,accuracyMean,accuracyVar))
+df_=NumberRoutines-1
+cv=stats.t.ppf(q=0.950, df=df_)
+print ("Criticial Value: {}".format(cv))
+#cv=1.660 # T-stat with n=100, alpha =0.05 -> 95% CI
 ciLosses=[lossesMean-cv*(math.sqrt(lossesVar/NumberRoutines)) ,lossesMean+cv*(math.sqrt(lossesVar/NumberRoutines))]
 ciAccuracy=[accuracyMean-cv*(math.sqrt(accuracyVar/NumberRoutines)) ,accuracyMean+cv*(math.sqrt(accuracyVar/NumberRoutines))]
 
-print ("95% CI Losses: {}\nAccuracy: {}".format(ciLosses,ciAccuracy))
+print ("95% CI Losses: {}\nAccuracy: ".format(ciLosses,ciAccuracy))
 
 out = ''
 for each in saved:
