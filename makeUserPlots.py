@@ -38,6 +38,8 @@ while(status):
                  #print(row,column)
                  p = pixel[0:dataMax, row, column]
                  plt.plot(t,p)
+                 plt.xlabel("periods") # 20sec/period
+                 plt.ylabel("mA" )
                  plt.savefig('./PiCam/Plots/%d_%d' % (row,column))
                  plt.plot(t,p)
                  plt.close()
@@ -50,7 +52,9 @@ while(status):
         if (0<int( row) <supRow) and (0< int(col) <supCol):
             p = pixel[0:dataMax,int(row),int(col)]
             plt.plot(t,p)
-            plt.savefig('./PiCam/Plots/%d_%d' % (int(row),int(column)))
+            plt.xlabel("periods") # 20sec/period
+            plt.ylabel("mA")
+            plt.savefig('./PiCam/Plots/Users/%d_%d.png' % (int(row),int(col)))
             plt.plot(t,p)
             plt.close()
         response = input("Wish to print another plot?")

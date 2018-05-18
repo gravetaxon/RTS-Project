@@ -24,6 +24,8 @@ for line in fname:
         #print(row,column)
         p = pixel[0:1500, row, column]
         plt.plot(x,p)
+        plt.xlabel("periods") # 20sec/period
+        plt.ylabel("mA" )
         plt.savefig('./PiCam/Plots/RTSGuess/%d_%d' % (row,column))
         plt.plot(x,p)
         plt.close()
