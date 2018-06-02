@@ -438,6 +438,7 @@ def dataFactors (args, arrayLen, dataMax,  supRow, supCol):
         NumberHLayers_in = len(factors)-2
         print("DEBUG: Possible Hidden Layer count:"+str(NumberHLayers_in))
         print("DEBUG: Prod Factors: {}".format(ProdFactors))
+	# Potential bug: What happens when there are no hidden layers?
         if (NumberHLayers_in >0):
             # hidden layers exist! Use all the numbers from 0 to largest
             HiddenLayers_out = NumberHLayers_in
