@@ -535,7 +535,7 @@ def main ():
     parser.add_argument("-t", "--testnrtsPath",type=str, help="nrtsTestlist file that contains whitenoise signals for the testing data")
     parser.add_argument("-u", "--testmrtsPath",type=str, help="mrtsTestList file that has possible rts signals for the testing data")
     parser.add_argument("-o", "--oldMethod", action='store_true', help="Activates a special routine that uses binary mode rather than categorical")
-    parser.add_argument("-","--",action='store_true',help=""
+    #parser.add_argument("-","--",action='store_true',help="")
 
     args = parser.parse_args()
 
