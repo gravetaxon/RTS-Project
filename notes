@@ -6,8 +6,8 @@ Tasks:
   + Build voter.py to vote on the signals
   + test, test, test!!
 * Build Metrics
-* Output is array with signaltype as the values of the array
-Example array 
+* Output is array with signal type as the values of the array
+Example array
     0   1  2  3  4  5  6  7  8  9  10
  0  0   2  1  4  2  2  2  4  1  0  0
  1  2   5  0  2  1  4  2  2  2  4  1

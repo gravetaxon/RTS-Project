@@ -1,0 +1,31 @@
+
+\begin{DoxyItemize}
+\item [x] add old list parsing into make\+List.\+py
+\item [x] modify make\+List to accept arguments
+\item [x ] verify operation in binary (rts/non-\/rts) mode
+\item [ ] verify operation in categorical mode
+\item [x ] add flags in \doxyref{Settings.\+py}{p.}{settings_8py} to allow the \doxyref{make\+Data\+Sets}{p.}{namespacemake_data_sets} to change how the model is fit i.\+e. the switch between \textquotesingle{}binary\+\_\+crossentropy\textquotesingle{} and \textquotesingle{}categorical\+\_\+crossentropy\textquotesingle{}
+\item [ ] Change testing data to old dataset for now
+\item [ ] split model training into primary (rts/nrts) and secondary (\{m,e,g\}rts/nrts) models
+\item [ ] in orignal version verify if categorical accuracy is as high as binary via the code snippet Code snippit\+: 
+\begin{DoxyCode}
+from keras.metrics import categorical\_accuracy
+model.compile(loss='binary\_crossentropy', optimizer='adam', metrics=[categorical\_accuracy])
+\end{DoxyCode}
+
+\item [ ] Update the main todo list by the list below\+: {\tt https\+://gist.\+github.\+com/gravetaxon/67c2891f5d665f07589fae576b802ee6}
+\item [ ] Verify that the output D\+E\+N\+SE function is of the correct for multi-\/class operations.
+\item [ ] {\tt https\+://machinelearningmastery.\+com/multi-\/class-\/classification-\/tutorial-\/keras-\/deep-\/learning-\/library/}
+\end{DoxyItemize}
+
+RE\+: Meeting May 9th\+:
+\begin{DoxyItemize}
+\item [ ] Add amplitude calculations for a graph
+\item [ ] Train multiple models\+: N v N, R v N, M v N, E v N
+\begin{DoxyItemize}
+\item [ ] Compare output relative to actual graphs (human vs models)
+\item [ ] Use voter model to ident which of the categories match best
+\item [ ] For R\+T\+S-\/\+Ident graphs use amp calc to determine the quantity of specific amplitutde ranges
+\end{DoxyItemize}
+\item [X ] modify model voting to allow for non perfect matches (mp[0]==0 =$>$ this pix is 100\% a R\+TS graph) [ low$\ast$cat\+Num $<$ mp[0] $<$ high$\ast$cat\+Num ] where cat\+Num has value of 0 for rts graphs, 1 for non-\/rts, 2+ for other categories 
+\end{DoxyItemize}

@@ -1,0 +1,34 @@
+\section{convertcsv.\+py File Reference}
+\label{convertcsv_8py}\index{convertcsv.\+py@{convertcsv.\+py}}
+\subsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+ \textbf{ convertcsv}
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\textbf{ convertcsv.\+filename\+\_\+in} = sys.\+argv[1]
+\item 
+\textbf{ convertcsv.\+filename\+\_\+out} = sys.\+argv[2]
+\item 
+\textbf{ convertcsv.\+outfile} = open(filename\+\_\+out, \textquotesingle{}w\textquotesingle{})
+\item 
+string \textbf{ convertcsv.\+delimiter} = \textquotesingle{}\+:\textquotesingle{}
+\item 
+\textbf{ convertcsv.\+infile} = open(filename\+\_\+in, \textquotesingle{}r\textquotesingle{})
+\item 
+\textbf{ convertcsv.\+letters} = string.\+ascii\+\_\+uppercase
+\item 
+list \textbf{ convertcsv.\+text} = [\char`\"{}\# Produced by convert\+\_\+csv\+\_\+to\+\_\+sc.\+py\char`\"{} ]
+\item 
+int \textbf{ convertcsv.\+row} = 0
+\item 
+\textbf{ convertcsv.\+allp} = line.\+rstrip().split(delimiter)
+\item 
+int \textbf{ convertcsv.\+column} = 0
+\item 
+\textbf{ convertcsv.\+col} = letters[column]
+\item 
+\textbf{ convertcsv.\+n} = string.\+atol(p)
+\end{DoxyCompactItemize}

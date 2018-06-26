@@ -1,0 +1,96 @@
+\section{Modeler3.\+py File Reference}
+\label{_modeler3_8py}\index{Modeler3.\+py@{Modeler3.\+py}}
+\subsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+ \textbf{ Modeler3}
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\textbf{ Modeler3.\+time\+Start} = timer()
+\item 
+\textbf{ Modeler3.\+x\+\_\+test} = np.\+load(\textquotesingle{}./Pi\+Cam/x\+\_\+test.\+npy\textquotesingle{})
+\item 
+\textbf{ Modeler3.\+x\+\_\+train} = np.\+load(\textquotesingle{}./Pi\+Cam/x\+\_\+train.\+npy\textquotesingle{})
+\item 
+\textbf{ Modeler3.\+y\+\_\+test} = np.\+load(\textquotesingle{}./Pi\+Cam/y\+\_\+test.\+npy\textquotesingle{})
+\item 
+\textbf{ Modeler3.\+y\+\_\+train} = np.\+load(\textquotesingle{}./Pi\+Cam/y\+\_\+train.\+npy\textquotesingle{})
+\item 
+\textbf{ Modeler3.\+X\+\_\+train} = np.\+expand\+\_\+dims(x\+\_\+train, axis=2)
+\item 
+\textbf{ Modeler3.\+X\+\_\+test} = np.\+expand\+\_\+dims(x\+\_\+test, axis=2)
+\item 
+\textbf{ Modeler3.\+Number\+H\+Layers} = \textbf{ settings.\+Hidden\+Layers}
+\item 
+\textbf{ Modeler3.\+Filter\+Size} = settings.\+Filter\+Size
+\item 
+\textbf{ Modeler3.\+Kernel\+Size} = \textbf{ settings.\+Kernel\+Sizes}
+\item 
+float \textbf{ Modeler3.\+Min\+Accuracy} = 0.\+75
+\item 
+float \textbf{ Modeler3.\+Max\+Losses} = 1.\+05
+\item 
+int \textbf{ Modeler3.\+Initial\+Seed} = 311967
+\item 
+float \textbf{ Modeler3.\+Drop\+Percent} = 0.\+5
+\item 
+int \textbf{ Modeler3.\+Axis\+Count} = 1
+\item 
+int \textbf{ Modeler3.\+Batch\+Size} = 16
+\item 
+int \textbf{ Modeler3.\+Epochs} = 50
+\item 
+list \textbf{ Modeler3.\+score} = [$\,$]
+\item 
+list \textbf{ Modeler3.\+saved} = [$\,$]
+\item 
+list \textbf{ Modeler3.\+losses} = [$\,$]
+\item 
+list \textbf{ Modeler3.\+accuracy} = [$\,$]
+\item 
+\textbf{ Modeler3.\+Number\+Routines} = settings.\+Number\+Routines
+\item 
+\textbf{ Modeler3.\+model} = Sequential()
+\item 
+\textbf{ Modeler3.\+loss}
+\item 
+\textbf{ Modeler3.\+optimizer}
+\item 
+\textbf{ Modeler3.\+metrics}
+\item 
+\textbf{ Modeler3.\+batch\+\_\+size}
+\item 
+\textbf{ Modeler3.\+epochs}
+\item 
+\textbf{ Modeler3.\+scr} = model.\+evaluate(X\+\_\+test, y\+\_\+test, batch\+\_\+size=Batch\+Size)
+\item 
+\textbf{ Modeler3.\+losses\+Mean} = np.\+mean(losses)
+\item 
+\textbf{ Modeler3.\+losses\+Var} = np.\+var(losses)
+\item 
+\textbf{ Modeler3.\+accuracy\+Mean} = np.\+mean(accuracy)
+\item 
+\textbf{ Modeler3.\+accuracy\+Var} = np.\+var(accuracy)
+\item 
+int \textbf{ Modeler3.\+df\+\_\+} = Number\+Routines-\/1
+\item 
+\textbf{ Modeler3.\+cv} = stats.\+t.\+ppf(q=0.\+950, df=df\+\_\+)
+\item 
+list \textbf{ Modeler3.\+ci\+Losses} = [losses\+Mean-\/cv$\ast$(math.\+sqrt(losses\+Var/Number\+Routines)) ,losses\+Mean+cv$\ast$(math.\+sqrt(losses\+Var/Number\+Routines))]
+\item 
+list \textbf{ Modeler3.\+ci\+Accuracy} = [accuracy\+Mean-\/cv$\ast$(math.\+sqrt(accuracy\+Var/Number\+Routines)) ,accuracy\+Mean+cv$\ast$(math.\+sqrt(accuracy\+Var/Number\+Routines))]
+\item 
+string \textbf{ Modeler3.\+out} = \textquotesingle{}\textquotesingle{}
+\item 
+\textbf{ Modeler3.\+settings\+File} = open(\textquotesingle{}./settings.\+py\textquotesingle{},\textquotesingle{}r\textquotesingle{})
+\item 
+\textbf{ Modeler3.\+settings\+Data} = settings\+File.\+read()
+\item 
+\textbf{ Modeler3.\+posb\+Value} = settings\+Data.\+find(\char`\"{}Saved=\char`\"{})
+\item 
+\textbf{ Modeler3.\+pose\+Value} = settings\+Data[posb\+Value\+:].find(\textquotesingle{}\textbackslash{}n\textquotesingle{})
+\item 
+\textbf{ Modeler3.\+time\+End} = timer()
+\end{DoxyCompactItemize}

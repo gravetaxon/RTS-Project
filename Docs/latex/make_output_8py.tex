@@ -1,0 +1,44 @@
+\section{make\+Output.\+py File Reference}
+\label{make_output_8py}\index{make\+Output.\+py@{make\+Output.\+py}}
+\subsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+ \textbf{ make\+Output}
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\textbf{ make\+Output.\+R\+T\+S\+Res} = open(\char`\"{}./Pi\+Cam/model\+\_\+\+Out.\+txt\char`\"{},\char`\"{}w\char`\"{})
+\item 
+\textbf{ make\+Output.\+Saved\+Models} = \textbf{ settings.\+Saved}
+\item 
+\textbf{ make\+Output.\+Num\+Models} = len(Saved\+Models)
+\item 
+\textbf{ make\+Output.\+Data\+Shape} = \textbf{ settings.\+data\+Shape}
+\item 
+int \textbf{ make\+Output.\+Test\+Percent} = 1
+\item 
+tuple \textbf{ make\+Output.\+loop\+Data} = (int(Data\+Shape[0]),int(Data\+Shape[1]$\ast$Test\+Percent),int(Data\+Shape[2]$\ast$Test\+Percent))
+\item 
+list \textbf{ make\+Output.\+models} = [$\,$]
+\item 
+string \textbf{ make\+Output.\+Models\+Used} = \char`\"{}\char`\"{}
+\item 
+string \textbf{ make\+Output.\+model\+\_\+name} = \textquotesingle{}./Pi\+Cam/C\+N\+Nlin\+\_\+model\{\}.h5\textquotesingle{}.format(str(each))
+\item 
+\textbf{ make\+Output.\+model} = load\+\_\+model(model\+\_\+name)
+\item 
+\textbf{ make\+Output.\+voter\+Count} = min(3,len(models))
+\item 
+\textbf{ make\+Output.\+pixel} = \textbf{ loader.\+load}()
+\item 
+\textbf{ make\+Output.\+pix} = pixel[0\+:loop\+Data[0], i, j]
+\item 
+\textbf{ make\+Output.\+ppix} = pix[None,\+:,None]
+\item 
+list \textbf{ make\+Output.\+votes} = [$\,$]
+\item 
+\textbf{ make\+Output.\+mp} = model.\+predict(ppix)
+\item 
+\textbf{ make\+Output.\+Voter\+Ave} = np.\+mean(votes)
+\end{DoxyCompactItemize}

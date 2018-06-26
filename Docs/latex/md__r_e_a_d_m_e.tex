@@ -1,0 +1,12 @@
+Usage\+: run the program in the following method\+:
+\begin{DoxyItemize}
+\item \doxyref{preprocess.\+py}{p.}{preprocess_8py} -\/$>$ to create a list of possible rts signals and generate folder structure
+\begin{DoxyItemize}
+\item (optional) \doxyref{make\+Plots.\+py}{p.}{make_plots_8py} -\/$>$ to generate all whitenoise plots
+\item (optional) make\+R\+T\+S\+Guess.\+py -\/$>$ to generate all rts plots from the guesses made from preprocess
+\end{DoxyItemize}
+\item \doxyref{make\+Lists.\+py}{p.}{make_lists_8py} -\/$>$ to make the dataset lists for the next stage from the directory structure
+\item \doxyref{make\+Data\+Sets.\+py}{p.}{namespacemake_data_sets_1_1py} -\/$>$ compiles the numpy datasets for training and testing along with generating the modeler\textquotesingle{}s settings file
+\item \doxyref{Modeler3.\+py}{p.}{_modeler3_8py} -\/$>$ compiles the model in a string of 50 instances and saves only the top ten models
+\item \doxyref{make\+Output.\+py}{p.}{make_output_8py} -\/$>$ generates a list of plots that matches each of the categories 
+\end{DoxyItemize}

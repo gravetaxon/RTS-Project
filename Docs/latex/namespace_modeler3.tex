@@ -1,0 +1,524 @@
+\section{Modeler3 Namespace Reference}
+\label{namespace_modeler3}\index{Modeler3@{Modeler3}}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\textbf{ time\+Start} = timer()
+\item 
+\textbf{ x\+\_\+test} = np.\+load(\textquotesingle{}./Pi\+Cam/x\+\_\+test.\+npy\textquotesingle{})
+\item 
+\textbf{ x\+\_\+train} = np.\+load(\textquotesingle{}./Pi\+Cam/x\+\_\+train.\+npy\textquotesingle{})
+\item 
+\textbf{ y\+\_\+test} = np.\+load(\textquotesingle{}./Pi\+Cam/y\+\_\+test.\+npy\textquotesingle{})
+\item 
+\textbf{ y\+\_\+train} = np.\+load(\textquotesingle{}./Pi\+Cam/y\+\_\+train.\+npy\textquotesingle{})
+\item 
+\textbf{ X\+\_\+train} = np.\+expand\+\_\+dims(\textbf{ x\+\_\+train}, axis=2)
+\item 
+\textbf{ X\+\_\+test} = np.\+expand\+\_\+dims(\textbf{ x\+\_\+test}, axis=2)
+\item 
+\textbf{ Number\+H\+Layers} = \textbf{ settings.\+Hidden\+Layers}
+\item 
+\textbf{ Filter\+Size} = settings.\+Filter\+Size
+\item 
+\textbf{ Kernel\+Size} = \textbf{ settings.\+Kernel\+Sizes}
+\item 
+float \textbf{ Min\+Accuracy} = 0.\+75
+\item 
+float \textbf{ Max\+Losses} = 1.\+05
+\item 
+int \textbf{ Initial\+Seed} = 311967
+\item 
+float \textbf{ Drop\+Percent} = 0.\+5
+\item 
+int \textbf{ Axis\+Count} = 1
+\item 
+int \textbf{ Batch\+Size} = 16
+\item 
+int \textbf{ Epochs} = 50
+\item 
+list \textbf{ score} = [$\,$]
+\item 
+list \textbf{ saved} = [$\,$]
+\item 
+list \textbf{ losses} = [$\,$]
+\item 
+list \textbf{ accuracy} = [$\,$]
+\item 
+\textbf{ Number\+Routines} = settings.\+Number\+Routines
+\item 
+\textbf{ model} = Sequential()
+\item 
+\textbf{ loss}
+\item 
+\textbf{ optimizer}
+\item 
+\textbf{ metrics}
+\item 
+\textbf{ batch\+\_\+size}
+\item 
+\textbf{ epochs}
+\item 
+\textbf{ scr} = model.\+evaluate(\textbf{ X\+\_\+test}, \textbf{ y\+\_\+test}, \textbf{ batch\+\_\+size}=\textbf{ Batch\+Size})
+\item 
+\textbf{ losses\+Mean} = np.\+mean(\textbf{ losses})
+\item 
+\textbf{ losses\+Var} = np.\+var(\textbf{ losses})
+\item 
+\textbf{ accuracy\+Mean} = np.\+mean(\textbf{ accuracy})
+\item 
+\textbf{ accuracy\+Var} = np.\+var(\textbf{ accuracy})
+\item 
+int \textbf{ df\+\_\+} = \textbf{ Number\+Routines}-\/1
+\item 
+\textbf{ cv} = stats.\+t.\+ppf(q=0.\+950, df=\textbf{ df\+\_\+})
+\item 
+list \textbf{ ci\+Losses} = [\textbf{ losses\+Mean}-\/\textbf{ cv}$\ast$(math.\+sqrt(\textbf{ losses\+Var}/\textbf{ Number\+Routines})) ,\textbf{ losses\+Mean}+\textbf{ cv}$\ast$(math.\+sqrt(\textbf{ losses\+Var}/\textbf{ Number\+Routines}))]
+\item 
+list \textbf{ ci\+Accuracy} = [\textbf{ accuracy\+Mean}-\/\textbf{ cv}$\ast$(math.\+sqrt(\textbf{ accuracy\+Var}/\textbf{ Number\+Routines})) ,\textbf{ accuracy\+Mean}+\textbf{ cv}$\ast$(math.\+sqrt(\textbf{ accuracy\+Var}/\textbf{ Number\+Routines}))]
+\item 
+string \textbf{ out} = \textquotesingle{}\textquotesingle{}
+\item 
+\textbf{ settings\+File} = open(\textquotesingle{}./settings.\+py\textquotesingle{},\textquotesingle{}r\textquotesingle{})
+\item 
+\textbf{ settings\+Data} = settings\+File.\+read()
+\item 
+\textbf{ posb\+Value} = settings\+Data.\+find(\char`\"{}Saved=\char`\"{})
+\item 
+\textbf{ pose\+Value} = \textbf{ settings\+Data}[posb\+Value\+:].find(\textquotesingle{}\textbackslash{}n\textquotesingle{})
+\item 
+\textbf{ time\+End} = timer()
+\end{DoxyCompactItemize}
+
+
+\subsection{Variable Documentation}
+\mbox{\label{namespace_modeler3_a9eaa650fb0f3f64a705b194dafe82503}} 
+\index{Modeler3@{Modeler3}!accuracy@{accuracy}}
+\index{accuracy@{accuracy}!Modeler3@{Modeler3}}
+\subsubsection{accuracy}
+{\footnotesize\ttfamily list Modeler3.\+accuracy = [$\,$]}
+
+
+
+Definition at line 63 of file Modeler3.\+py.
+
+\mbox{\label{namespace_modeler3_a44e13c8e4ee6e3dd9599a0fb42c72107}} 
+\index{Modeler3@{Modeler3}!accuracy\+Mean@{accuracy\+Mean}}
+\index{accuracy\+Mean@{accuracy\+Mean}!Modeler3@{Modeler3}}
+\subsubsection{accuracy\+Mean}
+{\footnotesize\ttfamily Modeler3.\+accuracy\+Mean = np.\+mean(\textbf{ accuracy})}
+
+
+
+Definition at line 111 of file Modeler3.\+py.
+
+\mbox{\label{namespace_modeler3_a90ecbdfcbed94f51411154bbb7810ec8}} 
+\index{Modeler3@{Modeler3}!accuracy\+Var@{accuracy\+Var}}
+\index{accuracy\+Var@{accuracy\+Var}!Modeler3@{Modeler3}}
+\subsubsection{accuracy\+Var}
+{\footnotesize\ttfamily Modeler3.\+accuracy\+Var = np.\+var(\textbf{ accuracy})}
+
+
+
+Definition at line 112 of file Modeler3.\+py.
+
+\mbox{\label{namespace_modeler3_a99c23c9ffb0736c25b07e9cd68776a58}} 
+\index{Modeler3@{Modeler3}!Axis\+Count@{Axis\+Count}}
+\index{Axis\+Count@{Axis\+Count}!Modeler3@{Modeler3}}
+\subsubsection{Axis\+Count}
+{\footnotesize\ttfamily int Modeler3.\+Axis\+Count = 1}
+
+
+
+Definition at line 56 of file Modeler3.\+py.
+
+\mbox{\label{namespace_modeler3_a5876b9daccf8bf4e726fd4360593546d}} 
+\index{Modeler3@{Modeler3}!batch\+\_\+size@{batch\+\_\+size}}
+\index{batch\+\_\+size@{batch\+\_\+size}!Modeler3@{Modeler3}}
+\subsubsection{batch\+\_\+size}
+{\footnotesize\ttfamily Modeler3.\+batch\+\_\+size}
+
+
+
+Definition at line 96 of file Modeler3.\+py.
+
+\mbox{\label{namespace_modeler3_adc58063124ee97c034a0b3707bc2b304}} 
+\index{Modeler3@{Modeler3}!Batch\+Size@{Batch\+Size}}
+\index{Batch\+Size@{Batch\+Size}!Modeler3@{Modeler3}}
+\subsubsection{Batch\+Size}
+{\footnotesize\ttfamily Modeler3.\+Batch\+Size = 16}
+
+
+
+Definition at line 57 of file Modeler3.\+py.
+
+\mbox{\label{namespace_modeler3_a2cd3fb037a6199ad939488df0a7a243b}} 
+\index{Modeler3@{Modeler3}!ci\+Accuracy@{ci\+Accuracy}}
+\index{ci\+Accuracy@{ci\+Accuracy}!Modeler3@{Modeler3}}
+\subsubsection{ci\+Accuracy}
+{\footnotesize\ttfamily list Modeler3.\+ci\+Accuracy = [\textbf{ accuracy\+Mean}-\/\textbf{ cv}$\ast$(math.\+sqrt(\textbf{ accuracy\+Var}/\textbf{ Number\+Routines})) ,\textbf{ accuracy\+Mean}+\textbf{ cv}$\ast$(math.\+sqrt(\textbf{ accuracy\+Var}/\textbf{ Number\+Routines}))]}
+
+
+
+Definition at line 120 of file Modeler3.\+py.
+
+\mbox{\label{namespace_modeler3_a3210d5053c8fb0f74a4dce8dcdcf4753}} 
+\index{Modeler3@{Modeler3}!ci\+Losses@{ci\+Losses}}
+\index{ci\+Losses@{ci\+Losses}!Modeler3@{Modeler3}}
+\subsubsection{ci\+Losses}
+{\footnotesize\ttfamily list Modeler3.\+ci\+Losses = [\textbf{ losses\+Mean}-\/\textbf{ cv}$\ast$(math.\+sqrt(\textbf{ losses\+Var}/\textbf{ Number\+Routines})) ,\textbf{ losses\+Mean}+\textbf{ cv}$\ast$(math.\+sqrt(\textbf{ losses\+Var}/\textbf{ Number\+Routines}))]}
+
+
+
+Definition at line 119 of file Modeler3.\+py.
+
+\mbox{\label{namespace_modeler3_a69db8b76e28840d6af81609f13c3bcfc}} 
+\index{Modeler3@{Modeler3}!cv@{cv}}
+\index{cv@{cv}!Modeler3@{Modeler3}}
+\subsubsection{cv}
+{\footnotesize\ttfamily Modeler3.\+cv = stats.\+t.\+ppf(q=0.\+950, df=\textbf{ df\+\_\+})}
+
+
+
+Definition at line 116 of file Modeler3.\+py.
+
+\mbox{\label{namespace_modeler3_a0e206528f1f62a6acd4605f102cdac54}} 
+\index{Modeler3@{Modeler3}!df\+\_\+@{df\+\_\+}}
+\index{df\+\_\+@{df\+\_\+}!Modeler3@{Modeler3}}
+\subsubsection{df\+\_\+}
+{\footnotesize\ttfamily int Modeler3.\+df\+\_\+ = \textbf{ Number\+Routines}-\/1}
+
+
+
+Definition at line 115 of file Modeler3.\+py.
+
+\mbox{\label{namespace_modeler3_a5f296f93c4ff79c56384b7b881a47a2b}} 
+\index{Modeler3@{Modeler3}!Drop\+Percent@{Drop\+Percent}}
+\index{Drop\+Percent@{Drop\+Percent}!Modeler3@{Modeler3}}
+\subsubsection{Drop\+Percent}
+{\footnotesize\ttfamily float Modeler3.\+Drop\+Percent = 0.\+5}
+
+
+
+Definition at line 55 of file Modeler3.\+py.
+
+\mbox{\label{namespace_modeler3_ae1946367ea4e720d2b33d2a14d1f857a}} 
+\index{Modeler3@{Modeler3}!Epochs@{Epochs}}
+\index{Epochs@{Epochs}!Modeler3@{Modeler3}}
+\subsubsection{Epochs}
+{\footnotesize\ttfamily int Modeler3.\+Epochs = 50}
+
+
+
+Definition at line 58 of file Modeler3.\+py.
+
+\mbox{\label{namespace_modeler3_adc57d6fe14920c32689afb3bf1984d0e}} 
+\index{Modeler3@{Modeler3}!epochs@{epochs}}
+\index{epochs@{epochs}!Modeler3@{Modeler3}}
+\subsubsection{epochs}
+{\footnotesize\ttfamily Modeler3.\+epochs}
+
+
+
+Definition at line 96 of file Modeler3.\+py.
+
+\mbox{\label{namespace_modeler3_a33bbaa3ca8c1bb4ec75e28a3d31060ae}} 
+\index{Modeler3@{Modeler3}!Filter\+Size@{Filter\+Size}}
+\index{Filter\+Size@{Filter\+Size}!Modeler3@{Modeler3}}
+\subsubsection{Filter\+Size}
+{\footnotesize\ttfamily Modeler3.\+Filter\+Size = settings.\+Filter\+Size}
+
+
+
+Definition at line 34 of file Modeler3.\+py.
+
+\mbox{\label{namespace_modeler3_a0980450cfc29cf3759c24147ca4969e6}} 
+\index{Modeler3@{Modeler3}!Initial\+Seed@{Initial\+Seed}}
+\index{Initial\+Seed@{Initial\+Seed}!Modeler3@{Modeler3}}
+\subsubsection{Initial\+Seed}
+{\footnotesize\ttfamily int Modeler3.\+Initial\+Seed = 311967}
+
+
+
+Definition at line 44 of file Modeler3.\+py.
+
+\mbox{\label{namespace_modeler3_aad4b87ca5e0d7003a432f037419c72df}} 
+\index{Modeler3@{Modeler3}!Kernel\+Size@{Kernel\+Size}}
+\index{Kernel\+Size@{Kernel\+Size}!Modeler3@{Modeler3}}
+\subsubsection{Kernel\+Size}
+{\footnotesize\ttfamily Modeler3.\+Kernel\+Size = \textbf{ settings.\+Kernel\+Sizes}}
+
+
+
+Definition at line 35 of file Modeler3.\+py.
+
+\mbox{\label{namespace_modeler3_a5c7d024a6f9ee67f8e81aacd874b08d0}} 
+\index{Modeler3@{Modeler3}!loss@{loss}}
+\index{loss@{loss}!Modeler3@{Modeler3}}
+\subsubsection{loss}
+{\footnotesize\ttfamily Modeler3.\+loss}
+
+
+
+Definition at line 93 of file Modeler3.\+py.
+
+\mbox{\label{namespace_modeler3_adc20f8b9cce32a5e72fc770d2054852c}} 
+\index{Modeler3@{Modeler3}!losses@{losses}}
+\index{losses@{losses}!Modeler3@{Modeler3}}
+\subsubsection{losses}
+{\footnotesize\ttfamily list Modeler3.\+losses = [$\,$]}
+
+
+
+Definition at line 62 of file Modeler3.\+py.
+
+\mbox{\label{namespace_modeler3_a0032de74d12d63c294e8fea6501b3a1b}} 
+\index{Modeler3@{Modeler3}!losses\+Mean@{losses\+Mean}}
+\index{losses\+Mean@{losses\+Mean}!Modeler3@{Modeler3}}
+\subsubsection{losses\+Mean}
+{\footnotesize\ttfamily Modeler3.\+losses\+Mean = np.\+mean(\textbf{ losses})}
+
+
+
+Definition at line 109 of file Modeler3.\+py.
+
+\mbox{\label{namespace_modeler3_ab3e42d20801a10b414607703f92f49d6}} 
+\index{Modeler3@{Modeler3}!losses\+Var@{losses\+Var}}
+\index{losses\+Var@{losses\+Var}!Modeler3@{Modeler3}}
+\subsubsection{losses\+Var}
+{\footnotesize\ttfamily Modeler3.\+losses\+Var = np.\+var(\textbf{ losses})}
+
+
+
+Definition at line 110 of file Modeler3.\+py.
+
+\mbox{\label{namespace_modeler3_a22ab886185e788367baa5eaf026760a0}} 
+\index{Modeler3@{Modeler3}!Max\+Losses@{Max\+Losses}}
+\index{Max\+Losses@{Max\+Losses}!Modeler3@{Modeler3}}
+\subsubsection{Max\+Losses}
+{\footnotesize\ttfamily float Modeler3.\+Max\+Losses = 1.\+05}
+
+
+
+Definition at line 43 of file Modeler3.\+py.
+
+\mbox{\label{namespace_modeler3_a06e769dfb38288ce1b11ccab75c709cb}} 
+\index{Modeler3@{Modeler3}!metrics@{metrics}}
+\index{metrics@{metrics}!Modeler3@{Modeler3}}
+\subsubsection{metrics}
+{\footnotesize\ttfamily Modeler3.\+metrics}
+
+
+
+Definition at line 95 of file Modeler3.\+py.
+
+\mbox{\label{namespace_modeler3_ae6f3fed7618f865b2e865cb82de51b84}} 
+\index{Modeler3@{Modeler3}!Min\+Accuracy@{Min\+Accuracy}}
+\index{Min\+Accuracy@{Min\+Accuracy}!Modeler3@{Modeler3}}
+\subsubsection{Min\+Accuracy}
+{\footnotesize\ttfamily float Modeler3.\+Min\+Accuracy = 0.\+75}
+
+
+
+Definition at line 42 of file Modeler3.\+py.
+
+\mbox{\label{namespace_modeler3_a8b0cefaf3718a6e6abda0de6dc28be32}} 
+\index{Modeler3@{Modeler3}!model@{model}}
+\index{model@{model}!Modeler3@{Modeler3}}
+\subsubsection{model}
+{\footnotesize\ttfamily Modeler3.\+model = Sequential()}
+
+
+
+Definition at line 69 of file Modeler3.\+py.
+
+\mbox{\label{namespace_modeler3_a7cabc5c71e73522c19507b329c009290}} 
+\index{Modeler3@{Modeler3}!Number\+H\+Layers@{Number\+H\+Layers}}
+\index{Number\+H\+Layers@{Number\+H\+Layers}!Modeler3@{Modeler3}}
+\subsubsection{Number\+H\+Layers}
+{\footnotesize\ttfamily Modeler3.\+Number\+H\+Layers = \textbf{ settings.\+Hidden\+Layers}}
+
+
+
+Definition at line 33 of file Modeler3.\+py.
+
+\mbox{\label{namespace_modeler3_ada7d4330af358f7e9e28ef21a29771e9}} 
+\index{Modeler3@{Modeler3}!Number\+Routines@{Number\+Routines}}
+\index{Number\+Routines@{Number\+Routines}!Modeler3@{Modeler3}}
+\subsubsection{Number\+Routines}
+{\footnotesize\ttfamily Modeler3.\+Number\+Routines = settings.\+Number\+Routines}
+
+
+
+Definition at line 66 of file Modeler3.\+py.
+
+\mbox{\label{namespace_modeler3_a8c4e09eb971350c3303a8afc06f6d363}} 
+\index{Modeler3@{Modeler3}!optimizer@{optimizer}}
+\index{optimizer@{optimizer}!Modeler3@{Modeler3}}
+\subsubsection{optimizer}
+{\footnotesize\ttfamily Modeler3.\+optimizer}
+
+
+
+Definition at line 94 of file Modeler3.\+py.
+
+\mbox{\label{namespace_modeler3_aaad5f141e4839d50df08d197a61cf154}} 
+\index{Modeler3@{Modeler3}!out@{out}}
+\index{out@{out}!Modeler3@{Modeler3}}
+\subsubsection{out}
+{\footnotesize\ttfamily string Modeler3.\+out = \textquotesingle{}\textquotesingle{}}
+
+
+
+Definition at line 124 of file Modeler3.\+py.
+
+\mbox{\label{namespace_modeler3_ad5354d15d9f38f0836b66102deaf03b8}} 
+\index{Modeler3@{Modeler3}!posb\+Value@{posb\+Value}}
+\index{posb\+Value@{posb\+Value}!Modeler3@{Modeler3}}
+\subsubsection{posb\+Value}
+{\footnotesize\ttfamily Modeler3.\+posb\+Value = settings\+Data.\+find(\char`\"{}Saved=\char`\"{})}
+
+
+
+Definition at line 136 of file Modeler3.\+py.
+
+\mbox{\label{namespace_modeler3_a3d7009f809c2db4e73f2cf7626bd68e1}} 
+\index{Modeler3@{Modeler3}!pose\+Value@{pose\+Value}}
+\index{pose\+Value@{pose\+Value}!Modeler3@{Modeler3}}
+\subsubsection{pose\+Value}
+{\footnotesize\ttfamily Modeler3.\+pose\+Value = \textbf{ settings\+Data}[posb\+Value\+:].find(\textquotesingle{}\textbackslash{}n\textquotesingle{})}
+
+
+
+Definition at line 137 of file Modeler3.\+py.
+
+\mbox{\label{namespace_modeler3_a63b0d4b2b01b68071408120043658086}} 
+\index{Modeler3@{Modeler3}!saved@{saved}}
+\index{saved@{saved}!Modeler3@{Modeler3}}
+\subsubsection{saved}
+{\footnotesize\ttfamily list Modeler3.\+saved = [$\,$]}
+
+
+
+Definition at line 61 of file Modeler3.\+py.
+
+\mbox{\label{namespace_modeler3_ae9bc74508243e74b5104703570a8432d}} 
+\index{Modeler3@{Modeler3}!score@{score}}
+\index{score@{score}!Modeler3@{Modeler3}}
+\subsubsection{score}
+{\footnotesize\ttfamily list Modeler3.\+score = [$\,$]}
+
+
+
+Definition at line 60 of file Modeler3.\+py.
+
+\mbox{\label{namespace_modeler3_a91036327fc877a476df80bea47ed7d67}} 
+\index{Modeler3@{Modeler3}!scr@{scr}}
+\index{scr@{scr}!Modeler3@{Modeler3}}
+\subsubsection{scr}
+{\footnotesize\ttfamily Modeler3.\+scr = model.\+evaluate(\textbf{ X\+\_\+test}, \textbf{ y\+\_\+test}, \textbf{ batch\+\_\+size}=\textbf{ Batch\+Size})}
+
+
+
+Definition at line 97 of file Modeler3.\+py.
+
+\mbox{\label{namespace_modeler3_adeb344a3d44a9624e21310676964f932}} 
+\index{Modeler3@{Modeler3}!settings\+Data@{settings\+Data}}
+\index{settings\+Data@{settings\+Data}!Modeler3@{Modeler3}}
+\subsubsection{settings\+Data}
+{\footnotesize\ttfamily string Modeler3.\+settings\+Data = settings\+File.\+read()}
+
+
+
+Definition at line 131 of file Modeler3.\+py.
+
+\mbox{\label{namespace_modeler3_ac28e69c92c93d0fc4c7f31906b21a681}} 
+\index{Modeler3@{Modeler3}!settings\+File@{settings\+File}}
+\index{settings\+File@{settings\+File}!Modeler3@{Modeler3}}
+\subsubsection{settings\+File}
+{\footnotesize\ttfamily Modeler3.\+settings\+File = open(\textquotesingle{}./settings.\+py\textquotesingle{},\textquotesingle{}r\textquotesingle{})}
+
+
+
+Definition at line 130 of file Modeler3.\+py.
+
+\mbox{\label{namespace_modeler3_a7b16064f9c4a587f0f70e9693d3a6369}} 
+\index{Modeler3@{Modeler3}!time\+End@{time\+End}}
+\index{time\+End@{time\+End}!Modeler3@{Modeler3}}
+\subsubsection{time\+End}
+{\footnotesize\ttfamily Modeler3.\+time\+End = timer()}
+
+
+
+Definition at line 143 of file Modeler3.\+py.
+
+\mbox{\label{namespace_modeler3_a86af7af75254c8f61adb1ac689cd7560}} 
+\index{Modeler3@{Modeler3}!time\+Start@{time\+Start}}
+\index{time\+Start@{time\+Start}!Modeler3@{Modeler3}}
+\subsubsection{time\+Start}
+{\footnotesize\ttfamily Modeler3.\+time\+Start = timer()}
+
+
+
+Definition at line 17 of file Modeler3.\+py.
+
+\mbox{\label{namespace_modeler3_aaf93988a63a5d2b1c57821d78aec2482}} 
+\index{Modeler3@{Modeler3}!x\+\_\+test@{x\+\_\+test}}
+\index{x\+\_\+test@{x\+\_\+test}!Modeler3@{Modeler3}}
+\subsubsection{x\+\_\+test}
+{\footnotesize\ttfamily Modeler3.\+x\+\_\+test = np.\+load(\textquotesingle{}./Pi\+Cam/x\+\_\+test.\+npy\textquotesingle{})}
+
+
+
+Definition at line 22 of file Modeler3.\+py.
+
+\mbox{\label{namespace_modeler3_aae80c36a8712435d7adfd179f5959bcb}} 
+\index{Modeler3@{Modeler3}!X\+\_\+test@{X\+\_\+test}}
+\index{X\+\_\+test@{X\+\_\+test}!Modeler3@{Modeler3}}
+\subsubsection{X\+\_\+test}
+{\footnotesize\ttfamily Modeler3.\+X\+\_\+test = np.\+expand\+\_\+dims(\textbf{ x\+\_\+test}, axis=2)}
+
+
+
+Definition at line 28 of file Modeler3.\+py.
+
+\mbox{\label{namespace_modeler3_ab10b40f6427db380a7fb98ad6508005a}} 
+\index{Modeler3@{Modeler3}!x\+\_\+train@{x\+\_\+train}}
+\index{x\+\_\+train@{x\+\_\+train}!Modeler3@{Modeler3}}
+\subsubsection{x\+\_\+train}
+{\footnotesize\ttfamily Modeler3.\+x\+\_\+train = np.\+load(\textquotesingle{}./Pi\+Cam/x\+\_\+train.\+npy\textquotesingle{})}
+
+
+
+Definition at line 23 of file Modeler3.\+py.
+
+\mbox{\label{namespace_modeler3_af2e61602b321aff37229f87a2958b123}} 
+\index{Modeler3@{Modeler3}!X\+\_\+train@{X\+\_\+train}}
+\index{X\+\_\+train@{X\+\_\+train}!Modeler3@{Modeler3}}
+\subsubsection{X\+\_\+train}
+{\footnotesize\ttfamily Modeler3.\+X\+\_\+train = np.\+expand\+\_\+dims(\textbf{ x\+\_\+train}, axis=2)}
+
+
+
+Definition at line 26 of file Modeler3.\+py.
+
+\mbox{\label{namespace_modeler3_ac6467f796b883c95aab4c27344abd927}} 
+\index{Modeler3@{Modeler3}!y\+\_\+test@{y\+\_\+test}}
+\index{y\+\_\+test@{y\+\_\+test}!Modeler3@{Modeler3}}
+\subsubsection{y\+\_\+test}
+{\footnotesize\ttfamily Modeler3.\+y\+\_\+test = np.\+load(\textquotesingle{}./Pi\+Cam/y\+\_\+test.\+npy\textquotesingle{})}
+
+
+
+Definition at line 24 of file Modeler3.\+py.
+
+\mbox{\label{namespace_modeler3_ac2e585f1f5aa8adea01db618c553151c}} 
+\index{Modeler3@{Modeler3}!y\+\_\+train@{y\+\_\+train}}
+\index{y\+\_\+train@{y\+\_\+train}!Modeler3@{Modeler3}}
+\subsubsection{y\+\_\+train}
+{\footnotesize\ttfamily Modeler3.\+y\+\_\+train = np.\+load(\textquotesingle{}./Pi\+Cam/y\+\_\+train.\+npy\textquotesingle{})}
+
+
+
+Definition at line 25 of file Modeler3.\+py.
+

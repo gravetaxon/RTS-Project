@@ -1,0 +1,212 @@
+\section{make\+Output Namespace Reference}
+\label{namespacemake_output}\index{make\+Output@{make\+Output}}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\textbf{ R\+T\+S\+Res} = open(\char`\"{}./Pi\+Cam/model\+\_\+\+Out.\+txt\char`\"{},\char`\"{}w\char`\"{})
+\item 
+\textbf{ Saved\+Models} = \textbf{ settings.\+Saved}
+\item 
+\textbf{ Num\+Models} = len(\textbf{ Saved\+Models})
+\item 
+\textbf{ Data\+Shape} = \textbf{ settings.\+data\+Shape}
+\item 
+int \textbf{ Test\+Percent} = 1
+\item 
+tuple \textbf{ loop\+Data} = (int(\textbf{ Data\+Shape}[0]),int(\textbf{ Data\+Shape}[1]$\ast$\textbf{ Test\+Percent}),int(\textbf{ Data\+Shape}[2]$\ast$\textbf{ Test\+Percent}))
+\item 
+list \textbf{ models} = [$\,$]
+\item 
+string \textbf{ Models\+Used} = \char`\"{}\char`\"{}
+\item 
+string \textbf{ model\+\_\+name} = \textquotesingle{}./Pi\+Cam/C\+N\+Nlin\+\_\+model\{\}.h5\textquotesingle{}.format(str(each))
+\item 
+\textbf{ model} = load\+\_\+model(\textbf{ model\+\_\+name})
+\item 
+\textbf{ voter\+Count} = min(3,len(\textbf{ models}))
+\item 
+\textbf{ pixel} = \textbf{ loader.\+load}()
+\item 
+\textbf{ pix} = \textbf{ pixel}[0\+:\textbf{ loop\+Data}[0], i, j]
+\item 
+\textbf{ ppix} = \textbf{ pix}[None,\+:,None]
+\item 
+list \textbf{ votes} = [$\,$]
+\item 
+\textbf{ mp} = model.\+predict(\textbf{ ppix})
+\item 
+\textbf{ Voter\+Ave} = np.\+mean(\textbf{ votes})
+\end{DoxyCompactItemize}
+
+
+\subsection{Variable Documentation}
+\mbox{\label{namespacemake_output_a3ba9170953092ba8f3208a7d98b63b03}} 
+\index{make\+Output@{make\+Output}!Data\+Shape@{Data\+Shape}}
+\index{Data\+Shape@{Data\+Shape}!make\+Output@{make\+Output}}
+\subsubsection{Data\+Shape}
+{\footnotesize\ttfamily make\+Output.\+Data\+Shape = \textbf{ settings.\+data\+Shape}}
+
+
+
+Definition at line 22 of file make\+Output.\+py.
+
+\mbox{\label{namespacemake_output_a07f2a88415c0b6bc137a43cf90159f20}} 
+\index{make\+Output@{make\+Output}!loop\+Data@{loop\+Data}}
+\index{loop\+Data@{loop\+Data}!make\+Output@{make\+Output}}
+\subsubsection{loop\+Data}
+{\footnotesize\ttfamily tuple make\+Output.\+loop\+Data = (int(\textbf{ Data\+Shape}[0]),int(\textbf{ Data\+Shape}[1]$\ast$\textbf{ Test\+Percent}),int(\textbf{ Data\+Shape}[2]$\ast$\textbf{ Test\+Percent}))}
+
+
+
+Definition at line 25 of file make\+Output.\+py.
+
+\mbox{\label{namespacemake_output_aa41179dcf40bc56cc0b0235e17f37b22}} 
+\index{make\+Output@{make\+Output}!model@{model}}
+\index{model@{model}!make\+Output@{make\+Output}}
+\subsubsection{model}
+{\footnotesize\ttfamily make\+Output.\+model = load\+\_\+model(\textbf{ model\+\_\+name})}
+
+
+
+Definition at line 37 of file make\+Output.\+py.
+
+\mbox{\label{namespacemake_output_a70f93afb034b7af241649ccd0b23869f}} 
+\index{make\+Output@{make\+Output}!model\+\_\+name@{model\+\_\+name}}
+\index{model\+\_\+name@{model\+\_\+name}!make\+Output@{make\+Output}}
+\subsubsection{model\+\_\+name}
+{\footnotesize\ttfamily string make\+Output.\+model\+\_\+name = \textquotesingle{}./Pi\+Cam/C\+N\+Nlin\+\_\+model\{\}.h5\textquotesingle{}.format(str(each))}
+
+
+
+Definition at line 36 of file make\+Output.\+py.
+
+\mbox{\label{namespacemake_output_a1c6c636de0f290a409417f9aad481791}} 
+\index{make\+Output@{make\+Output}!models@{models}}
+\index{models@{models}!make\+Output@{make\+Output}}
+\subsubsection{models}
+{\footnotesize\ttfamily list make\+Output.\+models = [$\,$]}
+
+
+
+Definition at line 26 of file make\+Output.\+py.
+
+\mbox{\label{namespacemake_output_ae26693c032b5247ccd6b104f2491df60}} 
+\index{make\+Output@{make\+Output}!Models\+Used@{Models\+Used}}
+\index{Models\+Used@{Models\+Used}!make\+Output@{make\+Output}}
+\subsubsection{Models\+Used}
+{\footnotesize\ttfamily string make\+Output.\+Models\+Used = \char`\"{}\char`\"{}}
+
+
+
+Definition at line 28 of file make\+Output.\+py.
+
+\mbox{\label{namespacemake_output_ac91dbd593b65254e7a7522bae2b2a665}} 
+\index{make\+Output@{make\+Output}!mp@{mp}}
+\index{mp@{mp}!make\+Output@{make\+Output}}
+\subsubsection{mp}
+{\footnotesize\ttfamily make\+Output.\+mp = model.\+predict(\textbf{ ppix})}
+
+
+
+Definition at line 51 of file make\+Output.\+py.
+
+\mbox{\label{namespacemake_output_a20376d43bacf50cfa4faa7a87b9e1f8c}} 
+\index{make\+Output@{make\+Output}!Num\+Models@{Num\+Models}}
+\index{Num\+Models@{Num\+Models}!make\+Output@{make\+Output}}
+\subsubsection{Num\+Models}
+{\footnotesize\ttfamily make\+Output.\+Num\+Models = len(\textbf{ Saved\+Models})}
+
+
+
+Definition at line 21 of file make\+Output.\+py.
+
+\mbox{\label{namespacemake_output_a89e3afe2a95494a7ddd3f3efa85596f6}} 
+\index{make\+Output@{make\+Output}!pix@{pix}}
+\index{pix@{pix}!make\+Output@{make\+Output}}
+\subsubsection{pix}
+{\footnotesize\ttfamily make\+Output.\+pix = \textbf{ pixel}[0\+:\textbf{ loop\+Data}[0], i, j]}
+
+
+
+Definition at line 47 of file make\+Output.\+py.
+
+\mbox{\label{namespacemake_output_aebe26dd7e84251b2f8c67278ab4ec495}} 
+\index{make\+Output@{make\+Output}!pixel@{pixel}}
+\index{pixel@{pixel}!make\+Output@{make\+Output}}
+\subsubsection{pixel}
+{\footnotesize\ttfamily make\+Output.\+pixel = \textbf{ loader.\+load}()}
+
+
+
+Definition at line 43 of file make\+Output.\+py.
+
+\mbox{\label{namespacemake_output_a05652e1d36f6eefc17d2c7df2236c90b}} 
+\index{make\+Output@{make\+Output}!ppix@{ppix}}
+\index{ppix@{ppix}!make\+Output@{make\+Output}}
+\subsubsection{ppix}
+{\footnotesize\ttfamily make\+Output.\+ppix = \textbf{ pix}[None,\+:,None]}
+
+
+
+Definition at line 48 of file make\+Output.\+py.
+
+\mbox{\label{namespacemake_output_a32f8841182ee63e40481c5ceafe3baa1}} 
+\index{make\+Output@{make\+Output}!R\+T\+S\+Res@{R\+T\+S\+Res}}
+\index{R\+T\+S\+Res@{R\+T\+S\+Res}!make\+Output@{make\+Output}}
+\subsubsection{R\+T\+S\+Res}
+{\footnotesize\ttfamily make\+Output.\+R\+T\+S\+Res = open(\char`\"{}./Pi\+Cam/model\+\_\+\+Out.\+txt\char`\"{},\char`\"{}w\char`\"{})}
+
+
+
+Definition at line 19 of file make\+Output.\+py.
+
+\mbox{\label{namespacemake_output_a5225251e961f2a90cfb650dd56ab3ba0}} 
+\index{make\+Output@{make\+Output}!Saved\+Models@{Saved\+Models}}
+\index{Saved\+Models@{Saved\+Models}!make\+Output@{make\+Output}}
+\subsubsection{Saved\+Models}
+{\footnotesize\ttfamily make\+Output.\+Saved\+Models = \textbf{ settings.\+Saved}}
+
+
+
+Definition at line 20 of file make\+Output.\+py.
+
+\mbox{\label{namespacemake_output_afffb8a8671c3e222b9dfb7f4f9dd5e2c}} 
+\index{make\+Output@{make\+Output}!Test\+Percent@{Test\+Percent}}
+\index{Test\+Percent@{Test\+Percent}!make\+Output@{make\+Output}}
+\subsubsection{Test\+Percent}
+{\footnotesize\ttfamily int make\+Output.\+Test\+Percent = 1}
+
+
+
+Definition at line 24 of file make\+Output.\+py.
+
+\mbox{\label{namespacemake_output_a501dae6b7f2422348af7f0897959d960}} 
+\index{make\+Output@{make\+Output}!Voter\+Ave@{Voter\+Ave}}
+\index{Voter\+Ave@{Voter\+Ave}!make\+Output@{make\+Output}}
+\subsubsection{Voter\+Ave}
+{\footnotesize\ttfamily make\+Output.\+Voter\+Ave = np.\+mean(\textbf{ votes})}
+
+
+
+Definition at line 60 of file make\+Output.\+py.
+
+\mbox{\label{namespacemake_output_aada3dc59b2ac1099897d2ae0d7c00f9f}} 
+\index{make\+Output@{make\+Output}!voter\+Count@{voter\+Count}}
+\index{voter\+Count@{voter\+Count}!make\+Output@{make\+Output}}
+\subsubsection{voter\+Count}
+{\footnotesize\ttfamily make\+Output.\+voter\+Count = min(3,len(\textbf{ models}))}
+
+
+
+Definition at line 40 of file make\+Output.\+py.
+
+\mbox{\label{namespacemake_output_a0e99cf39c9a97e505c59c975b3d3f254}} 
+\index{make\+Output@{make\+Output}!votes@{votes}}
+\index{votes@{votes}!make\+Output@{make\+Output}}
+\subsubsection{votes}
+{\footnotesize\ttfamily list make\+Output.\+votes = [$\,$]}
+
+
+
+Definition at line 49 of file make\+Output.\+py.
+

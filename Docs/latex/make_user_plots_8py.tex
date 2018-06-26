@@ -1,0 +1,40 @@
+\section{make\+User\+Plots.\+py File Reference}
+\label{make_user_plots_8py}\index{make\+User\+Plots.\+py@{make\+User\+Plots.\+py}}
+\subsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+ \textbf{ make\+User\+Plots}
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\textbf{ make\+User\+Plots.\+pixel} = \textbf{ loader.\+load}()
+\item 
+\textbf{ make\+User\+Plots.\+data\+Max}
+\item 
+\textbf{ make\+User\+Plots.\+sup\+Row}
+\item 
+\textbf{ make\+User\+Plots.\+sup\+Col}
+\item 
+\textbf{ make\+User\+Plots.\+t} = np.\+arange(0,data\+Max)
+\item 
+bool \textbf{ make\+User\+Plots.\+status} = True
+\item 
+\textbf{ make\+User\+Plots.\+choice} = input(\char`\"{}Enter choice\+: \char`\"{})
+\item 
+\textbf{ make\+User\+Plots.\+file\+Name} = input(\char`\"{}Enter path and filename of the file to be opened, (ex. \textquotesingle{}./Pi\+Cam/output.\+txt\textquotesingle{})\char`\"{})
+\item 
+\textbf{ make\+User\+Plots.\+fname} = open(str(file\+Name),\textquotesingle{}r\textquotesingle{})
+\item 
+\textbf{ make\+User\+Plots.\+fields} = line.\+strip().split()
+\item 
+\textbf{ make\+User\+Plots.\+row} = int(fields[0])
+\item 
+\textbf{ make\+User\+Plots.\+column} = int(fields[1])
+\item 
+\textbf{ make\+User\+Plots.\+p} = pixel[0\+:data\+Max, row, column]
+\item 
+\textbf{ make\+User\+Plots.\+col}
+\item 
+\textbf{ make\+User\+Plots.\+response} = input(\char`\"{}Wish to print another plot?\char`\"{})
+\end{DoxyCompactItemize}

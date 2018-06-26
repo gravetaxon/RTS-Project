@@ -1,0 +1,188 @@
+\section{make\+User\+Plots Namespace Reference}
+\label{namespacemake_user_plots}\index{make\+User\+Plots@{make\+User\+Plots}}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\textbf{ pixel} = \textbf{ loader.\+load}()
+\item 
+\textbf{ data\+Max}
+\item 
+\textbf{ sup\+Row}
+\item 
+\textbf{ sup\+Col}
+\item 
+\textbf{ t} = np.\+arange(0,\textbf{ data\+Max})
+\item 
+bool \textbf{ status} = True
+\item 
+\textbf{ choice} = input(\char`\"{}Enter choice\+: \char`\"{})
+\item 
+\textbf{ file\+Name} = input(\char`\"{}Enter path and filename of the file to be opened, (ex. \textquotesingle{}./Pi\+Cam/output.\+txt\textquotesingle{})\char`\"{})
+\item 
+\textbf{ fname} = open(str(\textbf{ file\+Name}),\textquotesingle{}r\textquotesingle{})
+\item 
+\textbf{ fields} = line.\+strip().split()
+\item 
+\textbf{ row} = int(\textbf{ fields}[0])
+\item 
+\textbf{ column} = int(\textbf{ fields}[1])
+\item 
+\textbf{ p} = \textbf{ pixel}[0\+:\textbf{ data\+Max}, \textbf{ row}, \textbf{ column}]
+\item 
+\textbf{ col}
+\item 
+\textbf{ response} = input(\char`\"{}Wish to print another plot?\char`\"{})
+\end{DoxyCompactItemize}
+
+
+\subsection{Variable Documentation}
+\mbox{\label{namespacemake_user_plots_af1332128930e280c0f97a62b836de58d}} 
+\index{make\+User\+Plots@{make\+User\+Plots}!choice@{choice}}
+\index{choice@{choice}!make\+User\+Plots@{make\+User\+Plots}}
+\subsubsection{choice}
+{\footnotesize\ttfamily make\+User\+Plots.\+choice = input(\char`\"{}Enter choice\+: \char`\"{})}
+
+
+
+Definition at line 28 of file make\+User\+Plots.\+py.
+
+\mbox{\label{namespacemake_user_plots_a1bc2e0a47939a6beac80c12dc6157e0b}} 
+\index{make\+User\+Plots@{make\+User\+Plots}!col@{col}}
+\index{col@{col}!make\+User\+Plots@{make\+User\+Plots}}
+\subsubsection{col}
+{\footnotesize\ttfamily make\+User\+Plots.\+col}
+
+
+
+Definition at line 49 of file make\+User\+Plots.\+py.
+
+\mbox{\label{namespacemake_user_plots_a5654c5f65d93c3b18a16dc6cb6328418}} 
+\index{make\+User\+Plots@{make\+User\+Plots}!column@{column}}
+\index{column@{column}!make\+User\+Plots@{make\+User\+Plots}}
+\subsubsection{column}
+{\footnotesize\ttfamily make\+User\+Plots.\+column = int(\textbf{ fields}[1])}
+
+
+
+Definition at line 37 of file make\+User\+Plots.\+py.
+
+\mbox{\label{namespacemake_user_plots_aa88f63a69469551507b72e11ef13c2cc}} 
+\index{make\+User\+Plots@{make\+User\+Plots}!data\+Max@{data\+Max}}
+\index{data\+Max@{data\+Max}!make\+User\+Plots@{make\+User\+Plots}}
+\subsubsection{data\+Max}
+{\footnotesize\ttfamily make\+User\+Plots.\+data\+Max}
+
+
+
+Definition at line 23 of file make\+User\+Plots.\+py.
+
+\mbox{\label{namespacemake_user_plots_a6a23d52171367149ad50ac97bcb613c0}} 
+\index{make\+User\+Plots@{make\+User\+Plots}!fields@{fields}}
+\index{fields@{fields}!make\+User\+Plots@{make\+User\+Plots}}
+\subsubsection{fields}
+{\footnotesize\ttfamily make\+User\+Plots.\+fields = line.\+strip().split()}
+
+
+
+Definition at line 34 of file make\+User\+Plots.\+py.
+
+\mbox{\label{namespacemake_user_plots_ad07936e0679442db524512aafa16a992}} 
+\index{make\+User\+Plots@{make\+User\+Plots}!file\+Name@{file\+Name}}
+\index{file\+Name@{file\+Name}!make\+User\+Plots@{make\+User\+Plots}}
+\subsubsection{file\+Name}
+{\footnotesize\ttfamily make\+User\+Plots.\+file\+Name = input(\char`\"{}Enter path and filename of the file to be opened, (ex. \textquotesingle{}./Pi\+Cam/output.\+txt\textquotesingle{})\char`\"{})}
+
+
+
+Definition at line 30 of file make\+User\+Plots.\+py.
+
+\mbox{\label{namespacemake_user_plots_a99dbeefa963934bff31ca815fa512bb2}} 
+\index{make\+User\+Plots@{make\+User\+Plots}!fname@{fname}}
+\index{fname@{fname}!make\+User\+Plots@{make\+User\+Plots}}
+\subsubsection{fname}
+{\footnotesize\ttfamily make\+User\+Plots.\+fname = open(str(\textbf{ file\+Name}),\textquotesingle{}r\textquotesingle{})}
+
+
+
+Definition at line 32 of file make\+User\+Plots.\+py.
+
+\mbox{\label{namespacemake_user_plots_a6ceb12f38a02d348e6d136285dc69ac6}} 
+\index{make\+User\+Plots@{make\+User\+Plots}!p@{p}}
+\index{p@{p}!make\+User\+Plots@{make\+User\+Plots}}
+\subsubsection{p}
+{\footnotesize\ttfamily make\+User\+Plots.\+p = \textbf{ pixel}[0\+:\textbf{ data\+Max}, \textbf{ row}, \textbf{ column}]}
+
+
+
+Definition at line 39 of file make\+User\+Plots.\+py.
+
+\mbox{\label{namespacemake_user_plots_a324231a0f5e3394b5b0af89be6e3c94e}} 
+\index{make\+User\+Plots@{make\+User\+Plots}!pixel@{pixel}}
+\index{pixel@{pixel}!make\+User\+Plots@{make\+User\+Plots}}
+\subsubsection{pixel}
+{\footnotesize\ttfamily make\+User\+Plots.\+pixel = \textbf{ loader.\+load}()}
+
+
+
+Definition at line 22 of file make\+User\+Plots.\+py.
+
+\mbox{\label{namespacemake_user_plots_a4286bee41a8772fdd4784d0c1574acc2}} 
+\index{make\+User\+Plots@{make\+User\+Plots}!response@{response}}
+\index{response@{response}!make\+User\+Plots@{make\+User\+Plots}}
+\subsubsection{response}
+{\footnotesize\ttfamily make\+User\+Plots.\+response = input(\char`\"{}Wish to print another plot?\char`\"{})}
+
+
+
+Definition at line 56 of file make\+User\+Plots.\+py.
+
+\mbox{\label{namespacemake_user_plots_a66e9b661dcdf6e1cb2763a22168d20fc}} 
+\index{make\+User\+Plots@{make\+User\+Plots}!row@{row}}
+\index{row@{row}!make\+User\+Plots@{make\+User\+Plots}}
+\subsubsection{row}
+{\footnotesize\ttfamily make\+User\+Plots.\+row = int(\textbf{ fields}[0])}
+
+
+
+Definition at line 36 of file make\+User\+Plots.\+py.
+
+\mbox{\label{namespacemake_user_plots_a2548bb5e0dc7bff3caa3e0c97b9ac1d9}} 
+\index{make\+User\+Plots@{make\+User\+Plots}!status@{status}}
+\index{status@{status}!make\+User\+Plots@{make\+User\+Plots}}
+\subsubsection{status}
+{\footnotesize\ttfamily bool make\+User\+Plots.\+status = True}
+
+
+
+Definition at line 25 of file make\+User\+Plots.\+py.
+
+\mbox{\label{namespacemake_user_plots_af4f84bae64d363756e62ba9397ca2fd3}} 
+\index{make\+User\+Plots@{make\+User\+Plots}!sup\+Col@{sup\+Col}}
+\index{sup\+Col@{sup\+Col}!make\+User\+Plots@{make\+User\+Plots}}
+\subsubsection{sup\+Col}
+{\footnotesize\ttfamily make\+User\+Plots.\+sup\+Col}
+
+
+
+Definition at line 23 of file make\+User\+Plots.\+py.
+
+\mbox{\label{namespacemake_user_plots_a4b914a1b7ff2ce0d51e688a462f216ae}} 
+\index{make\+User\+Plots@{make\+User\+Plots}!sup\+Row@{sup\+Row}}
+\index{sup\+Row@{sup\+Row}!make\+User\+Plots@{make\+User\+Plots}}
+\subsubsection{sup\+Row}
+{\footnotesize\ttfamily make\+User\+Plots.\+sup\+Row}
+
+
+
+Definition at line 23 of file make\+User\+Plots.\+py.
+
+\mbox{\label{namespacemake_user_plots_a401c8c7662c954ec76e36c99e9863510}} 
+\index{make\+User\+Plots@{make\+User\+Plots}!t@{t}}
+\index{t@{t}!make\+User\+Plots@{make\+User\+Plots}}
+\subsubsection{t}
+{\footnotesize\ttfamily make\+User\+Plots.\+t = np.\+arange(0,\textbf{ data\+Max})}
+
+
+
+Definition at line 24 of file make\+User\+Plots.\+py.
+

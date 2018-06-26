@@ -1,0 +1,24 @@
+\section{preprocess.\+py File Reference}
+\label{preprocess_8py}\index{preprocess.\+py@{preprocess.\+py}}
+\subsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+ \textbf{ preprocess}
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+int \textbf{ preprocess.\+winwid} = 500
+\item 
+\textbf{ preprocess.\+pixel} = \textbf{ loader.\+load}()
+\item 
+\textbf{ preprocess.\+R\+T\+S\+List} = open(\char`\"{}./Pi\+Cam/samp\+\_\+\+R\+T\+S\+\_\+\+List\+\_\+garbage.\+txt\char`\"{}, \char`\"{}w+\char`\"{})
+\item 
+\textbf{ preprocess.\+W\+N\+List} = open(\char`\"{}./Pi\+Cam/samp\+\_\+\+W\+N\+\_\+\+List.\+txt\char`\"{}, \char`\"{}w+\char`\"{})
+\item 
+\textbf{ preprocess.\+Sigma\+Step} = settings.\+Sigma\+Step
+\item 
+\textbf{ preprocess.\+p} = pixel[0\+:1500, i, j]
+\item 
+\textbf{ preprocess.\+winmean} = abs(np.\+mean(p[(k$\ast$winwid)\+:((k+1)$\ast$winwid)])-\/np.\+mean(p[(k-\/1)$\ast$winwid\+:(k$\ast$winwid)]))
+\end{DoxyCompactItemize}
