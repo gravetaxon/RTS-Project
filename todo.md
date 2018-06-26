@@ -22,14 +22,12 @@ https://gist.github.com/gravetaxon/67c2891f5d665f07589fae576b802ee6
 
 RE: Meeting May 9th:
 - [ ] Add amplitude calculations for a graph
-- [ ] Train multiple models: N v N, R v N, M v N, E v N 
+- [ ] Train multiple models: N v N, R v N, M v N, E v N
    + [ ] Compare output relative to actual graphs (human vs models)
    + [ ] Use voter model to ident which of the categories match best
    + [ ] For RTS-Ident graphs use amp calc to determine the quantity of specific amplitutde ranges
-- [X ] modify model voting to allow for non perfect matches (mp[0]==0 => 
-this pix is 100% a RTS graph) [ low*catNum < mp[0] < high*catNum ] where 
-catNum has value of 0 for rts graphs, 1 for non-rts, 2+ for other 
+- [X ] modify model voting to allow for non perfect matches (mp[0]==0 =>
+this pix is 100% a RTS graph) [ low*catNum < mp[0] < high*catNum ] where
+catNum has value of 0 for rts graphs, 1 for non-rts, 2+ for other
 categories
- 
-
-
+- [ ] add basic categorization to modeling system
