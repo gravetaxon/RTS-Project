@@ -538,6 +538,7 @@ def main ():
     parser.add_argument("-o", "--oldMethod", action='store_true', help="Activates a special routine that uses binary mode rather than categorical")
     #parser.add_argument("-","--",action='store_true',help="")
 
+
     args = parser.parse_args()
 
     testingSizeTest  = 100

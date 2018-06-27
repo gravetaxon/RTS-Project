@@ -69,6 +69,8 @@ for i in range(1,loopData[1]):
     #        RTSRes.write("%d %d %d\r\n" %(i,j,mp[0]))
             #x = np.arange(0,1500)
             #plt.plot(x,pix)
+            # plt.xlabel("periods") # 20sec/period
+            # plt.ylabel("mA" )
             #plt.savefig('./PiCam/RTS_CNN2demo/%d_%d' % (i,j))
 #            plt.plot(x,pix)
             #plt.close()
