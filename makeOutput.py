@@ -15,7 +15,7 @@ import sys
 import random
 if os.name == 'posix':
     os.nice(10)
-
+# Open the file for future output
 RTSRes = open("./PiCam/model_Out.txt","w")
 SavedModels =settings.Saved
 NumModels = len(SavedModels)
