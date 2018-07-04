@@ -1,6 +1,7 @@
 Tasks:
 
 * Build categorical detection
+  + Rebuild makeDataSets to be more modular in usage  
   + Build run.py to automate creation of RTS vs NRTS, MRTS vs NRTS, and ERTS vs NRTS models
 
   + Build voter.py to vote on the signals

@@ -1,8 +1,9 @@
-#!/usr/bin/env python3
-
-"""
-There are 2,313 RTS candidates, so add 2,637 WN signals to create np.array(4950,1500)
-"""
+## @package makeDataSets.py
+# makeTrainingData will output a numpy array of (arrayLen x dataMax) that will
+#   concatenated at the end to compile into the training data to be used
+# likewise with makeTestingData
+# both of the functions input will also have the definition of the signal (which number)
+#  to indicate the signal type.
 
 import matplotlib
 matplotlib.use('Agg')
@@ -17,212 +18,129 @@ from pathlib import Path
 import random
 
 delta = loader.Delta
+maxSig = 5
+minSig = 0
 
-def makeTrainingData(args, pixel, minSize):
+## Signal definitions
+nrtsSig = 0 # Signal is not a rts frame
+rtsSig  = 1 # Signal is a rts frame
+mrtsSig = 2 # Signal is a possible rts frame
+ertsSig = 3 # Signal is an erratic signal frame
+resv1   = 4 # Reserved for future use.
+resv2   = 5 # Reserved for future use.
+
+
+def makeTrainingData(args, pixel, minSize, sigType):
     #inputs:
     # args     -> all commandline arguments
     # pixel    -> dataset
-    # minSize  -> testingSizetrain
+    # minSize  -> minimum size needed to process (floor of 30 with normally distributed populations)
+    # sigType  -> signal indicator (number from 0 to 5)
     #
     #outputs:
-    # x_train  -> pixel data for training
-    # y_train  -> values for the data type
+    # x_train  -> pixel data for training for sigType
+    # y_train  -> values for the data type (sigType)
+    # count    -> how many values for this sigType
     # status   -> bool value of process success
     #
-
     (dataMax, supRow, supCol) = pixel.shape
-    if args.oldMethod:
-        # Binary method only
-        # rts and nrts only
-        print("DEBUG: Activating old binary method!")
-        if args.rtsPath != None:
-            print("DEBUG: rtsPath is {}".format(args.rtsPath))
-            szRtsPath = Path(args.rtsPath)
-            if szRtsPath.is_file():
-                print("DEBUG: It is a file! Opening rtsFile")
-                rtsFile = open(str(args.rtsPath),'r')
-            else:
-                print ("File not found, opening backup")
-                rtsFile = open(('./PiCam/RTS_list.txt'),'r')
-        else:
-            print("DEBUG: RtsList will be built from directory listing")
-            rtsFile = open(('./PiCam/RTS_list.txt'),'r')
-        if args.nrtsPath != None:
-            print("DEBUG: nrtsPath is {}".format(args.nrtsPath))
-            szNrtsPath = Path(args.nrtsPath)
-            if szNrtsPath.is_file():
-                print("DEBUG: It is a file! Opening nrtsFile")
-                nrtsFile = open(str(args.nrtsPath),'r')
-            else:
-                print ("File not found, opening backup")
-                nrtsFile = open('./PiCam/NRTS_list.txt','r')
-        else:
-            print("DEBUG: Nrts will be built from directory listing")
-            nrtsFile = open('./PiCam/NRTS_list.txt','r')
-        rtsList  =  rtsFile.read().replace('\n\n','\n').replace('\n\n','\n').replace('\n\n','\n').split('\n')
-        nrtsList = nrtsFile.read().replace('\n\n','\n').replace('\n\n','\n').replace('\n\n','\n').split('\n')
-        rtsFile.close()
-        nrtsFile.close()
-        deadList = 1
-        rtsLen  = len(rtsList)
-        nrtsLen = len(nrtsList)
-        arrayLen = int(rtsLen + nrtsLen)
 
-        if (arrayLen >= minSize):
-            # we have enough data to do stuff
-            x_train = np.zeros((arrayLen,dataMax))
-            y_train = np.zeros(arrayLen)
-            tr_count = 0
-            for each in rtsList:
-                if (each != '') and (each != '.DS Store'):
-                    (row,col)=each.split()
-                    if (int(row)<=supRow) and (int(col)<=supCol):
-                        x_train[tr_count] = (pixel[0:dataMax,int(row),int(col)])
-                        y_train[tr_count] = 0
-                        tr_count +=1
-                    else:
-                        print("DEBUG: Error data out of range (training rts bin)")
-                        break
-                else:
-                    deadList +=1
-            for each in nrtsList:
-                if (each != '') and (each != '.DS Store'):
-                    (row,col)=each.split()
-                    if (int(row)<=supRow) and (int(col)<=supCol):
-                        x_train[tr_count] = (pixel[0:dataMax,int(row),int(col)])
-                        y_train[tr_count] = 1
-                        tr_count +=1
-                    else:
-                        print("DEBUG: Error data out of range (training nrts bin)")
-                        break
-                else:
-                    deadList +=1
-            if abs(tr_count - arrayLen) >= delta :
-                print("DEBUG: We have lost data!!!! (bin)")
-                print("DEBUG: Sizes:\n\t [dataWritten:dataExpected]\n{}:{}".format(tr_count,arrayLen))
-                return (False, 0,0,0)
+    # create the dataset from the text file that holds the listings
+    if sigType <= maxSig and sigType >= minSig:
+        # Signal type is something that we understand
+        if sigType == rtsSig and args.rtsPath != None:
+            # we have an argument passes that requests a rts analysis and have data
+            szfilePath = Path(args.rtsPath)
+            if szfilePath.is_file():
+                inputFile = open(str(args.rtsPath),'r')
             else:
-                print ("DEBUG: Dataset complete")
+                inputFile = 0
+            if type(inputFile) != int :
+                # inputfile was succesful in opening the data!
+                inputList = inputFile.read().replace('\n\n','\n').replace('\n\n','\n').replace('\n\n','\n').split('\n')
+                # The triple replace is to handle errors in the source file from lines with three newlines
+                inputFile.close()
+            else:
+                inputList = ""
+        elif sigType == nrtsSig and args.nrtsPath != None:
+            # we have an argument passes that requests a rts analysis and have data
+            szfilePath = Path(args.nrtsPath)
+            if szfilePath.is_file():
+                inputFile = open(str(args.nrtsPath),'r')
+            else:
+                inputFile = 0
+            if type(inputFile) != int :
+                # inputfile was succesful in opening the data!
+                inputList = inputFile.read().replace('\n\n','\n').replace('\n\n','\n').replace('\n\n','\n').split('\n')
+                # The triple replace is to handle errors in the source file from lines with three newlines
+                inputFile.close()
+            else:
+                inputList = ""
+        elif sigType == mrtsSig and args.mrtsPath != None:
+            # we have an argument passes that requests a rts analysis and have data
+            szfilePath = Path(args.mrtsPath)
+            if szfilePath.is_file():
+                inputFile = open(str(args.mrtsPath),'r')
+            else:
+                inputFile = 0
+            if type(inputFile) != int :
+                # inputfile was succesful in opening the data!
+                inputList = inputFile.read().replace('\n\n','\n').replace('\n\n','\n').replace('\n\n','\n').split('\n')
+                # The triple replace is to handle errors in the source file from lines with three newlines
+                inputFile.close()
+            else:
+                inputList = ""
+        elif sigType == ertsSig and args.ertsPath != None:
+            # we have an argument passes that requests a rts analysis and have data
+            szfilePath = Path(args.ertsPath)
+            if szfilePath.is_file():
+                inputFile = open(str(args.ertsPath),'r')
+            else:
+                inputFile = 0
+            if type(inputFile) != int :
+                # inputfile was succesful in opening the data!
+                inputList = inputFile.read().replace('\n\n','\n').replace('\n\n','\n').replace('\n\n','\n').split('\n')
+                # The triple replace is to handle errors in the source file from lines with three newlines
+                inputFile.close()
+            else:
+                inputList = ""
+        else:
+            print("DEBUG: signal file not found")
+            return (False,0,0,-2)
+        print("DEBUG: generating dataset from file {}".format(szfilePath))
+        deadList = 0
+        listLen = len(inputList)
+        if listLen >= minSize:
+            # Start analysis
+            x_train = np.zeros((listLen,dataMax))
+            y_train = np.zeros(listLen) # output is a "binary value" i.e it either is or is not the signal
+                                    # if it is the signal then the model pushes out a one else a zero
+            tr_count =0 # index of where we are in the training set
+            for each in inputLine:
+                if (each != ''):
+                    (row,col)=each.split() # we have row col pair, split and test
+                    (row,col)=(int(row),int(col)) # convert the text strings into numbers
+                    if (row <= supRow) and (col <= supCol) and (row >= 0) and (col >= 0):
+                        x_train[tr_count]=(pixel[0:dataMax,row,col])
+                        y_train[tr_count]= int(sigType)
+                        tr_count +=1
+                else:
+                    deadList+=1
+
+            if abs(tr_count-listLen)>delta:
+                return (False, 0,0,-1)
+            else:
                 return (True, x_train,y_train, tr_count)
-
         else:
-            # uhhh we need more data
-            print("DEBUG: Too small of dataset, less than {} for all of the data types (bin)".format(testingTrainSize))
-            return(False,0,0,0)
-    else:
-        # Categorical method
-        # rts, nrts, and mrts lists
-        print("DEBUG: Categorical method active")
-        if args.rtsPath != None:
-            print("DEBUG: rtsPath is {}".format(args.rtsPath))
-            szRtsPath = Path(args.rtsPath)
-            if szRtsPath.is_file():
-                print("DEBUG: It is a file! Opening rtsFile")
-                rtsFile = open(str(args.rtsPath),'r')
-            else:
-                print ("File not found, opening backup")
-                rtsFile = open(('./PiCam/RTS_list.txt'),'r')
-        else:
-            print("DEBUG: RtsList will be built from directory listing")
-            rtsFile = open(('./PiCam/RTS_list.txt'),'r')
-        if args.nrtsPath != None:
-            print("DEBUG: nrtsPath is {}".format(args.nrtsPath))
-            szNrtsPath = Path(args.nrtsPath)
-            if szNrtsPath.is_file():
-                print("DEBUG: It is a file! Opening nrtsFile")
-                nrtsFile = open(str(args.nrtsPath),'r')
-            else:
-                print ("File not found, opening backup")
-                nrtsFile = open('./PiCam/NRTS_list.txt','r')
-        else:
-            print("DEBUG: Nrts will be built from directory listing")
-            nrtsFile = open('./PiCam/NRTS_list.txt','r')
-        if args.mrtsPath != None:
-            print("DEBUG: mrtsPath is {}".format(args.mrtsPath))
-            szMrtsPath = Path(args.mrtsPath)
-            if szMrtsPath.is_file():
-                print("DEBUG: It is a file! Opening mrtsFile")
-                mrtsFile = open(str(args.mrtsPath),'r')
-            else:
-                print ("File not found, opening backup")
-                mrtsFile = open('./PiCam/MRTS_list.txt','r')
-        else:
-            print("DEBUG: Mrts will be built from directory listing")
-            mrtsFile = open('./PiCam/MRTS_list.txt','r')
+            print("DEBUG: Dataset is too small")
+# ENDOF makeTrainingData
 
-        rtsList  =  rtsFile.read().replace('\n\n','\n').replace('\n\n','\n').replace('\n\n','\n').split('\n')
-        nrtsList = nrtsFile.read().replace('\n\n','\n').replace('\n\n','\n').replace('\n\n','\n').split('\n')
-        mrtsList = mrtsFile.read().replace('\n\n','\n').replace('\n\n','\n').replace('\n\n','\n').split('\n')
-        rtsFile.close()
-        nrtsFile.close()
-        mrtsFile.close()
-        deadList = 1
-        rtsLen  = len(rtsList)
-        nrtsLen = len(nrtsList)
-        mrtsLen = len(mrtsList)
-        arrayLen = int(rtsLen + nrtsLen + mrtsLen)
-        if (arrayLen >= minSize):
-            # we have enough data to do stuff
-            x_train = np.zeros((arrayLen,dataMax))
-            y_train = np.zeros(arrayLen)
-            tr_count = 0
-            for each in rtsList:
-                if (each != '') and (each != '.DS Store'):
-                    (row,col)=each.split()
-                    if (int(row)<=supRow) and (int(col)<=supCol):
-                        x_train[tr_count] = (pixel[0:dataMax,int(row),int(col)])
-                        y_train[tr_count] = 0
-                        tr_count +=1
-                    else:
-                        print("DEBUG: Error data out of range (training rts cat)")
-                        break
-                else:
-                    deadList +=1
-            for each in nrtsList:
-                if (each != '') and (each != '.DS Store'):
-                    (row,col)=each.split()
-                    if (int(row)<=supRow) and (int(col)<=supCol):
-                        x_train[tr_count] = (pixel[0:dataMax,int(row),int(col)])
-                        y_train[tr_count] = 1
-                        tr_count +=1
-                    else:
-                        print("DEBUG: Error data out of range (training nts cat)")
-                        break
-                else:
-                    deadList +=1
-            for each in mrtsList:
-                if (each != '') and (each != '.DS Store'):
-                    (row,col)=each.split()
-                    if (int(row)<=supRow) and (int(col)<=supCol):
-                        x_train[tr_count] = (pixel[0:dataMax,int(row),int(col)])
-                        y_train[tr_count] = 2
-                        tr_count +=1
-                    else:
-                        print("DEBUG: Error data out of range (training mrts cat)")
-                        break
-                else:
-                    deadList +=1
-            if abs(tr_count -arrayLen) >= delta :
-                print("DEBUG: We have lost data!!!! (cat)")
-                print("DEBUG: Sizes:\n\t [dataWritten:dataExpected]\n{}:{}".format(tr_count,arrayLen))
-
-                return (False, 0,0,0)
-            else:
-                print ("DEBUG: Dataset complete")
-                return (True, x_train,y_train, tr_count)
-
-        else:
-            # uhhh we need more data
-            print("DEBUG: Too small of dataset, less than {} for all of the data types (cat)".format(testingTrainSize))
-            return (False,0,0,0)
-
-
-def makeTestingData (args, pixel, minSize):
+def makeTestingData (args, pixel, minSize, sigType):
     #inputs:
     # args     -> all commandline arguments
     # pixel    -> dataset
     # minSize  -> testingSizetest
-    #
+    # sigType  -> signal type
     #outputs:
     # x_test  -> pixel data for testing
     # y_test  -> values for the data type
@@ -230,69 +148,86 @@ def makeTestingData (args, pixel, minSize):
     #
 
     (dataMax, supRow, supCol) = pixel.shape
-    if args.oldMethod:
-        # Binary method only
-        # rts and nrts only
-        print("DEBUG: Activating old binary method!")
-        if args.testrtsPath != None:
-            print("DEBUG: rtsTestPath is {}".format(args.testrtsPath))
-            sztestRtsPath = Path(args.testrtsPath)
-            if sztestRtsPath.is_file():
-                print("DEBUG: It is a file! Opening rtstestFile")
-                rtstestFile = open(str(args.testrtsPath),'r')
+    # create the dataset from the text file that holds the listings
+    if sigType <= maxSig and sigType >= minSig:
+        # Signal type is something that we understand
+        if sigType == rtsSig and args.testrtsPath != None:
+            # we have an argument passes that requests a rts analysis and have data
+            szfilePath = Path(args.testrtsPath)
+            if szfilePath.is_file():
+                inputFile = open(str(args.testrtsPath),'r')
             else:
-                print ("File not found, opening backup")
-                rtstestFile = open(('./PiCam/RTS_list_test.txt'),'r')
-        else:
-            print("DEBUG: RtsList will be built from directory listing")
-            rtstestFile = open(('./PiCam/RTS_list_t.txt'),'r')
-        if args.testnrtsPath != None:
-            print("DEBUG: nrtsPath is {}".format(args.testnrtsPath))
-            sztestNrtsPath = Path(args.testnrtsPath)
-            if sztestNrtsPath.is_file():
-                print("DEBUG: It is a file! Opening nrtsFile")
-                nrtstestFile = open(str(args.testnrtsPath),'r')
+                inputFile = 0
+            if type(inputFile) != int :
+                # inputfile was succesful in opening the data!
+                inputList = inputFile.read().replace('\n\n','\n').replace('\n\n','\n').replace('\n\n','\n').split('\n')
+                # The triple replace is to handle errors in the source file from lines with three newlines
+                inputFile.close()
             else:
-                print ("File not found, opening backup")
-                nrtstestFile = open('./PiCam/WN_ListSh_test.txt','r')
+                inputList = ""
+        elif sigType == nrtsSig and args.testnrtsPath != None:
+            # we have an argument passes that requests a rts analysis and have data
+            szfilePath = Path(args.testnrtsPath)
+            if szfilePath.is_file():
+                inputFile = open(str(args.testnrtsPath),'r')
+            else:
+                inputFile = 0
+            if type(inputFile) != int :
+                # inputfile was succesful in opening the data!
+                inputList = inputFile.read().replace('\n\n','\n').replace('\n\n','\n').replace('\n\n','\n').split('\n')
+                # The triple replace is to handle errors in the source file from lines with three newlines
+                inputFile.close()
+            else:
+                inputList = ""
+        elif sigType == mrtsSig and args.testmrtsPath != None:
+            # we have an argument passes that requests a rts analysis and have data
+            szfilePath = Path(args.testmrtsPath)
+            if szfilePath.is_file():
+                inputFile = open(str(args.testmrtsPath),'r')
+            else:
+                inputFile = 0
+            if type(inputFile) != int :
+                # inputfile was succesful in opening the data!
+                inputList = inputFile.read().replace('\n\n','\n').replace('\n\n','\n').replace('\n\n','\n').split('\n')
+                # The triple replace is to handle errors in the source file from lines with three newlines
+                inputFile.close()
+            else:
+                inputList = ""
+        elif sigType == ertsSig and args.testertsPath != None:
+            # we have an argument passes that requests a rts analysis and have data
+            szfilePath = Path(args.testertsPath)
+            if szfilePath.is_file():
+                inputFile = open(str(args.testertsPath),'r')
+            else:
+                inputFile = 0
+            if type(inputFile) != int :
+                # inputfile was succesful in opening the data!
+                inputList = inputFile.read().replace('\n\n','\n').replace('\n\n','\n').replace('\n\n','\n').split('\n')
+                # The triple replace is to handle errors in the source file from lines with three newlines
+                inputFile.close()
+            else:
+                inputList = ""
         else:
-            print("DEBUG: Nrts will be built from directory listing")
-            nrtstestFile = open('./PiCam/NRTS_list_t.txt','r')
-        rtstestList  =  rtstestFile.read().replace('\n\n','\n').replace('\n\n','\n').replace('\n\n','\n').split('\n')
-        nrtstestList = nrtstestFile.read().replace('\n\n','\n').replace('\n\n','\n').replace('\n\n','\n').split('\n')
-        rtstestFile.close()
-        nrtstestFile.close()
-        deadList =1
-        rtstestLen  = len(rtstestList)
-        nrtstestLen = len(nrtstestList)
-        testLen = int(rtstestLen + nrtstestLen) - deadList
+            print("DEBUG: signal file not found")
+            return (False,0,0,-2)
+
+        deadList = 0
+        testLen  = len(inputList)
         if (testLen >= minSize):
             # we have enough data to do stuff
             x_test = np.zeros((testLen,dataMax))
             y_test = np.zeros(testLen)
             td_count = 0
-            for each in rtstestList:
-                if (each != '') and (each != '.DS Store'):
+            for each in inputList:
+                if (each != ''):
                     (row,col)=each.split()
-                    if (int(row)<=supRow) and (int(col)<=supCol):
-                        x_test[td_count] = (pixel[0:dataMax,int(row),int(col)])
-                        y_test[td_count] = 0
+                    (row,col)=(int(row),int(col)) # convert the text strings into numbers
+                    if (row<=supRow) and (col<=supCol):
+                        x_test[td_count] = (pixel[0:dataMax,row,col])
+                        y_test[td_count] = sigType
                         td_count +=1
                     else:
                         print("DEBUG: Error data out of range (testing rts bin)")
-                        break
-                else:
-                    deadList +=1
-
-            for each in nrtstestList:
-                if (each != '') and (each != '.DS Store'):
-                    (row,col)=each.split()
-                    if (int(row)<=supRow) and (int(col)<=supCol):
-                        x_test[td_count] = (pixel[0:dataMax,int(row),int(col)])
-                        y_test[td_count] = 1
-                        td_count +=1
-                    else:
-                        print("DEBUG: Error data out of range (testing nrts bin)")
                         break
                 else:
                     deadList +=1
@@ -300,122 +235,17 @@ def makeTestingData (args, pixel, minSize):
             if abs(td_count - testLen) >=delta :
                 print("DEBUG: We have lost data!!!! (testing bin)")
                 print("DEBUG: Sizes:\n\t [dataWritten:dataExpected]\n{}:{}".format(td_count,testLen))
-                return (False, 0,0)
+                return (False, 0,0,-1)
             else:
                 print ("DEBUG: Dataset complete (testing bin)")
-                return (True, x_test,y_test)
+                return (True, x_test,y_test,td_count)
 
         else:
             # uhhh we need more data
             print("DEBUG: Too small of dataset, less than {} for all of the data types (testing bin)".format(testingTrainSize))
-    else:
-        # Categorical method
-        # rts, nrts, and mrts lists
-        print("DEBUG: Categorical method active")
-        if args.testrtsPath != None:
-            print("DEBUG: testrtsPath is {}".format(args.testrtsPath))
-            sztestRtsPath = Path(args.testrtsPath)
-            if sztestRtsPath.is_file():
-                print("DEBUG: It is a file! Opening rtsFile")
-                testrtsFile = open(str(args.testrtsPath),'r')
-            else:
-                print ("File not found, opening backup")
-                testrtsFile = open(('./PiCam/RTS_list_test.txt'),'r')
-        else:
-            print("DEBUG: RtsList will be built from directory listing")
-            testrtsFile = open(('./PiCam/RTS_list_t.txt'),'r')
-        if args.testnrtsPath != None:
-            print("DEBUG: nrtsPath is {}".format(args.testnrtsPath))
-            sztestNrtsPath = Path(args.testnrtsPath)
-            if stestzNrtsPath.is_fle():
-                print("DEBUG: It is a file! Opening nrtsFile")
-                testnrtsFile = open(str(args.testnrtsPath),'r')
-            else:
-                print ("File not found, opening backup")
-                testnrtsFile = open('./PiCam/WN_ListSh_test.txt','r')
-        else:
-            print("DEBUG: Nrts will be built from directory listing")
-            testnrtsFile = open('./PiCam/NRTS_list_t.txt','r')
-        if args.testmrtsPath != None:
-            print("DEBUG: mrtsPath is {}".format(args.testmrtsPath))
-            sztestMrtsPath = Path(args.testmrtsPath)
-            if sztestMrtsPath.is_fle():
-                print("DEBUG: It is a file! Opening mrtsFile")
-                testmrtsFile = open(str(args.testmrtsPath),'r')
-            else:
-                print ("File not found, opening backup")
-                testmrtsFile = open('./PiCam/WN_ListSh_test.txt','r')
-        else:
-            print("DEBUG: Mrts will be built from directory listing")
-            testmrtsFile = open('./PiCam/MRTS_list_t.txt','r')
+#ENDOF makeTestingData
 
-        rtstestList  =  testrtsFile.read().replace('\n\n','\n').replace('\n\n','\n').replace('\n\n','\n').split('\n')
-        nrtstestList = testnrtsFile.read().replace('\n\n','\n').replace('\n\n','\n').replace('\n\n','\n').split('\n')
-        mrtstestList = testmrtsFile.read().replace('\n\n','\n').replace('\n\n','\n').replace('\n\n','\n').split('\n')
-        testrtsFile.close()
-        testnrtsFile.close()
-        testmrtsFile.close()
-        deadList =1
-        testrtsLen  = len(rtstestList)
-        testnrtsLen = len(nrtstestList)
-        testmrtsLen = len(mrtstestList)
-        testLen = int(testrtsLen + testnrtsLen + testmrtsLen) - deadList
-        if (testLen >= minSize):
-            # we have enough data to do stuff
-            x_test = np.zeros((testLen,dataMax))
-            y_test= np.zeros(testLen)
-            tr_count = 0
-            for each in rtstestList:
-                if (each != '') and (each !='.DS Store'):
-                    (row,col)=each.split()
-                    if (int(row)<=supRow) and (int(col)<=supCol):
-                        x_test[tr_count] = (pixel[0:dataMax,int(row),int(col)])
-                        y_test[tr_count] = 0
-                        tr_count +=1
-                    else:
-                        print("DEBUG: Error data out of range (testing rts bin)")
-                        break
-                else:
-                    deadList +=1
-            for each in nrtstestList:
-                if (each != '') and (each != '.DS Store'):
-                    (row,col)=each.split()
-                    if (int(row)<=supRow) and (int(col)<=supCol):
-                        x_test[tr_count] = (pixel[0:dataMax,int(row),int(col)])
-                        y_test[tr_count] = 1
-                        tr_count +=1
-                    else:
-                        print("DEBUG: Error data out of range (testing nrts bin)")
-                        break
-                else:
-                    deadList +=1
-            for each in mrtstestList:
-                if (each != '') and (each != '.DS Store'):
-                    (row,col)=each.split()
-                    if (int(row)<=supRow) and (int(col)<=supCol):
-                        x_test[tr_count] = (pixel[0:dataMax,int(row),int(col)])
-                        y_test[tr_count] = 2
-                        tr_count +=1
-                    else:
-                        print("DEBUG: Error data out of range (testing mrts bin)")
-                        break
-                else:
-                    deadList +=1
-
-            if abs(tr_count - testLen) >= delta :
-                print("DEBUG: We have lost data!!!! (testing bin)")
-                print("DEBUG: Sizes:\n\t [dataWritten:dataExpected]\n{}:{}".format(td_count,testLen))
-                return (False, 0,0)
-            else:
-                print ("DEBUG: Dataset complete (testing bin)")
-                return (True, x_test,y_test)
-
-        else:
-            # uhhh we need more data
-            print("DEBUG: Too small of dataset, less than {} for all of the data types".format(testingTestSize))
-
-
-def dataFactors (args, arrayLen, dataMax,  supRow, supCol):
+def dataFactors ( arrayLen, dataMax,  supRow, supCol):
     # Here we do the prime magic on the training dataset!
     # take the length of the training dataset and use prime factorization on it
     if (arrayLen > 0):
@@ -438,7 +268,7 @@ def dataFactors (args, arrayLen, dataMax,  supRow, supCol):
         NumberHLayers_in = len(factors)-2
         print("DEBUG: Possible Hidden Layer count:"+str(NumberHLayers_in))
         print("DEBUG: Prod Factors: {}".format(ProdFactors))
-	# Potential bug: What happens when there are no hidden layers?
+    # Potential bug: What happens when there are no hidden layers?
         if (NumberHLayers_in >0):
             # hidden layers exist! Use all the numbers from 0 to largest
             HiddenLayers_out = NumberHLayers_in
@@ -447,7 +277,10 @@ def dataFactors (args, arrayLen, dataMax,  supRow, supCol):
                 FilterSize_Prod = FilterSize_Prod*int(each)
             print("DEBUG: FilterSize raw: {}".format(FilterSize_Prod))
             FilterSize_out = int(loader.smallest_power(FilterSize_Prod,2))
-
+        # Check the hidden layer math
+        # InputLayerKernel - sum(HiddenLayers) > OutputLayerKernel+1
+        # and
+        # 1stHL - sum(HiddenLayers) > OutputLayerKernel
         KernelSizes='['
         for each in factors:
             KernelSizes+=str(each)+','
@@ -459,6 +292,7 @@ def dataFactors (args, arrayLen, dataMax,  supRow, supCol):
         settingsData = settingsFile.read()
         print("Current settings data:\n{}".format(settingsData))
         settingsFile.close()
+
         if (settingsData.find('KernelSizes=')<0):
             settingsData+="KernelSizes="+KernelSizes+'\n'
         elif (settingsData.find('KernelSizes=')>=0):
@@ -483,21 +317,15 @@ def dataFactors (args, arrayLen, dataMax,  supRow, supCol):
             posbValue = settingsData.find('FilterSize=')
             poseValue = settingsData[posbValue:].find('\n')
             settingsData=settingsData[:posbValue]+'FilterSize='+out+'\n'+settingsData[(posbValue+poseValue):]
+
         if (settingsData.find('Loss=')<0):
-            settingsData +='Loss='
-            if (args.oldMethod):
-                settingsData +="'binary_crossentropy'\n"
-            else:
-                settingsData +="'categorical_crossentropy'\n"
+            settingsData +="Loss='binary_crossentropy'\n"
         elif (settingsData.find('Loss=')>=0):
             posbValue = settingsData.find('Loss=')
             poseValue = settingsData[posbValue:].find('\n')
-            out='Loss='
-            if (args.oldMethod):
-                out+="'binary_crossentropy'\n"
-            else:
-                out +="'categorical_crossentropy'\n"
+            out="Loss=out+='binary_crossentropy'\n"
             settingsData= settingsData[:posbValue]+out+settingsData[(posbValue+poseValue):]
+
         if (settingsData.find('dataShape=')<0):
             settingsData +="dataShape=({},{},{})".format(dataMax, supRow, supCol)+'\n'
         elif (settingsData.find('dataShape=')>=0):
@@ -517,43 +345,79 @@ def dataFactors (args, arrayLen, dataMax,  supRow, supCol):
     else:
         print("DEBUG: we had a failure to communicate...")
         return False
+#ENDOF dataFactors
 
 def main ():
     #import settings
     if os.name == 'posix':
         os.nice(10)
 
-
     # Open the input files
 
     # Add commandline parsing
     # short codes are single char only!
     parser = argparse.ArgumentParser(prog='makeDataSets.py', description="Creates the numpy dataset for train, testing, and running keras models")
-    parser.add_argument("-r","--rtsPath",type=str, help="rtslist file that contains rts signals in col_row format")
-    parser.add_argument("-n", "--nrtsPath",type=str, help="nrtslist file that contains whitenoise signals")
-    parser.add_argument("-m", "--mrtsPath",type=str, help="mrtsList file that has possible rts signals")
-    parser.add_argument("-s","--testrtsPath",type=str, help="rtsTestlist file that contains rts signals in col_row format for the testing data")
-    parser.add_argument("-t", "--testnrtsPath",type=str, help="nrtsTestlist file that contains whitenoise signals for the testing data")
-    parser.add_argument("-u", "--testmrtsPath",type=str, help="mrtsTestList file that has possible rts signals for the testing data")
+    parser.add_argument("-r", "--rtsPath",      type=str, help="rtslist file that contains rts signals in col_row format")
+    parser.add_argument("-n", "--nrtsPath",     type=str, help="nrtslist file that contains whitenoise signals")
+    parser.add_argument("-m", "--mrtsPath",     type=str, help="mrtsList file that has possible rts signals")
+    parser.add_argument("-e", "--ertsPath",     type=str, help="ertsList file that contains erratic signals")
+    parser.add_argument("-s", "--testrtsPath",  type=str, help="rtsTestlist file that contains rts signals in col_row format for the testing data")
+    parser.add_argument("-t", "--testnrtsPath", type=str, help="nrtsTestlist file that contains whitenoise signals for the testing data")
+    parser.add_argument("-u", "--testmrtsPath", type=str, help="mrtsTestList file that has possible rts signals for the testing data")
+    parser.add_argument("-a", "--testertsPath", type=str, help="ertsTestList file contains the listings for the erratic signals as testing data")
     parser.add_argument("-o", "--oldMethod", action='store_true', help="Activates a special routine that uses binary mode rather than categorical")
     #parser.add_argument("-","--",action='store_true',help="")
 
-
     args = parser.parse_args()
 
-    testingSizeTest  = 100
-    testingSizeTrain = 500
+    testingSizeTest  = 30
+    testingSizeTrain = 200
 
 
     pixel = loader.load()
     (dataMax, supRow, supCol) = pixel.shape
 
-    (trainStatus, x_train,y_train, dataCount)  = makeTrainingData(args,pixel,testingSizeTrain)
-    (testStatus, x_test,y_test)     = makeTestingData(args,pixel,testingSizeTest)
+    # RTS testing and training
+    (trainStatus_1, x_train_1,y_train_1, dataCount_1)  = makeTrainingData(args,pixel,testingSizeTrain,rtsSig)
+    (testStatus_1, x_test_1,y_test_1,testCount_1)     = makeTestingData(args,pixel,testingSizeTest,rtsSig)
+    # mRTS testing and training
+    (trainStatus_2, x_train_2,y_train_2, dataCount_2)  = makeTrainingData(args,pixel,testingSizeTrain,mrtsSig)
+    (testStatus_2, x_test_2,y_test_2,testCount_2)     = makeTestingData(args,pixel,testingSizeTest,mrtsSig)
+    # eRTS testing and training
+    (trainStatus_3, x_train_3,y_train_3, dataCount_3)  = makeTrainingData(args,pixel,testingSizeTrain,ertsSig)
+    (testStatus_3, x_test_3,y_test_3,testCount_3)     = makeTestingData(args,pixel,testingSizeTest,ertsSig)
+    # nRTS testing and training
+    (trainStatus_4, x_train_4,y_train_4, dataCount_4)  = makeTrainingData(args,pixel,testingSizeTrain,nrtsSig)
+    (testStatus_4, x_test_4,y_test_4,testCount_4)     = makeTestingData(args,pixel,testingSizeTest,nrtsSig)
+
+    trainStatus = trainStatus_1 and trainStatus_2 and trainStatus_3 and trainStatus_4
+    testStatus = testStatus_1 and testStatus_2 and testStatus_3 and testStatus_4
+    countStatus = False
+    dataCountStatus = False
+    testCountStatus = False
+    dataCount =0
+    testCount =0
+    if dataCount_1 >=0 and dataCount_2 >=0 and dataCount_3 >=0 and dataCount_4 >=0:
+        dataCountStatus = True
+        dataCount = dataCount_1+dataCount_2+dataCount_3+dataCount_4
+    if testCount_1 >=0 and testCount_2 >=0 and testCount_3 >=0 and testCount_4 >=0:
+        testCountStatus = True
+        testCount= testCount_1+testCount_2+testCount_3+testCount_4
+
+    countStatus = dataCountStatus and testCountSatus
+    if countStatus & trainStatus & testStatus:
+        x_train = np.concatenate((x_train_1,x_train_2,x_train_3,x_train_4),axis=0)
+        y_train = np.concatenate((y_train_1,y_train_2,y_train_3,y_train_4),axis=0)
+        x_test  = np.concatenate((x_test_1,x_test_2,x_test_3,x_test_4),axis=0)
+        y_test  = np.concatenate((y_test_1,y_test_2,y_test_3,y_test_4),axis=0)
+    else:
+        x_train=y_train=x_test=y_test=0
+
     print ("DEBUG: \n\tSize of training data:\n{} ".format(dataCount))
+
     if type(x_train) == np.ndarray:
         arrayLen = x_train.shape[0]
-        statusFactor                    = dataFactors (args,dataCount, dataMax,  supRow, supCol)
+        statusFactor                    = dataFactors (dataCount, dataMax,  supRow, supCol)
     else:
         statusFactor = False
     if trainStatus :
@@ -570,8 +434,8 @@ def main ():
         # complain
         statusTest = False
         print("DEBUG: Testing data failed!")
-
-    status = statusFactor & statusTest & statusTraining
+    # catchall for all possible errors
+    status = statusFactor & statusTest & statusTraining & countStatus
 
     if (status == True):
         print("DEBUG: Saving new numpy datasets")
