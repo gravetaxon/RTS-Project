@@ -209,6 +209,16 @@ def makeTestingData (args, pixel, minSize, sigType):
                 inputList = ""
         else:
             print("DEBUG: signal file not found")
+            print("DEBUG: creating testing data from random samples of the input data")
+            # Sample the data set that we have
+            #random.sample(source, count)
+
+
+
+
+
+
+
             return (False,0,0,-2)
 
         deadList = 0
@@ -245,7 +255,7 @@ def makeTestingData (args, pixel, minSize, sigType):
             print("DEBUG: Too small of dataset, less than {} for all of the data types (testing bin)".format(testingTrainSize))
 #ENDOF makeTestingData
 
-def dataFactors ( arrayLen, dataMax,  supRow, supCol):
+def dataFactors ( name, arrayLen, dataMax,  supRow, supCol):
     # Here we do the prime magic on the training dataset!
     # take the length of the training dataset and use prime factorization on it
     if (arrayLen > 0):
@@ -293,46 +303,46 @@ def dataFactors ( arrayLen, dataMax,  supRow, supCol):
         print("Current settings data:\n{}".format(settingsData))
         settingsFile.close()
 
-        if (settingsData.find('KernelSizes=')<0):
-            settingsData+="KernelSizes="+KernelSizes+'\n'
-        elif (settingsData.find('KernelSizes=')>=0):
-            posbValue=settingsData.find('KernelSizes=') # What position does the string start
+        if (settingsData.find('{}KernelSizes='.format(name))<0):
+            settingsData+="{}KernelSizes=".format(name)+KernelSizes+'\n'
+        elif (settingsData.find('{}KernelSizes='.format(name))>=0):
+            posbValue=settingsData.find('{}KernelSizes='.format(name)) # What position does the string start
             poseValue=settingsData[posbValue:].find('\n')        # and where does it end? On the first newline
-            settingsData=settingsData[:posbValue]+"KernelSizes="+KernelSizes+'\n'+settingsData[(posbValue+poseValue):]
+            settingsData=settingsData[:posbValue]+"{}KernelSizes=".format(name)+KernelSizes+'\n'+settingsData[(posbValue+poseValue):]
 
-        if (settingsData.find('HiddenLayers=')<0):
-            settingsData+="HiddenLayers="+str(HiddenLayers_out)+'\n'
-        elif (settingsData.find('HiddenLayers=')>=0):
-            posbValue = settingsData.find('HiddenLayers=')
+        if (settingsData.find('{}HiddenLayers=')<0):
+            settingsData+="{}HiddenLayers=".format(name)+str(HiddenLayers_out)+'\n'
+        elif (settingsData.find('{}HiddenLayers='.format(name))>=0):
+            posbValue = settingsData.find('{}HiddenLayers='.format(name))
             poseValue = settingsData[posbValue:].find('\n')
-            settingsData = settingsData[:posbValue]+"HiddenLayers="+str(HiddenLayers_out)+'\n'+settingsData[(posbValue+poseValue):]
+        settingsData = settingsData[:posbValue]+"{}HiddenLayers=".format(name)+str(HiddenLayers_out)+'\n'+settingsData[(posbValue+poseValue):]
 
-        if (settingsData.find('FilterSize=')<0):
+        if (settingsData.find('{}FilterSize='.format(name))<0):
             out = (str(FilterSize_out)+',')*(len(factors))
             out = '['+out[:-1]+']'
-            settingsData+="FilterSize="+out+'\n'
-        elif (settingsData.find('FilterSize=')>=0):
+            settingsData+="{}FilterSize=".format(name)+out+'\n'
+        elif (settingsData.find('{}FilterSize='.format(name))>=0):
             out = (str(FilterSize_out)+',')*(len(factors))
             out = '['+out[:-1]+']'
-            posbValue = settingsData.find('FilterSize=')
+            posbValue = settingsData.find('{}FilterSize='.format(name))
             poseValue = settingsData[posbValue:].find('\n')
-            settingsData=settingsData[:posbValue]+'FilterSize='+out+'\n'+settingsData[(posbValue+poseValue):]
 
-        if (settingsData.find('Loss=')<0):
-            settingsData +="Loss='binary_crossentropy'\n"
-        elif (settingsData.find('Loss=')>=0):
-            posbValue = settingsData.find('Loss=')
+            settingsData=settingsData[:posbValue]+'{}FilterSize='.format(name)+out+'\n'+settingsData[(posbValue+poseValue):]
+        if (settingsData.find('{}Loss='.format(name))<0):
+            settingsData +="{}Loss='binary_crossentropy'\n".format(name)
+        elif (settingsData.find('{}Loss='.format(name))>=0):
+            posbValue = settingsData.find('{}Loss='.format(name))
             poseValue = settingsData[posbValue:].find('\n')
-            out="Loss=out+='binary_crossentropy'\n"
+            out="{}Loss".format(name)+'binary_crossentropy'\n"
             settingsData= settingsData[:posbValue]+out+settingsData[(posbValue+poseValue):]
 
-        if (settingsData.find('dataShape=')<0):
-            settingsData +="dataShape=({},{},{})".format(dataMax, supRow, supCol)+'\n'
-        elif (settingsData.find('dataShape=')>=0):
+        if (settingsData.find('{}dataShape='.format(name))<0):
+            settingsData +="{}dataShape=({},{},{})".format(name,dataMax, supRow, supCol)+'\n'
+        elif (settingsData.find('{}dataShape='.format(name))>=0):
 
-            posbValue = settingsData.find('dataShape=')
+            posbValue = settingsData.find('{}dataShape='.format(name))
             poseValue = settingsData[posbValue:].find('\n')
-            out = "dataShape=({},{},{})".format(dataMax, supRow, supCol)+'\n'
+            out = "{}dataShape=({},{},{})".format(name, dataMax, supRow, supCol)+'\n'
             settingsData = settingsData[:posbValue]+out+settingsData[(posbValue+poseValue):]
         settingsFile = open('./settings.py','w')
         settingsData= settingsData.replace('\n\n','\n').replace('\n \n','\n')
@@ -454,23 +464,23 @@ def DSfnHandler (inrtsPath=None,innrtsPath=None,inmrtsPath=None,inertsPath=None,
         os.nice(10)
 
     # Open the input files
-"""
-    # Add commandline parsing
-    # short codes are single char only!
-    parser = argparse.ArgumentParser(prog='makeDataSets.py', description="Creates the numpy dataset for train, testing, and running keras models")
-    parser.add_argument("-r", "--rtsPath",      type=str, help="rtslist file that contains rts signals in col_row format")
-    parser.add_argument("-n", "--nrtsPath",     type=str, help="nrtslist file that contains whitenoise signals")
-    parser.add_argument("-m", "--mrtsPath",     type=str, help="mrtsList file that has possible rts signals")
-    parser.add_argument("-e", "--ertsPath",     type=str, help="ertsList file that contains erratic signals")
-    parser.add_argument("-s", "--testrtsPath",  type=str, help="rtsTestlist file that contains rts signals in col_row format for the testing data")
-    parser.add_argument("-t", "--testnrtsPath", type=str, help="nrtsTestlist file that contains whitenoise signals for the testing data")
-    parser.add_argument("-u", "--testmrtsPath", type=str, help="mrtsTestList file that has possible rts signals for the testing data")
-    parser.add_argument("-a", "--testertsPath", type=str, help="ertsTestList file contains the listings for the erratic signals as testing data")
-    parser.add_argument("-o", "--oldMethod", action='store_true', help="Activates a special routine that uses binary mode rather than categorical")
-    #parser.add_argument("-","--",action='store_true',help="")
+    """
+        # Add commandline parsing
+        # short codes are single char only!
+        parser = argparse.ArgumentParser(prog='makeDataSets.py', description="Creates the numpy dataset for train, testing, and running keras models")
+        parser.add_argument("-r", "--rtsPath",      type=str, help="rtslist file that contains rts signals in col_row format")
+        parser.add_argument("-n", "--nrtsPath",     type=str, help="nrtslist file that contains whitenoise signals")
+        parser.add_argument("-m", "--mrtsPath",     type=str, help="mrtsList file that has possible rts signals")
+        parser.add_argument("-e", "--ertsPath",     type=str, help="ertsList file that contains erratic signals")
+        parser.add_argument("-s", "--testrtsPath",  type=str, help="rtsTestlist file that contains rts signals in col_row format for the testing data")
+        parser.add_argument("-t", "--testnrtsPath", type=str, help="nrtsTestlist file that contains whitenoise signals for the testing data")
+        parser.add_argument("-u", "--testmrtsPath", type=str, help="mrtsTestList file that has possible rts signals for the testing data")
+        parser.add_argument("-a", "--testertsPath", type=str, help="ertsTestList file contains the listings for the erratic signals as testing data")
+        parser.add_argument("-o", "--oldMethod", action='store_true', help="Activates a special routine that uses binary mode rather than categorical")
+        #parser.add_argument("-","--",action='store_true',help="")
 
-    args = parser.parse_args()
-"""
+        args = parser.parse_args()
+    """
     args = argparse.Namespace(rtsPath=inrtsPath,nrtsPath=innrtsPath,mrtsPath=inmrtsPath,ertsPath=inertsPath,testrtsPath=intestrtsPath,testnrtsPath=intestnrtsPath,testmrtsPath=intestmrtsPath,testertsPath=intestertsPath,oldMethod=inoldMethod)
     testingSizeTest  = 30
     testingSizeTrain = 200
@@ -480,6 +490,8 @@ def DSfnHandler (inrtsPath=None,innrtsPath=None,inmrtsPath=None,inertsPath=None,
     (dataMax, supRow, supCol) = pixel.shape
 
     # RTS testing and training
+    # Need to add signal list as an out from the training data creation to feed into the testing
+    # data maker which can be an extra variable output from the training data function.
     (trainStatus_1, x_train_1,y_train_1, dataCount_1)  = makeTrainingData(args,pixel,testingSizeTrain,rtsSig)
     (testStatus_1, x_test_1,y_test_1,testCount_1)     = makeTestingData(args,pixel,testingSizeTest,rtsSig)
     # mRTS testing and training

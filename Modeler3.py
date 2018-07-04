@@ -131,12 +131,12 @@ def runModel(name=''):
     settingsFile = open('./settings.py','r')
     settingsData = settingsFile.read()
     settingsFile.close()
-    if  (settingsData.find('Saved=')<0):
-        settingsData+='Saved=['+out+']'
-    elif (settingsData.find('Saved=')>=0):
-        posbValue = settingsData.find("Saved=")
+    if  (settingsData.find('{}Saved='.format(name))<0):
+        settingsData+='{}Saved=['.format(name)+out+']'
+    elif (settingsData.find('{}Saved='.format(name))>=0):
+        posbValue = settingsData.find("{}Saved=".format(name))
         poseValue = settingsData[posbValue:].find('\n')
-        settingsData = settingsData[:posbValue]+'Saved=['+str(out) +']\n'+settingsData[(posbValue+poseValue):]
+        settingsData = settingsData[:posbValue]+'{}Saved=['.format(name)+str(out) +']\n'+settingsData[(posbValue+poseValue):]
 
     settingsFile = open('./settings.py','w')
     settingsFile.write(settingsData)

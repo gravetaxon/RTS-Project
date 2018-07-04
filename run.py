@@ -27,4 +27,4 @@ import makeOutput
 buildLists()
 
 
-DSfnHandler
+DSfnHandler(inrtsPath="./PiCam/RTS_list.txt",innrtsPath="./PiCam/NRTS_list.txt",inmrtsPath="./PiCam/RTS_list.txt",inertsPath=None,intestrtsPath=None,intestnrtsPath=None,intestmrtsPath=None,intestertsPath=None,inoldMethod=False)
