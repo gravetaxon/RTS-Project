@@ -347,7 +347,7 @@ def dataFactors ( arrayLen, dataMax,  supRow, supCol):
         return False
 #ENDOF dataFactors
 
-def main ():
+def DScommandlineHandler ():
     #import settings
     if os.name == 'posix':
         os.nice(10)
@@ -448,4 +448,134 @@ def main ():
         print("DEBUG: We had an error in writing settings data and have not written incompatible training and/or testing data")
 
 
-main()
+def DSfnHandler (inrtsPath=None,innrtsPath=None,inmrtsPath=None,inertsPath=None,intestrtsPath=None,intestnrtsPath=None,intestmrtsPath=None,intestertsPath=None,inoldMethod=True):
+    #import settings
+    if os.name == 'posix':
+        os.nice(10)
+
+    # Open the input files
+"""
+    # Add commandline parsing
+    # short codes are single char only!
+    parser = argparse.ArgumentParser(prog='makeDataSets.py', description="Creates the numpy dataset for train, testing, and running keras models")
+    parser.add_argument("-r", "--rtsPath",      type=str, help="rtslist file that contains rts signals in col_row format")
+    parser.add_argument("-n", "--nrtsPath",     type=str, help="nrtslist file that contains whitenoise signals")
+    parser.add_argument("-m", "--mrtsPath",     type=str, help="mrtsList file that has possible rts signals")
+    parser.add_argument("-e", "--ertsPath",     type=str, help="ertsList file that contains erratic signals")
+    parser.add_argument("-s", "--testrtsPath",  type=str, help="rtsTestlist file that contains rts signals in col_row format for the testing data")
+    parser.add_argument("-t", "--testnrtsPath", type=str, help="nrtsTestlist file that contains whitenoise signals for the testing data")
+    parser.add_argument("-u", "--testmrtsPath", type=str, help="mrtsTestList file that has possible rts signals for the testing data")
+    parser.add_argument("-a", "--testertsPath", type=str, help="ertsTestList file contains the listings for the erratic signals as testing data")
+    parser.add_argument("-o", "--oldMethod", action='store_true', help="Activates a special routine that uses binary mode rather than categorical")
+    #parser.add_argument("-","--",action='store_true',help="")
+
+    args = parser.parse_args()
+"""
+    args = argparse.Namespace(rtsPath=inrtsPath,nrtsPath=innrtsPath,mrtsPath=inmrtsPath,ertsPath=inertsPath,testrtsPath=intestrtsPath,testnrtsPath=intestnrtsPath,testmrtsPath=intestmrtsPath,testertsPath=intestertsPath,oldMethod=inoldMethod)
+    testingSizeTest  = 30
+    testingSizeTrain = 200
+
+
+    pixel = loader.load()
+    (dataMax, supRow, supCol) = pixel.shape
+
+    # RTS testing and training
+    (trainStatus_1, x_train_1,y_train_1, dataCount_1)  = makeTrainingData(args,pixel,testingSizeTrain,rtsSig)
+    (testStatus_1, x_test_1,y_test_1,testCount_1)     = makeTestingData(args,pixel,testingSizeTest,rtsSig)
+    # mRTS testing and training
+    (trainStatus_2, x_train_2,y_train_2, dataCount_2)  = makeTrainingData(args,pixel,testingSizeTrain,mrtsSig)
+    (testStatus_2, x_test_2,y_test_2,testCount_2)     = makeTestingData(args,pixel,testingSizeTest,mrtsSig)
+    # eRTS testing and training
+    (trainStatus_3, x_train_3,y_train_3, dataCount_3)  = makeTrainingData(args,pixel,testingSizeTrain,ertsSig)
+    (testStatus_3, x_test_3,y_test_3,testCount_3)     = makeTestingData(args,pixel,testingSizeTest,ertsSig)
+    # nRTS testing and training
+    (trainStatus_4, x_train_4,y_train_4, dataCount_4)  = makeTrainingData(args,pixel,testingSizeTrain,nrtsSig)
+    (testStatus_4, x_test_4,y_test_4,testCount_4)     = makeTestingData(args,pixel,testingSizeTest,nrtsSig)
+
+    trainStatus = trainStatus_1 and trainStatus_2 and trainStatus_3 and trainStatus_4
+    testStatus = testStatus_1 and testStatus_2 and testStatus_3 and testStatus_4
+    countStatus = False
+    dataCountStatus = False
+    testCountStatus = False
+    dataCount =0
+    testCount =0
+    if dataCount_1 >=0 and dataCount_2 >=0 and dataCount_3 >=0 and dataCount_4 >=0:
+        dataCountStatus = True
+        dataCount = dataCount_1+dataCount_2+dataCount_3+dataCount_4
+    if testCount_1 >=0 and testCount_2 >=0 and testCount_3 >=0 and testCount_4 >=0:
+        testCountStatus = True
+        testCount= testCount_1+testCount_2+testCount_3+testCount_4
+
+    countStatus = dataCountStatus and testCountSatus
+    if countStatus & trainStatus & testStatus:
+        x_train = np.concatenate((x_train_1,x_train_2,x_train_3,x_train_4),axis=0)
+        y_train = np.concatenate((y_train_1,y_train_2,y_train_3,y_train_4),axis=0)
+        x_test  = np.concatenate((x_test_1,x_test_2,x_test_3,x_test_4),axis=0)
+        y_test  = np.concatenate((y_test_1,y_test_2,y_test_3,y_test_4),axis=0)
+    else:
+        x_train=y_train=x_test=y_test=0
+
+    print ("DEBUG: \n\tSize of training data:\n{} ".format(dataCount))
+
+    if type(x_train) == np.ndarray and type(y_train) == np.ndarray and type(x_test) == np.ndarray and type(y_test) == np.ndarray:
+        arrayLen = x_train.shape[0]
+        statusFactor                    = dataFactors (dataCount, dataMax,  supRow, supCol)
+    else:
+        statusFactor = False
+    if trainStatus :
+        # save the training data
+        statusTraining = True
+    else:
+        # complain
+        statusTraining = False
+        print("DEBUG: Training data failed!")
+    if testStatus :
+        # save the testing data
+        statusTest = True
+    else:
+        # complain
+        statusTest = False
+        print("DEBUG: Testing data failed!")
+    # catchall for all possible errors
+    status = statusFactor & statusTest & statusTraining & countStatus
+
+    if (status == True and args.oldMethod):
+        print("DEBUG: Saving new numpy datasets")
+        np.save('./PiCam/x_train.npy',x_train)
+        np.save('./PiCam/x_test.npy',x_test)
+        np.save('./PiCam/y_train.npy',y_train)
+        np.save('./PiCam/y_test.npy',y_test)
+        print("DEBUG: run modeler next")
+    elif(status == True and args.oldMethod == False):
+        # Each dataset is saved into groups of two
+        # RTS vs NRTS   1v4
+        # MRTS vs NRTS  2v4
+        # ERTS vs NRTS  3v4
+        # './PiCam/x_test_{}.npy' <- name format
+        print("DEBUG: Saving new numpy datasets")
+        x_train = np.concatenate((x_train_1,x_train_4),axis=0)
+        y_train = np.concatenate((y_train_1,y_train_4),axis=0)
+        x_test  = np.concatenate((x_test_1,x_test_4),axis=0)
+        y_test  = np.concatenate((y_test_1,y_test_4),axis=0)
+        np.save('./PiCam/x_train_RTS.npy',x_train) # RTS vs NRTS
+        np.save('./PiCam/x_test_RTS.npy',x_test)
+        np.save('./PiCam/y_train_RTS.npy',y_train)
+        np.save('./PiCam/y_test_RTS.npy',y_test)
+        x_train = np.concatenate((x_train_2,x_train_4),axis=0)
+        y_train = np.concatenate((y_train_2,y_train_4),axis=0)
+        x_test  = np.concatenate((x_test_2,x_test_4),axis=0)
+        y_test  = np.concatenate((y_test_2,y_test_4),axis=0)
+        np.save('./PiCam/x_train_MRTS.npy',x_train) # MRTS
+        np.save('./PiCam/x_test_MRTS.npy',x_test)
+        np.save('./PiCam/y_train_MRTS.npy',y_train)
+        np.save('./PiCam/y_test_MRTS.npy',y_test)
+        x_train = np.concatenate((x_train_3,x_train_4),axis=0)
+        y_train = np.concatenate((y_train_3,y_train_4),axis=0)
+        x_test  = np.concatenate((x_test_3,x_test_4),axis=0)
+        y_test  = np.concatenate((y_test_3,y_test_4),axis=0)
+        np.save('./PiCam/x_train_ERTS.npy',x_train) # ERTS
+        np.save('./PiCam/x_test_ERTS.npy',x_test)
+        np.save('./PiCam/y_train_ERTS.npy',y_train)
+        np.save('./PiCam/y_test_ERTS.npy',y_test)
+    else:
+        print("DEBUG: We had an error in writing settings data and have not written incompatible training and/or testing data")
