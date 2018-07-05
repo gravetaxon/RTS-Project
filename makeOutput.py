@@ -16,67 +16,68 @@ import random
 if os.name == 'posix':
     os.nice(10)
 # Open the file for future output
-RTSRes = open("./PiCam/model_Out.txt","w")
-SavedModels =settings.Saved
-NumModels = len(SavedModels)
-DataShape = settings.dataShape
-# For testing purposes reducing col and rows by a handicap
-TestPercent = 1
-loopData = (int(DataShape[0]),int(DataShape[1]*TestPercent),int(DataShape[2]*TestPercent))
-models = []
+def openModel(name):
+    RTSRes = open("./PiCam/model_Out.txt","w")
+    SavedModels =settings.Saved
+    NumModels = len(SavedModels)
+    DataShape = settings.dataShape
+    # For testing purposes reducing col and rows by a handicap
+    TestPercent = 1
+    loopData = (int(DataShape[0]),int(DataShape[1]*TestPercent),int(DataShape[2]*TestPercent))
+    models = []
 
-ModelsUsed =""
-for each in SavedModels:
-    ModelsUsed+=str(each)+','
-ModelsUsed=ModelsUsed[:-1]
-print ("DEBUG: Using the following models: {}".format(ModelsUsed))
+    ModelsUsed =""
+    for each in SavedModels:
+        ModelsUsed+=str(each)+','
+    ModelsUsed=ModelsUsed[:-1]
+    print ("DEBUG: Using the following models: {}".format(ModelsUsed))
 
-print("DEBUG: Loading models...")
-for each in SavedModels:
-    model_name = './PiCam/CNNlin_model{}.h5'.format(str(each))
-    model = load_model(model_name)
-    models.append(model)
+    print("DEBUG: Loading models...")
+    for each in SavedModels:
+        model_name = './PiCam/CNNlin_model{}.h5'.format(str(each))
+        model = load_model(model_name)
+        models.append(model)
 
-voterCount = min(3,len(models)) # either the size of the array or the number of appeallete judges reviewing a case
+    voterCount = min(3,len(models)) # either the size of the array or the number of appeallete judges reviewing a case
 
 
-pixel = loader.load()
-for i in range(1,loopData[1]):
-    print("status ",(i/loopData[1])*100,"%" )
-    for j in range(1,loopData[2]):
-        pix = pixel[0:loopData[0], i, j]
-        ppix = pix[None,:,None]
-        votes = []
-        for voter in random.sample(models,voterCount):
-            mp = model.predict(ppix) # how does this work with multiple categories?
-            print(mp)
-            if (mp[0] <settings.DecisionStep):
-                # model voted yes
-                votes.append(int(1))
-            else:
-                # model voted no
-                votes.append(int(0))
-        # mean of votes
-        VoterAve = np.mean(votes)
-        if (VoterAve >=0.54):
-            print(i,j)
-            RTSRes.write("%d %d\r\n" %(i,j))
-        #else:
-        #    print ("Vote: {}\nWith {} voters".format(VoterAve, len(votes)))
-        #print(i,j,mp[0])
-        #if mp[0] == 0:
-        #    print(i,j,mp[0])
-    #        RTSRes.write("%d %d %d\r\n" %(i,j,mp[0]))
-            #x = np.arange(0,1500)
-            #plt.plot(x,pix)
-            # plt.xlabel("periods") # 20sec/period
-            # plt.ylabel("mA" )
-            #plt.savefig('./PiCam/RTS_CNN2demo/%d_%d' % (i,j))
-#            plt.plot(x,pix)
-            #plt.close()
+    pixel = loader.load()
+    for i in range(1,loopData[1]):
+        print("status ",(i/loopData[1])*100,"%" )
+        for j in range(1,loopData[2]):
+            pix = pixel[0:loopData[0], i, j]
+            ppix = pix[None,:,None]
+            votes = []
+            for voter in random.sample(models,voterCount):
+                mp = model.predict(ppix) # how does this work with multiple categories?
+                print(mp)
+                if (mp[0] <settings.DecisionStep):
+                    # model voted yes
+                    votes.append(int(1))
+                else:
+                    # model voted no
+                    votes.append(int(0))
+            # mean of votes
+            VoterAve = np.mean(votes)
+            if (VoterAve >=0.54):
+                print(i,j)
+                RTSRes.write("%d %d\r\n" %(i,j))
+            #else:
+            #    print ("Vote: {}\nWith {} voters".format(VoterAve, len(votes)))
+            #print(i,j,mp[0])
+            #if mp[0] == 0:
+            #    print(i,j,mp[0])
+        #        RTSRes.write("%d %d %d\r\n" %(i,j,mp[0]))
+                #x = np.arange(0,1500)
+                #plt.plot(x,pix)
+                # plt.xlabel("periods") # 20sec/period
+                # plt.ylabel("mA" )
+                #plt.savefig('./PiCam/RTS_CNN2demo/%d_%d' % (i,j))
+    #            plt.plot(x,pix)
+                #plt.close()
 
-RTSRes.close()
-
+    RTSRes.close()
+# ENDOF openModel(str name)
 
 #x = np.arange(0,500)
 

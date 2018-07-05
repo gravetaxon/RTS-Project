@@ -11,7 +11,7 @@ import loader
 import math
 import os
 import fnmatch
-
+import re
 def buildLists():
 
     rtsList = []    # RTS files
@@ -50,9 +50,9 @@ def buildLists():
         print("DEBUG: Nothing in the RTS folder")
     if len(nonrtsList)!=0:
         with open('./PiCam/NRTS_list.txt',"w+") as gname:
-        for each in nonrtsList:
+            for each in nonrtsList:
                 if expression.match(each) != None:
-                    gname.write((each+"\n").replace('.png','').replace('_', ' '))
+                        gname.write((each+"\n").replace('.png','').replace('_', ' '))
     else:
         print("DEBUG: Nothing in the NRTS folder")
     if len(mrtsList)!=0:

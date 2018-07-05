@@ -22,9 +22,12 @@ def ensureFolder(file_path):
     else:
         return True
 
-def load():
+def load(type=False):
     print ("Loading dataset, please wait...")
-    mat = h5py.File('A5_pipe1_32C.mat')
+    if type != True:
+        mat = h5py.File('A5_pipe1_32C.mat') # testing dataset
+    else:
+        mat = h5py.File('A5_stack_32C.mat') # Full dataset
     print ("Converting matlab dataset into numpy")
     matpixel = mat["p1"]
     pixel = np.array(matpixel)

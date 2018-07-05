@@ -24,7 +24,5 @@ import Modeler3
 import voter
 import makeOutput
 
-buildLists()
-
-
-DSfnHandler(inrtsPath="./PiCam/RTS_list.txt",innrtsPath="./PiCam/NRTS_list.txt",inmrtsPath="./PiCam/RTS_list.txt",inertsPath=None,intestrtsPath=None,intestnrtsPath=None,intestmrtsPath=None,intestertsPath=None,inoldMethod=False)
+makeLists.buildLists()
+makeDataSets.DSfnHandler(inrtsPath="./PiCam/RTS_list.txt",innrtsPath="./PiCam/NRTS_list.txt",inmrtsPath="./PiCam/MRTS_list.txt",inertsPath="./PiCam/ERTS_list.txt",intestrtsPath=None,intestnrtsPath=None,intestmrtsPath=None,intestertsPath=None,inoldMethod=False)

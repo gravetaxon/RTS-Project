@@ -212,15 +212,15 @@ def makeTestingData (args, pixel, minSize, sigType):
             print("DEBUG: creating testing data from random samples of the input data")
             # Sample the data set that we have
             #random.sample(source, count)
-
-
-
-
-
-
-
+            
+            
+            
+            
+             
+            
+             
             return (False,0,0,-2)
-
+            
         deadList = 0
         testLen  = len(inputList)
         if (testLen >= minSize):
@@ -333,7 +333,7 @@ def dataFactors ( name, arrayLen, dataMax,  supRow, supCol):
         elif (settingsData.find('{}Loss='.format(name))>=0):
             posbValue = settingsData.find('{}Loss='.format(name))
             poseValue = settingsData[posbValue:].find('\n')
-            out="{}Loss".format(name)+'binary_crossentropy'\n"
+            out="{}Loss".format(name)+"'binary_crossentropy'\n"
             settingsData= settingsData[:posbValue]+out+settingsData[(posbValue+poseValue):]
 
         if (settingsData.find('{}dataShape='.format(name))<0):
