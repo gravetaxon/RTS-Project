@@ -114,3 +114,4 @@ Scripts/
 # mypy
 .mypy_cache/
 .DS_Store
+pip-selfcheck.json
