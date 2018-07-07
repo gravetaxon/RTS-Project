@@ -1,2 +1,2 @@
 # voter.py
-# load all of the model, 
+# load all of the model, have them to compare 
