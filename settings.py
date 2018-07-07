@@ -33,3 +33,12 @@ RTSHiddenLayers=2
 NRTSHiddenLayers=2
 MRTSHiddenLayers=3
 ERTSHiddenLayers=2
+RTSHiddenLayers=2
+NRTSHiddenLayers=2
+MRTSHiddenLayers=3
+ERTSHiddenLayers=2
+RTSHiddenLayers=2
+NRTSHiddenLayers=2
+MRTSHiddenLayers=3
+ERTSHiddenLayers=2
+RTSSaved=[0,1,2,3,4]MRTSSaved=[0,1,3,4]ERTSSaved=[0,1,2,3,4]NRTSSaved=[0,1,2,3,4]

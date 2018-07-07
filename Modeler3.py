@@ -77,7 +77,7 @@ def runModel(name=''):
     DropPercent =0.5                    # Dropout rate is 50%
     AxisCount = 1
     BatchSize = 16
-    Epochs    = 5
+    Epochs    = 25
 
     score = []
     saved = []
@@ -141,7 +141,7 @@ def runModel(name=''):
     ciLosses=[lossesMean-cv*(math.sqrt(lossesVar/NumberRoutines)) ,lossesMean+cv*(math.sqrt(lossesVar/NumberRoutines))]
     ciAccuracy=[accuracyMean-cv*(math.sqrt(accuracyVar/NumberRoutines)) ,accuracyMean+cv*(math.sqrt(accuracyVar/NumberRoutines))]
 
-    print ("95% CI Losses: {}\nAccuracy: ".format(ciLosses,ciAccuracy))
+    print ("95% CI Losses: {}\nAccuracy:{}".format(ciLosses,ciAccuracy))
 
     out = ''
     for each in saved:

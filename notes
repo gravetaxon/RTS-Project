@@ -37,3 +37,914 @@ Modeler3 functions
 voter functions
 
 makeOutput functions
+
+
+
+Terminal output:
+
+
+
+>>> import buildModels
+D:\Users\james\Documents\RTS-Project\lib\site-packages\h5py\__init__.py:36: FutureWarning: Conversion of the second argument of issubdtype from `float` to `np.floating` is deprecated. In future, it will be treated as `np.float64 == np.dtype(float).type`.
+  from ._conv import register_converters as _register_converters
+Using TensorFlow backend.
+./PiCam
+./PiCam/Plots
+./PiCam/Plots/RTS
+./PiCam/Plots/NRTS
+./PiCam/Plots/MRTS
+./PiCam/Plots/ERTS
+DEBUG: We are good to go!
+.
+Loading dataset, please wait...
+Converting matlab dataset into numpy
+Done loading and coverting dataset
+DEBUG: generating dataset from file PiCam\RTS_list.txt
+DEBUG: SigType: 1 DataLen: 516
+DEBUG: signal file not found (test)
+DEBUG: creating testing data from random samples of the input data
+DEBUG: list generated from directory listing(test)
+DEBUG: Dataset complete (testing bin)
+DEBUG: generating dataset from file PiCam\MRTS_list.txt
+DEBUG: SigType: 2 DataLen: 171
+DEBUG: signal file not found (test)
+DEBUG: creating testing data from random samples of the input data
+DEBUG: list generated from directory listing(test)
+DEBUG: Dataset complete (testing bin)
+DEBUG: generating dataset from file PiCam\ERTS_list.txt
+DEBUG: SigType: 3 DataLen: 288
+DEBUG: signal file not found (test)
+DEBUG: creating testing data from random samples of the input data
+DEBUG: list generated from directory listing(test)
+DEBUG: Dataset complete (testing bin)
+DEBUG: generating dataset from file PiCam\NRTS_list.txt
+DEBUG: SigType: 0 DataLen: 2203
+DEBUG: signal file not found (test)
+DEBUG: creating testing data from random samples of the input data
+DEBUG: list generated from directory listing(test)
+DEBUG: Dataset complete (testing bin)
+DEBUG:
+        Size of training data:
+3174
+DEBUG: Factors:[5, 3, 103, 2]
+DEBUG: Possible Hidden Layer count:2
+DEBUG: Prod Factors: [5, 3]
+DEBUG: FilterSize raw: 15
+DEBUG: Kernel Size: [5,3,103,2]
+DEBUG: Filter Size: 8
+Current settings data:
+SigmaStep = 1.5
+DecisionStep =0.51
+NumberRoutines=5
+RTSKernelSizes=[5,3,103,2]
+RTSHiddenLayers=2
+RTSFilterSize=[8,8,8,8]
+RTSLoss='binary_crossentropy'
+RTSdataShape=(1500,972,1296)
+NRTSKernelSizes=[5,3,17,2]
+NRTSHiddenLayers=2
+NRTSFilterSize=[8,8,8,8]
+NRTSLoss='binary_crossentropy'
+NRTSdataShape=(1500,972,1296)
+MRTSKernelSizes=[7,5,3,41,2]
+MRTSHiddenLayers=3
+MRTSFilterSize=[64,64,64,64,64]
+MRTSLoss='binary_crossentropy'
+MRTSdataShape=(1500,972,1296)
+ERTSKernelSizes=[5,3,367,2]
+ERTSHiddenLayers=2
+ERTSFilterSize=[8,8,8,8]
+ERTSLoss='binary_crossentropy'
+ERTSdataShape=(1500,972,1296)
+RTSHiddenLayers=2
+NRTSHiddenLayers=2
+MRTSHiddenLayers=3
+ERTSHiddenLayers=2
+RTSHiddenLayers=2
+NRTSHiddenLayers=2
+MRTSHiddenLayers=3
+ERTSHiddenLayers=2
+RTSHiddenLayers=2
+NRTSHiddenLayers=2
+MRTSHiddenLayers=3
+ERTSHiddenLayers=2
+RTSHiddenLayers=2
+NRTSHiddenLayers=2
+MRTSHiddenLayers=3
+ERTSHiddenLayers=2
+
+Data to be written:
+SigmaStep = 1.5
+DecisionStep =0.51
+NumberRoutines=5
+RTSKernelSizes=[5,3,103,2]
+RTSHiddenLayers=2
+RTSFilterSize=[8,8,8,8]
+RTSLoss='binary_crossentropy'
+RTSdataShape=(1500,972,1296)
+NRTSKernelSizes=[5,3,17,2]
+NRTSHiddenLayers=2
+NRTSFilterSize=[8,8,8,8]
+NRTSLoss='binary_crossentropy'
+NRTSdataShape=(1500,972,1296)
+MRTSKernelSizes=[7,5,3,41,2]
+MRTSHiddenLayers=3
+MRTSFilterSize=[64,64,64,64,64]
+MRTSLoss='binary_crossentropy'
+MRTSdataShape=(1500,972,1296)
+ERTSKernelSizes=[5,3,367,2]
+ERTSHiddenLayers=2
+ERTSFilterSize=[8,8,8,8]
+ERTSLoss='binary_crossentropy'
+ERTSdataShape=(1500,972,1296)
+RTSHiddenLayers=2
+NRTSHiddenLayers=2
+MRTSHiddenLayers=3
+ERTSHiddenLayers=2
+RTSHiddenLayers=2
+NRTSHiddenLayers=2
+MRTSHiddenLayers=3
+ERTSHiddenLayers=2
+RTSHiddenLayers=2
+NRTSHiddenLayers=2
+MRTSHiddenLayers=3
+ERTSHiddenLayers=2
+RTSHiddenLayers=2
+NRTSHiddenLayers=2
+MRTSHiddenLayers=3
+ERTSHiddenLayers=2
+RTSHiddenLayers=2
+
+DEBUG: Factors:[5, 3, 17, 2]
+DEBUG: Possible Hidden Layer count:2
+DEBUG: Prod Factors: [5, 3]
+DEBUG: FilterSize raw: 15
+DEBUG: Kernel Size: [5,3,17,2]
+DEBUG: Filter Size: 8
+Current settings data:
+SigmaStep = 1.5
+DecisionStep =0.51
+NumberRoutines=5
+RTSKernelSizes=[5,3,103,2]
+RTSHiddenLayers=2
+RTSFilterSize=[8,8,8,8]
+RTSLoss='binary_crossentropy'
+RTSdataShape=(1500,972,1296)
+NRTSKernelSizes=[5,3,17,2]
+NRTSHiddenLayers=2
+NRTSFilterSize=[8,8,8,8]
+NRTSLoss='binary_crossentropy'
+NRTSdataShape=(1500,972,1296)
+MRTSKernelSizes=[7,5,3,41,2]
+MRTSHiddenLayers=3
+MRTSFilterSize=[64,64,64,64,64]
+MRTSLoss='binary_crossentropy'
+MRTSdataShape=(1500,972,1296)
+ERTSKernelSizes=[5,3,367,2]
+ERTSHiddenLayers=2
+ERTSFilterSize=[8,8,8,8]
+ERTSLoss='binary_crossentropy'
+ERTSdataShape=(1500,972,1296)
+RTSHiddenLayers=2
+NRTSHiddenLayers=2
+MRTSHiddenLayers=3
+ERTSHiddenLayers=2
+RTSHiddenLayers=2
+NRTSHiddenLayers=2
+MRTSHiddenLayers=3
+ERTSHiddenLayers=2
+RTSHiddenLayers=2
+NRTSHiddenLayers=2
+MRTSHiddenLayers=3
+ERTSHiddenLayers=2
+RTSHiddenLayers=2
+NRTSHiddenLayers=2
+MRTSHiddenLayers=3
+ERTSHiddenLayers=2
+RTSHiddenLayers=2
+
+Data to be written:
+SigmaStep = 1.5
+DecisionStep =0.51
+NumberRoutines=5
+RTSKernelSizes=[5,3,103,2]
+RTSHiddenLayers=2
+RTSFilterSize=[8,8,8,8]
+RTSLoss='binary_crossentropy'
+RTSdataShape=(1500,972,1296)
+NRTSKernelSizes=[5,3,17,2]
+NRTSHiddenLayers=2
+NRTSFilterSize=[8,8,8,8]
+NRTSLoss='binary_crossentropy'
+NRTSdataShape=(1500,972,1296)
+MRTSKernelSizes=[7,5,3,41,2]
+MRTSHiddenLayers=3
+MRTSFilterSize=[64,64,64,64,64]
+MRTSLoss='binary_crossentropy'
+MRTSdataShape=(1500,972,1296)
+ERTSKernelSizes=[5,3,367,2]
+ERTSHiddenLayers=2
+ERTSFilterSize=[8,8,8,8]
+ERTSLoss='binary_crossentropy'
+ERTSdataShape=(1500,972,1296)
+RTSHiddenLayers=2
+NRTSHiddenLayers=2
+MRTSHiddenLayers=3
+ERTSHiddenLayers=2
+RTSHiddenLayers=2
+NRTSHiddenLayers=2
+MRTSHiddenLayers=3
+ERTSHiddenLayers=2
+RTSHiddenLayers=2
+NRTSHiddenLayers=2
+MRTSHiddenLayers=3
+ERTSHiddenLayers=2
+RTSHiddenLayers=2
+NRTSHiddenLayers=2
+MRTSHiddenLayers=3
+ERTSHiddenLayers=2
+RTSHiddenLayers=2
+NRTSHiddenLayers=2
+
+DEBUG: Factors:[7, 5, 3, 41, 2]
+DEBUG: Possible Hidden Layer count:3
+DEBUG: Prod Factors: [7, 5, 3]
+DEBUG: FilterSize raw: 105
+DEBUG: Kernel Size: [7,5,3,41,2]
+DEBUG: Filter Size: 64
+Current settings data:
+SigmaStep = 1.5
+DecisionStep =0.51
+NumberRoutines=5
+RTSKernelSizes=[5,3,103,2]
+RTSHiddenLayers=2
+RTSFilterSize=[8,8,8,8]
+RTSLoss='binary_crossentropy'
+RTSdataShape=(1500,972,1296)
+NRTSKernelSizes=[5,3,17,2]
+NRTSHiddenLayers=2
+NRTSFilterSize=[8,8,8,8]
+NRTSLoss='binary_crossentropy'
+NRTSdataShape=(1500,972,1296)
+MRTSKernelSizes=[7,5,3,41,2]
+MRTSHiddenLayers=3
+MRTSFilterSize=[64,64,64,64,64]
+MRTSLoss='binary_crossentropy'
+MRTSdataShape=(1500,972,1296)
+ERTSKernelSizes=[5,3,367,2]
+ERTSHiddenLayers=2
+ERTSFilterSize=[8,8,8,8]
+ERTSLoss='binary_crossentropy'
+ERTSdataShape=(1500,972,1296)
+RTSHiddenLayers=2
+NRTSHiddenLayers=2
+MRTSHiddenLayers=3
+ERTSHiddenLayers=2
+RTSHiddenLayers=2
+NRTSHiddenLayers=2
+MRTSHiddenLayers=3
+ERTSHiddenLayers=2
+RTSHiddenLayers=2
+NRTSHiddenLayers=2
+MRTSHiddenLayers=3
+ERTSHiddenLayers=2
+RTSHiddenLayers=2
+NRTSHiddenLayers=2
+MRTSHiddenLayers=3
+ERTSHiddenLayers=2
+RTSHiddenLayers=2
+NRTSHiddenLayers=2
+
+Data to be written:
+SigmaStep = 1.5
+DecisionStep =0.51
+NumberRoutines=5
+RTSKernelSizes=[5,3,103,2]
+RTSHiddenLayers=2
+RTSFilterSize=[8,8,8,8]
+RTSLoss='binary_crossentropy'
+RTSdataShape=(1500,972,1296)
+NRTSKernelSizes=[5,3,17,2]
+NRTSHiddenLayers=2
+NRTSFilterSize=[8,8,8,8]
+NRTSLoss='binary_crossentropy'
+NRTSdataShape=(1500,972,1296)
+MRTSKernelSizes=[7,5,3,41,2]
+MRTSHiddenLayers=3
+MRTSFilterSize=[64,64,64,64,64]
+MRTSLoss='binary_crossentropy'
+MRTSdataShape=(1500,972,1296)
+ERTSKernelSizes=[5,3,367,2]
+ERTSHiddenLayers=2
+ERTSFilterSize=[8,8,8,8]
+ERTSLoss='binary_crossentropy'
+ERTSdataShape=(1500,972,1296)
+RTSHiddenLayers=2
+NRTSHiddenLayers=2
+MRTSHiddenLayers=3
+ERTSHiddenLayers=2
+RTSHiddenLayers=2
+NRTSHiddenLayers=2
+MRTSHiddenLayers=3
+ERTSHiddenLayers=2
+RTSHiddenLayers=2
+NRTSHiddenLayers=2
+MRTSHiddenLayers=3
+ERTSHiddenLayers=2
+RTSHiddenLayers=2
+NRTSHiddenLayers=2
+MRTSHiddenLayers=3
+ERTSHiddenLayers=2
+RTSHiddenLayers=2
+NRTSHiddenLayers=2
+MRTSHiddenLayers=3
+
+DEBUG: Factors:[5, 3, 367, 2]
+DEBUG: Possible Hidden Layer count:2
+DEBUG: Prod Factors: [5, 3]
+DEBUG: FilterSize raw: 15
+DEBUG: Kernel Size: [5,3,367,2]
+DEBUG: Filter Size: 8
+Current settings data:
+SigmaStep = 1.5
+DecisionStep =0.51
+NumberRoutines=5
+RTSKernelSizes=[5,3,103,2]
+RTSHiddenLayers=2
+RTSFilterSize=[8,8,8,8]
+RTSLoss='binary_crossentropy'
+RTSdataShape=(1500,972,1296)
+NRTSKernelSizes=[5,3,17,2]
+NRTSHiddenLayers=2
+NRTSFilterSize=[8,8,8,8]
+NRTSLoss='binary_crossentropy'
+NRTSdataShape=(1500,972,1296)
+MRTSKernelSizes=[7,5,3,41,2]
+MRTSHiddenLayers=3
+MRTSFilterSize=[64,64,64,64,64]
+MRTSLoss='binary_crossentropy'
+MRTSdataShape=(1500,972,1296)
+ERTSKernelSizes=[5,3,367,2]
+ERTSHiddenLayers=2
+ERTSFilterSize=[8,8,8,8]
+ERTSLoss='binary_crossentropy'
+ERTSdataShape=(1500,972,1296)
+RTSHiddenLayers=2
+NRTSHiddenLayers=2
+MRTSHiddenLayers=3
+ERTSHiddenLayers=2
+RTSHiddenLayers=2
+NRTSHiddenLayers=2
+MRTSHiddenLayers=3
+ERTSHiddenLayers=2
+RTSHiddenLayers=2
+NRTSHiddenLayers=2
+MRTSHiddenLayers=3
+ERTSHiddenLayers=2
+RTSHiddenLayers=2
+NRTSHiddenLayers=2
+MRTSHiddenLayers=3
+ERTSHiddenLayers=2
+RTSHiddenLayers=2
+NRTSHiddenLayers=2
+MRTSHiddenLayers=3
+
+Data to be written:
+SigmaStep = 1.5
+DecisionStep =0.51
+NumberRoutines=5
+RTSKernelSizes=[5,3,103,2]
+RTSHiddenLayers=2
+RTSFilterSize=[8,8,8,8]
+RTSLoss='binary_crossentropy'
+RTSdataShape=(1500,972,1296)
+NRTSKernelSizes=[5,3,17,2]
+NRTSHiddenLayers=2
+NRTSFilterSize=[8,8,8,8]
+NRTSLoss='binary_crossentropy'
+NRTSdataShape=(1500,972,1296)
+MRTSKernelSizes=[7,5,3,41,2]
+MRTSHiddenLayers=3
+MRTSFilterSize=[64,64,64,64,64]
+MRTSLoss='binary_crossentropy'
+MRTSdataShape=(1500,972,1296)
+ERTSKernelSizes=[5,3,367,2]
+ERTSHiddenLayers=2
+ERTSFilterSize=[8,8,8,8]
+ERTSLoss='binary_crossentropy'
+ERTSdataShape=(1500,972,1296)
+RTSHiddenLayers=2
+NRTSHiddenLayers=2
+MRTSHiddenLayers=3
+ERTSHiddenLayers=2
+RTSHiddenLayers=2
+NRTSHiddenLayers=2
+MRTSHiddenLayers=3
+ERTSHiddenLayers=2
+RTSHiddenLayers=2
+NRTSHiddenLayers=2
+MRTSHiddenLayers=3
+ERTSHiddenLayers=2
+RTSHiddenLayers=2
+NRTSHiddenLayers=2
+MRTSHiddenLayers=3
+ERTSHiddenLayers=2
+RTSHiddenLayers=2
+NRTSHiddenLayers=2
+MRTSHiddenLayers=3
+ERTSHiddenLayers=2
+
+DEBUG: Saving new numpy datasets
+0
+adding input layer
+Adding Layer Conv1D(8,  5)
+Adding dropout
+adding pooling
+Adding Layer Conv1D(8,  3)
+adding pooling
+adding output layer
+Epoch 1/5
+2018-07-07 14:22:54.428776: I T:\src\github\tensorflow\tensorflow\core\platform\cpu_feature_guard.cc:140] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2
+2018-07-07 14:22:55.140170: I T:\src\github\tensorflow\tensorflow\core\common_runtime\gpu\gpu_device.cc:1356] Found device 0 with properties:
+name: GeForce GTX 970M major: 5 minor: 2 memoryClockRate(GHz): 1.038
+pciBusID: 0000:01:00.0
+totalMemory: 3.00GiB freeMemory: 2.47GiB
+2018-07-07 14:22:55.145230: I T:\src\github\tensorflow\tensorflow\core\common_runtime\gpu\gpu_device.cc:1435] Adding visible gpu devices: 0
+2018-07-07 14:22:55.566565: I T:\src\github\tensorflow\tensorflow\core\common_runtime\gpu\gpu_device.cc:923] Device interconnect StreamExecutor with strength 1 edge matrix:
+2018-07-07 14:22:55.570881: I T:\src\github\tensorflow\tensorflow\core\common_runtime\gpu\gpu_device.cc:929]      0
+2018-07-07 14:22:55.572637: I T:\src\github\tensorflow\tensorflow\core\common_runtime\gpu\gpu_device.cc:942] 0:   N
+2018-07-07 14:22:55.574612: I T:\src\github\tensorflow\tensorflow\core\common_runtime\gpu\gpu_device.cc:1053] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 2183 MB memory) -> physical GPU (device: 0, name: GeForce GTX 970M, pci bus id: 0000:01:00.0, compute capability: 5.2)
+2719/2719 [==============================] - 6s 2ms/step - loss: 0.5254 - acc: 0.8106
+Epoch 2/5
+2719/2719 [==============================] - 1s 409us/step - loss: 0.5089 - acc: 0.8106
+Epoch 3/5
+2719/2719 [==============================] - 1s 406us/step - loss: 0.5144 - acc: 0.8106
+Epoch 4/5
+2719/2719 [==============================] - 1s 410us/step - loss: 0.4991 - acc: 0.8106
+Epoch 5/5
+2719/2719 [==============================] - 1s 410us/step - loss: 0.4965 - acc: 0.8106
+816/816 [==============================] - 0s 215us/step
+[0, 0.49317667589468117, 0.8100490196078431]
+DEBUG: Saving model #0
+1
+adding input layer
+Adding Layer Conv1D(8,  5)
+Adding dropout
+adding pooling
+Adding Layer Conv1D(8,  3)
+adding pooling
+adding output layer
+Epoch 1/5
+2719/2719 [==============================] - 2s 556us/step - loss: 0.5233 - acc: 0.8106
+Epoch 2/5
+2719/2719 [==============================] - 1s 407us/step - loss: 0.5206 - acc: 0.8099
+Epoch 3/5
+2719/2719 [==============================] - 1s 408us/step - loss: 0.5150 - acc: 0.8106
+Epoch 4/5
+2719/2719 [==============================] - 1s 405us/step - loss: 0.5089 - acc: 0.8106
+Epoch 5/5
+2719/2719 [==============================] - 1s 407us/step - loss: 0.5040 - acc: 0.8106
+816/816 [==============================] - 0s 225us/step
+[1, 0.5285381353368946, 0.8100490196078431]
+DEBUG: Saving model #1
+2
+adding input layer
+Adding Layer Conv1D(8,  5)
+Adding dropout
+adding pooling
+Adding Layer Conv1D(8,  3)
+adding pooling
+adding output layer
+Epoch 1/5
+2719/2719 [==============================] - 2s 560us/step - loss: 0.5287 - acc: 0.7988
+Epoch 2/5
+2719/2719 [==============================] - 1s 409us/step - loss: 0.5149 - acc: 0.8106
+Epoch 3/5
+2719/2719 [==============================] - 1s 409us/step - loss: 0.5109 - acc: 0.8106
+Epoch 4/5
+2719/2719 [==============================] - 1s 409us/step - loss: 0.5071 - acc: 0.8106
+Epoch 5/5
+2719/2719 [==============================] - 1s 408us/step - loss: 0.5035 - acc: 0.8106
+816/816 [==============================] - 0s 248us/step
+[2, 0.4998848970029868, 0.8100490196078431]
+DEBUG: Saving model #2
+3
+adding input layer
+Adding Layer Conv1D(8,  5)
+Adding dropout
+adding pooling
+Adding Layer Conv1D(8,  3)
+adding pooling
+adding output layer
+Epoch 1/5
+2719/2719 [==============================] - 2s 577us/step - loss: 0.5330 - acc: 0.8076
+Epoch 2/5
+2719/2719 [==============================] - 1s 413us/step - loss: 0.5131 - acc: 0.8106
+Epoch 3/5
+2719/2719 [==============================] - 1s 410us/step - loss: 0.5071 - acc: 0.8106
+Epoch 4/5
+2719/2719 [==============================] - 1s 414us/step - loss: 0.5043 - acc: 0.8091
+Epoch 5/5
+2719/2719 [==============================] - 1s 408us/step - loss: 0.4952 - acc: 0.8106
+816/816 [==============================] - 0s 274us/step
+[3, 0.49620942975960525, 0.8100490196078431]
+DEBUG: Saving model #3
+4
+adding input layer
+Adding Layer Conv1D(8,  5)
+Adding dropout
+adding pooling
+Adding Layer Conv1D(8,  3)
+adding pooling
+adding output layer
+Epoch 1/5
+2719/2719 [==============================] - 2s 586us/step - loss: 0.5580 - acc: 0.7985
+Epoch 2/5
+2719/2719 [==============================] - 1s 405us/step - loss: 0.5141 - acc: 0.8106
+Epoch 3/5
+2719/2719 [==============================] - 1s 409us/step - loss: 0.5127 - acc: 0.8106
+Epoch 4/5
+2719/2719 [==============================] - 1s 405us/step - loss: 0.4997 - acc: 0.8106
+Epoch 5/5
+2719/2719 [==============================] - 1s 403us/step - loss: 0.4969 - acc: 0.8106
+816/816 [==============================] - 0s 285us/step
+[4, 0.49054716673551824, 0.8100490196078431]
+DEBUG: Saving model #4
+[[0.49317667589468117, 0.8100490196078431], [0.5285381353368946, 0.8100490196078431], [0.4998848970029868, 0.8100490196078431], [0.49620942975960525, 0.8100490196078431], [0.49054716673551824, 0.8100490196078431]]
+Statistics of model:
+        Losses:
+                Mean: 0.5016712609459372                Variance: 0.00019015101655588912
+        Accuracy:
+                Mean: 0.8100490196078433                Variance:1.232595164407831e-32
+Criticial Value: 2.13184678133629
+95% CI Losses: [0.4885244532083446, 0.5148180686835298]
+Accuracy:
+Total time elapsed: 61.42383813195631
+Run makeOutput.py next to generate output list
+0
+adding input layer
+Adding Layer Conv1D(64,  7)
+Adding dropout
+adding pooling
+Adding Layer Conv1D(64,  5)
+adding pooling
+Adding Layer Conv1D(64,  3)
+Adding dropout
+adding pooling
+adding output layer
+Epoch 1/5
+2018-07-07 14:23:33.933368: W T:\src\github\tensorflow\tensorflow\core\common_runtime\bfc_allocator.cc:219] Allocator (GPU_0_bfc) ran out of memory trying to allocate 2.52GiB. The caller indicates that this is not a failure, but may mean that there could be performance gains if more memory were available.
+2018-07-07 14:23:34.080168: W T:\src\github\tensorflow\tensorflow\core\common_runtime\bfc_allocator.cc:219] Allocator (GPU_0_bfc) ran out of memory trying to allocate 2.52GiB. The caller indicates that this is not a failure, but may mean that there could be performance gains if more memory were available.
+2320/2374 [============================>.] - ETA: 0s - loss: 0.5391 - acc: 0.91082018-07-07 14:23:35.644717: W T:\src\github\tensorflow\tensorflow\core\common_runtime\bfc_allocator.cc:219] Allocator (GPU_0_bfc) ran out of memory trying to allocate 2.21GiB. The caller indicates that this is not a failure, but may mean that there could be performance gains if more memory were available.
+2018-07-07 14:23:35.762050: W T:\src\github\tensorflow\tensorflow\core\common_runtime\bfc_allocator.cc:219] Allocator (GPU_0_bfc) ran out of memory trying to allocate 2.21GiB. The caller indicates that this is not a failure, but may mean that there could be performance gains if more memory were available.
+2374/2374 [==============================] - 2s 1ms/step - loss: 0.5345 - acc: 0.9115
+Epoch 2/5
+2374/2374 [==============================] - 2s 654us/step - loss: 0.4957 - acc: 0.9284
+Epoch 3/5
+2374/2374 [==============================] - 2s 657us/step - loss: 0.4738 - acc: 0.9284
+Epoch 4/5
+2374/2374 [==============================] - 2s 656us/step - loss: 0.4639 - acc: 0.9284
+Epoch 5/5
+2374/2374 [==============================] - 2s 659us/step - loss: 0.4574 - acc: 0.9284
+496/712 [===================>..........] - ETA: 0s2018-07-07 14:23:42.331281: W T:\src\github\tensorflow\tensorflow\core\common_runtime\bfc_allocator.cc:219] Allocator (GPU_0_bfc) ran out of memory trying to allocate 2.27GiB. The caller indicates that this is not a failure, but may mean that there could be performance gains if more memory were available.
+712/712 [==============================] - 0s 455us/step
+[0, 0.4899254997124833, 0.9283707865168539]
+DEBUG: Saving model #0
+1
+adding input layer
+Adding Layer Conv1D(64,  7)
+Adding dropout
+adding pooling
+Adding Layer Conv1D(64,  5)
+adding pooling
+Adding Layer Conv1D(64,  3)
+Adding dropout
+adding pooling
+adding output layer
+Epoch 1/5
+2374/2374 [==============================] - 2s 920us/step - loss: 0.5837 - acc: 0.9162
+Epoch 2/5
+2374/2374 [==============================] - 2s 660us/step - loss: 0.4949 - acc: 0.9254
+Epoch 3/5
+2374/2374 [==============================] - 2s 652us/step - loss: 0.4951 - acc: 0.9284
+Epoch 4/5
+2374/2374 [==============================] - 2s 655us/step - loss: 0.4783 - acc: 0.9284
+Epoch 5/5
+2374/2374 [==============================] - 2s 659us/step - loss: 0.4513 - acc: 0.9284
+712/712 [==============================] - 0s 469us/step
+[1, 0.4469188850247458, 0.9283707865168539]
+DEBUG: Saving model #1
+2
+adding input layer
+Adding Layer Conv1D(64,  7)
+Adding dropout
+adding pooling
+Adding Layer Conv1D(64,  5)
+adding pooling
+Adding Layer Conv1D(64,  3)
+Adding dropout
+adding pooling
+adding output layer
+Epoch 1/5
+2374/2374 [==============================] - 2s 946us/step - loss: 2.3089 - acc: 0.9284
+Epoch 2/5
+2374/2374 [==============================] - 2s 657us/step - loss: 2.3085 - acc: 0.9284
+Epoch 3/5
+2374/2374 [==============================] - 2s 660us/step - loss: 2.3084 - acc: 0.9284
+Epoch 4/5
+2374/2374 [==============================] - 2s 657us/step - loss: 2.3084 - acc: 0.9284
+Epoch 5/5
+2374/2374 [==============================] - 2s 659us/step - loss: 2.3084 - acc: 0.9284
+712/712 [==============================] - 0s 493us/step
+[2, 2.309053083414094, 0.9283707865168539]
+3
+adding input layer
+Adding Layer Conv1D(64,  7)
+Adding dropout
+adding pooling
+Adding Layer Conv1D(64,  5)
+adding pooling
+Adding Layer Conv1D(64,  3)
+Adding dropout
+adding pooling
+adding output layer
+Epoch 1/5
+2374/2374 [==============================] - 2s 970us/step - loss: 0.5882 - acc: 0.9179
+Epoch 2/5
+2374/2374 [==============================] - 2s 658us/step - loss: 0.4686 - acc: 0.9284
+Epoch 3/5
+2374/2374 [==============================] - 2s 660us/step - loss: 0.4763 - acc: 0.9284
+Epoch 4/5
+2374/2374 [==============================] - 2s 661us/step - loss: 0.4671 - acc: 0.9284
+Epoch 5/5
+2374/2374 [==============================] - 2s 660us/step - loss: 0.4698 - acc: 0.9284
+712/712 [==============================] - 0s 525us/step
+[3, 0.48471252369077017, 0.9283707865168539]
+DEBUG: Saving model #3
+4
+adding input layer
+Adding Layer Conv1D(64,  7)
+Adding dropout
+adding pooling
+Adding Layer Conv1D(64,  5)
+adding pooling
+Adding Layer Conv1D(64,  3)
+Adding dropout
+adding pooling
+adding output layer
+Epoch 1/5
+2374/2374 [==============================] - 2s 1ms/step - loss: 0.5789 - acc: 0.9061
+Epoch 2/5
+2374/2374 [==============================] - 2s 660us/step - loss: 0.4947 - acc: 0.9284
+Epoch 3/5
+2374/2374 [==============================] - 2s 660us/step - loss: 0.4589 - acc: 0.9284
+Epoch 4/5
+2374/2374 [==============================] - 2s 660us/step - loss: 0.4635 - acc: 0.9284
+Epoch 5/5
+2374/2374 [==============================] - 2s 660us/step - loss: 0.4669 - acc: 0.9284
+712/712 [==============================] - 0s 548us/step
+[4, 0.4306539973516143, 0.9283707865168539]
+DEBUG: Saving model #4
+[[0.4899254997124833, 0.9283707865168539], [0.4469188850247458, 0.9283707865168539], [2.309053083414094, 0.9283707865168539], [0.48471252369077017, 0.9283707865168539], [0.4306539973516143, 0.9283707865168539]]
+Statistics of model:
+        Losses:
+                Mean: 0.8322527978387415                Variance: 0.5457350251179915
+        Accuracy:
+                Mean: 0.9283707865168539                Variance:0.0
+Criticial Value: 2.13184678133629
+95% CI Losses: [0.1279459681649806, 1.5365596275125024]
+Accuracy:
+Total time elapsed: 110.55181932067474
+Run makeOutput.py next to generate output list
+0
+adding input layer
+Adding Layer Conv1D(8,  5)
+Adding dropout
+adding pooling
+Adding Layer Conv1D(8,  3)
+adding pooling
+adding output layer
+Epoch 1/5
+2491/2491 [==============================] - 2s 752us/step - loss: 0.7377 - acc: 0.8402
+Epoch 2/5
+2491/2491 [==============================] - 1s 435us/step - loss: 0.6766 - acc: 0.8848
+Epoch 3/5
+2491/2491 [==============================] - 1s 427us/step - loss: 0.6700 - acc: 0.8848
+Epoch 4/5
+2491/2491 [==============================] - 1s 432us/step - loss: 0.6467 - acc: 0.8848
+Epoch 5/5
+2491/2491 [==============================] - 1s 430us/step - loss: 0.6535 - acc: 0.8848
+748/748 [==============================] - 0s 480us/step
+[0, 0.6480981297990217, 0.8836898395721925]
+DEBUG: Saving model #0
+1
+adding input layer
+Adding Layer Conv1D(8,  5)
+Adding dropout
+adding pooling
+Adding Layer Conv1D(8,  3)
+adding pooling
+adding output layer
+Epoch 1/5
+2491/2491 [==============================] - 2s 742us/step - loss: 0.6910 - acc: 0.8836
+Epoch 2/5
+2491/2491 [==============================] - 1s 428us/step - loss: 0.6776 - acc: 0.8844
+Epoch 3/5
+2491/2491 [==============================] - 1s 431us/step - loss: 0.6706 - acc: 0.8563
+Epoch 4/5
+2491/2491 [==============================] - 1s 428us/step - loss: 0.6593 - acc: 0.8848
+Epoch 5/5
+2491/2491 [==============================] - 1s 434us/step - loss: 0.6537 - acc: 0.8848
+748/748 [==============================] - 0s 479us/step
+[1, 0.6472401177500658, 0.8836898395721925]
+DEBUG: Saving model #1
+2
+adding input layer
+Adding Layer Conv1D(8,  5)
+Adding dropout
+adding pooling
+Adding Layer Conv1D(8,  3)
+adding pooling
+adding output layer
+Epoch 1/5
+2491/2491 [==============================] - 2s 761us/step - loss: 0.7921 - acc: 0.8836
+Epoch 2/5
+2491/2491 [==============================] - 1s 427us/step - loss: 0.6929 - acc: 0.8848
+Epoch 3/5
+2491/2491 [==============================] - 1s 434us/step - loss: 0.6667 - acc: 0.8848
+Epoch 4/5
+2491/2491 [==============================] - 1s 429us/step - loss: 0.6788 - acc: 0.8848
+Epoch 5/5
+2491/2491 [==============================] - 1s 429us/step - loss: 0.6603 - acc: 0.8848
+748/748 [==============================] - 0s 501us/step
+[2, 0.6648714902566716, 0.8836898395721925]
+DEBUG: Saving model #2
+3
+adding input layer
+Adding Layer Conv1D(8,  5)
+Adding dropout
+adding pooling
+Adding Layer Conv1D(8,  3)
+adding pooling
+adding output layer
+Epoch 1/5
+2491/2491 [==============================] - 2s 775us/step - loss: 0.8218 - acc: 0.8470
+Epoch 2/5
+2491/2491 [==============================] - 1s 433us/step - loss: 0.6736 - acc: 0.8848
+Epoch 3/5
+2491/2491 [==============================] - 1s 436us/step - loss: 0.6810 - acc: 0.8848
+Epoch 4/5
+2491/2491 [==============================] - 1s 433us/step - loss: 0.6777 - acc: 0.8848
+Epoch 5/5
+2491/2491 [==============================] - 1s 440us/step - loss: 0.6713 - acc: 0.8699
+748/748 [==============================] - 0s 533us/step
+[3, 0.6502057619910827, 0.8836898395721925]
+DEBUG: Saving model #3
+4
+adding input layer
+Adding Layer Conv1D(8,  5)
+Adding dropout
+adding pooling
+Adding Layer Conv1D(8,  3)
+adding pooling
+adding output layer
+Epoch 1/5
+2491/2491 [==============================] - 2s 784us/step - loss: 0.7458 - acc: 0.7888
+Epoch 2/5
+2491/2491 [==============================] - 1s 435us/step - loss: 0.6665 - acc: 0.8743
+Epoch 3/5
+2491/2491 [==============================] - 1s 435us/step - loss: 0.6515 - acc: 0.8848
+Epoch 4/5
+2491/2491 [==============================] - 1s 433us/step - loss: 0.6457 - acc: 0.8848
+Epoch 5/5
+2491/2491 [==============================] - 1s 436us/step - loss: 0.6457 - acc: 0.8848
+748/748 [==============================] - 0s 572us/step
+[4, 0.6469335732931759, 0.8836898395721925]
+DEBUG: Saving model #4
+[[0.6480981297990217, 0.8836898395721925], [0.6472401177500658, 0.8836898395721925], [0.6648714902566716, 0.8836898395721925], [0.6502057619910827, 0.8836898395721925], [0.6469335732931759, 0.8836898395721925]]
+Statistics of model:
+        Losses:
+                Mean: 0.6514698146180036                Variance: 4.6207763687592467e-05
+        Accuracy:
+                Mean: 0.8836898395721924                Variance:1.232595164407831e-32
+Criticial Value: 2.13184678133629
+95% CI Losses: [0.6449890169745337, 0.6579506122614734]
+Accuracy:
+Total time elapsed: 148.49350023921016
+Run makeOutput.py next to generate output list
+0
+adding input layer
+Adding Layer Conv1D(8,  5)
+Adding dropout
+adding pooling
+Adding Layer Conv1D(8,  3)
+adding pooling
+adding output layer
+Epoch 1/5
+4406/4406 [==============================] - 3s 641us/step - loss: 0.0018 - acc: 1.0000
+Epoch 2/5
+4406/4406 [==============================] - 2s 413us/step - loss: 2.5631e-04 - acc: 1.0000
+Epoch 3/5
+4406/4406 [==============================] - 2s 414us/step - loss: 2.3162e-04 - acc: 1.0000
+Epoch 4/5
+4406/4406 [==============================] - 2s 413us/step - loss: 2.0464e-04 - acc: 1.0000
+Epoch 5/5
+4406/4406 [==============================] - 2s 419us/step - loss: 1.7144e-04 - acc: 1.0000
+1322/1322 [==============================] - 1s 416us/step
+[0, 1.000000153257169e-07, 1.0]
+DEBUG: Saving model #0
+1
+adding input layer
+Adding Layer Conv1D(8,  5)
+Adding dropout
+adding pooling
+Adding Layer Conv1D(8,  3)
+adding pooling
+adding output layer
+Epoch 1/5
+4406/4406 [==============================] - 3s 684us/step - loss: 9.1072e-04 - acc: 1.0000
+Epoch 2/5
+4406/4406 [==============================] - 2s 424us/step - loss: 2.1804e-04 - acc: 1.0000
+Epoch 3/5
+4406/4406 [==============================] - 2s 420us/step - loss: 1.8654e-04 - acc: 1.0000
+Epoch 4/5
+4406/4406 [==============================] - 2s 430us/step - loss: 1.5102e-04 - acc: 1.0000
+Epoch 5/5
+4406/4406 [==============================] - 2s 424us/step - loss: 1.1701e-04 - acc: 1.0000
+1322/1322 [==============================] - 1s 401us/step
+[1, 1.000000153257169e-07, 1.0]
+DEBUG: Saving model #1
+2
+adding input layer
+Adding Layer Conv1D(8,  5)
+Adding dropout
+adding pooling
+Adding Layer Conv1D(8,  3)
+adding pooling
+adding output layer
+Epoch 1/5
+4406/4406 [==============================] - 3s 643us/step - loss: 4.0443e-04 - acc: 1.0000
+Epoch 2/5
+4406/4406 [==============================] - 2s 416us/step - loss: 2.0298e-04 - acc: 1.0000
+Epoch 3/5
+4406/4406 [==============================] - 2s 415us/step - loss: 1.6031e-04 - acc: 1.0000
+Epoch 4/5
+4406/4406 [==============================] - 2s 422us/step - loss: 1.1549e-04 - acc: 1.0000
+Epoch 5/5
+4406/4406 [==============================] - 2s 420us/step - loss: 7.7277e-05 - acc: 1.0000
+1322/1322 [==============================] - 1s 422us/step
+[2, 1.000000153257169e-07, 1.0]
+DEBUG: Saving model #2
+3
+adding input layer
+Adding Layer Conv1D(8,  5)
+Adding dropout
+adding pooling
+Adding Layer Conv1D(8,  3)
+adding pooling
+adding output layer
+Epoch 1/5
+4406/4406 [==============================] - 3s 656us/step - loss: 0.0046 - acc: 1.0000
+Epoch 2/5
+4406/4406 [==============================] - 2s 418us/step - loss: 2.1167e-04 - acc: 1.0000
+Epoch 3/5
+4406/4406 [==============================] - 2s 455us/step - loss: 1.7828e-04 - acc: 1.0000
+Epoch 4/5
+4406/4406 [==============================] - 2s 443us/step - loss: 1.4276e-04 - acc: 1.0000
+Epoch 5/5
+4406/4406 [==============================] - 2s 431us/step - loss: 1.0818e-04 - acc: 1.0000
+1322/1322 [==============================] - 1s 440us/step
+[3, 1.000000153257169e-07, 1.0]
+DEBUG: Saving model #3
+4
+adding input layer
+Adding Layer Conv1D(8,  5)
+Adding dropout
+adding pooling
+Adding Layer Conv1D(8,  3)
+adding pooling
+adding output layer
+Epoch 1/5
+4406/4406 [==============================] - 3s 669us/step - loss: 0.1395 - acc: 0.9709
+Epoch 2/5
+4406/4406 [==============================] - 2s 423us/step - loss: 2.2266e-04 - acc: 1.0000
+Epoch 3/5
+4406/4406 [==============================] - 2s 423us/step - loss: 1.9930e-04 - acc: 1.0000
+Epoch 4/5
+4406/4406 [==============================] - 2s 418us/step - loss: 1.7574e-04 - acc: 1.0000
+Epoch 5/5
+4406/4406 [==============================] - 2s 422us/step - loss: 1.4834e-04 - acc: 1.0000
+1322/1322 [==============================] - 1s 448us/step
+[4, 1.0001067144584506e-07, 1.0]
+DEBUG: Saving model #4
+[[1.000000153257169e-07, 1.0], [1.000000153257169e-07, 1.0], [1.000000153257169e-07, 1.0], [1.000000153257169e-07, 1.0], [1.0001067144584506e-07, 1.0]]
+Statistics of model:
+        Losses:
+                Mean: 1.0000214654974251e-07            Variance: 1.816846338974747e-23
+        Accuracy:
+                Mean: 1.0               Variance:0.0
+Criticial Value: 2.13184678133629
+95% CI Losses: [9.999808277071157e-08, 1.0000621032877345e-07]
+Accuracy:
+Total time elapsed: 208.87934049897146
+Run makeOutput.py next to generate output list
