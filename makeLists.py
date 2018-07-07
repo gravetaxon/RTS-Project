@@ -19,7 +19,10 @@ def buildLists():
     nonrtsList = [] # not RTS
     mrtsList=[]   # possible RTS
     ertsList=[]   # possible RTS
-
+    rtsStatus =False
+    mrtsStatus=False
+    nrtsStatus=False
+    ertsStatus=False
     if (loader.ensureFolder("./PiCam") and
     loader.ensureFolder("./PiCam/Plots") and
     loader.ensureFolder("./PiCam/Plots/RTS") and  # RTS
@@ -47,6 +50,7 @@ def buildLists():
             for each in rtsList:
                     if expression.match(each) != None:
                         fname.write((each+"\n").replace('.png','').replace('_',' '))
+        rtsStatus = True
     else:
         print("DEBUG: Nothing in the RTS folder")
     if len(nonrtsList)!=0:
@@ -54,6 +58,7 @@ def buildLists():
             for each in nonrtsList:
                 if expression.match(each) != None:
                         gname.write((each+"\n").replace('.png','').replace('_', ' '))
+        nrtsStatus = True
     else:
         print("DEBUG: Nothing in the NRTS folder")
     if len(mrtsList)!=0:
@@ -61,6 +66,7 @@ def buildLists():
             for each in mrtsList:
                     if expression.match(each) != None:
                         hname.write((each+"\n").replace('.png','').replace('_',' '))
+        mrtsStatus = True
     else:
         print("DEBUG: Nothing in the MRTS folder")
 
@@ -69,5 +75,10 @@ def buildLists():
             for each in ertsList:
                     if expression.match(each) != None:
                         hname.write((each+"\n").replace('.png','').replace('_',' '))
+        ertsStatus = True
     else:
         print("DEBUG: Nothing in the ERTS folder")
+    if rtsStatus and mrtsStatus and ertsStatus and nrtsStatus:
+        return True
+    else:
+        return False

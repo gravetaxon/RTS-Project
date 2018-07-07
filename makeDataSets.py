@@ -16,6 +16,7 @@ import argparse
 import os, os.path
 from pathlib import Path
 import random
+import math
 
 delta = loader.Delta
 maxSig = 5
@@ -105,18 +106,19 @@ def makeTrainingData(args, pixel, minSize, sigType):
             else:
                 inputList = ""
         else:
-            print("DEBUG: signal file not found")
+            print("DEBUG: signal file not found (train)")
             return (False,0,0,-2,None)
         print("DEBUG: generating dataset from file {}".format(szfilePath))
         deadList = 0
         listLen = len(inputList)
+        print("DEBUG: SigType: {} DataLen: {}".format(sigType,listLen))
         if listLen >= minSize:
             # Start analysis
             x_train = np.zeros((listLen,dataMax))
             y_train = np.zeros(listLen) # output is a "binary value" i.e it either is or is not the signal
                                     # if it is the signal then the model pushes out a one else a zero
             tr_count =0 # index of where we are in the training set
-            for each in inputLine:
+            for each in inputList:
                 if (each != ''):
                     (row,col)=each.split() # we have row col pair, split and test
                     (row,col)=(int(row),int(col)) # convert the text strings into numbers
@@ -132,7 +134,8 @@ def makeTrainingData(args, pixel, minSize, sigType):
             else:
                 return (True, x_train,y_train, tr_count,inputList)
         else:
-            print("DEBUG: Dataset is too small")
+            print("DEBUG: Dataset is too small (train)")
+            return (False, 0,0,-2,None)
 # ENDOF makeTrainingData
 
 def makeTestingData (args, pixel, minSize, sigType, list=None):
@@ -208,7 +211,7 @@ def makeTestingData (args, pixel, minSize, sigType, list=None):
             else:
                 inputList = ""
         else:
-            print("DEBUG: signal file not found")
+            print("DEBUG: signal file not found (test)")
             print("DEBUG: creating testing data from random samples of the input data")
             # Sample the data set that we have
             #random.sample(source, count)
@@ -226,10 +229,10 @@ def makeTestingData (args, pixel, minSize, sigType, list=None):
                         sampleSize = 0.30 * len(listTemp)
                         sampleSize = math.ceil(sampleSize)
                         inputList = random.sample(listTemp, sampleSize)
-                        print("DEBUG: list generated from directory listing")
+                        print("DEBUG: list generated from directory listing(test)")
 
                 else:
-                    print("DEBUG: list is below the minimum size")
+                    print("DEBUG: list is below the minimum size (test)")
                     return (False,0,0,-2)
             else:
                 return (False,0,0,-2)
@@ -250,7 +253,7 @@ def makeTestingData (args, pixel, minSize, sigType, list=None):
                         y_test[td_count] = sigType
                         td_count +=1
                     else:
-                        print("DEBUG: Error data out of range (testing rts bin)")
+                        print("DEBUG: Error data out of range (test)")
                         break
                 else:
                     deadList +=1
@@ -268,7 +271,7 @@ def makeTestingData (args, pixel, minSize, sigType, list=None):
             print("DEBUG: Too small of dataset, less than {} for all of the data types (testing bin)".format(testingTrainSize))
 #ENDOF makeTestingData
 
-def dataFactors ( name=None, arrayLen, dataMax,  supRow, supCol):
+def dataFactors (arrayLen, dataMax,  supRow, supCol, name=None):
     # Here we do the prime magic on the training dataset!
     # take the length of the training dataset and use prime factorization on it
     if (arrayLen > 0):
@@ -328,7 +331,7 @@ def dataFactors ( name=None, arrayLen, dataMax,  supRow, supCol):
         elif (settingsData.find('{}HiddenLayers='.format(name))>=0):
             posbValue = settingsData.find('{}HiddenLayers='.format(name))
             poseValue = settingsData[posbValue:].find('\n')
-        settingsData = settingsData[:posbValue]+"{}HiddenLayers=".format(name)+str(HiddenLayers_out)+'\n'+settingsData[(posbValue+poseValue):]
+            settingsData = settingsData[:posbValue]+"{}HiddenLayers=".format(name)+str(HiddenLayers_out)+'\n'+settingsData[(posbValue+poseValue):]
 
         if (settingsData.find('{}FilterSize='.format(name))<0):
             out = (str(FilterSize_out)+',')*(len(factors))
@@ -496,7 +499,7 @@ def DSfnHandler (inrtsPath=None,innrtsPath=None,inmrtsPath=None,inertsPath=None,
     """
     args = argparse.Namespace(rtsPath=inrtsPath,nrtsPath=innrtsPath,mrtsPath=inmrtsPath,ertsPath=inertsPath,testrtsPath=intestrtsPath,testnrtsPath=intestnrtsPath,testmrtsPath=intestmrtsPath,testertsPath=intestertsPath,oldMethod=inoldMethod)
     testingSizeTest  = 30
-    testingSizeTrain = 200
+    testingSizeTrain = 100
 
 
     pixel = loader.load()
@@ -515,7 +518,7 @@ def DSfnHandler (inrtsPath=None,innrtsPath=None,inmrtsPath=None,inertsPath=None,
     (testStatus_3, x_test_3,y_test_3,testCount_3)     = makeTestingData(args,pixel,testingSizeTest,ertsSig, outList)
     # nRTS testing and training
     (trainStatus_4, x_train_4,y_train_4, dataCount_4, outList)  = makeTrainingData(args,pixel,testingSizeTrain,nrtsSig)
-    (testStatus_4, x_test_4,y_test_4,testCount_4)     = makeTestingData(args,pixel,testingSizeTest,nrtsSi, outList)
+    (testStatus_4, x_test_4,y_test_4,testCount_4)     = makeTestingData(args,pixel,testingSizeTest,nrtsSig, outList)
 
     trainStatus = trainStatus_1 and trainStatus_2 and trainStatus_3 and trainStatus_4
     testStatus = testStatus_1 and testStatus_2 and testStatus_3 and testStatus_4
@@ -531,7 +534,7 @@ def DSfnHandler (inrtsPath=None,innrtsPath=None,inmrtsPath=None,inertsPath=None,
         testCountStatus = True
         testCount= testCount_1+testCount_2+testCount_3+testCount_4
 
-    countStatus = dataCountStatus and testCountSatus
+    countStatus = dataCountStatus and testCountStatus
     if countStatus & trainStatus & testStatus:
         x_train = np.concatenate((x_train_1,x_train_2,x_train_3,x_train_4),axis=0)
         y_train = np.concatenate((y_train_1,y_train_2,y_train_3,y_train_4),axis=0)
@@ -544,10 +547,10 @@ def DSfnHandler (inrtsPath=None,innrtsPath=None,inmrtsPath=None,inertsPath=None,
 
     if type(x_train) == np.ndarray and type(y_train) == np.ndarray and type(x_test) == np.ndarray and type(y_test) == np.ndarray:
         arrayLen = x_train.shape[0]
-        statusFactor                    = dataFactors ('RTS',dataCount_1, dataMax,  supRow, supCol)
-        statusFactor                    = dataFactors ('NRTS',dataCount_2, dataMax,  supRow, supCol)
-        statusFactor                    = dataFactors ('MRTS',dataCount_3, dataMax,  supRow, supCol)
-        statusFactor                    = dataFactors ('ERTS',dataCount_4, dataMax,  supRow, supCol)
+        statusFactor                    = dataFactors (dataCount_1, dataMax,  supRow, supCol,'RTS')
+        statusFactor                    = dataFactors (dataCount_2, dataMax,  supRow, supCol,'NRTS')
+        statusFactor                    = dataFactors (dataCount_3, dataMax,  supRow, supCol,'MRTS')
+        statusFactor                    = dataFactors (dataCount_4, dataMax,  supRow, supCol,'ERTS')
 
     else:
         statusFactor = False
@@ -575,6 +578,7 @@ def DSfnHandler (inrtsPath=None,innrtsPath=None,inmrtsPath=None,inertsPath=None,
         np.save('./PiCam/y_train.npy',y_train)
         np.save('./PiCam/y_test.npy',y_test)
         print("DEBUG: run modeler next")
+        return True
     elif(status == True and args.oldMethod == False):
         # Each dataset is saved into groups of two
         # RTS vs NRTS   1v4
@@ -614,5 +618,7 @@ def DSfnHandler (inrtsPath=None,innrtsPath=None,inmrtsPath=None,inertsPath=None,
         np.save('./PiCam/x_test_NRTS.npy',x_test)
         np.save('./PiCam/y_train_NRTS.npy',y_train)
         np.save('./PiCam/y_test_NRTS.npy',y_test)
+        return True
     else:
         print("DEBUG: We had an error in writing settings data and have not written incompatible training and/or testing data")
+        return False

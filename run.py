@@ -21,8 +21,9 @@ import loader
 import makeLists
 import makeDataSets
 import Modeler3
-import voter
+#import voter
 import makeOutput
 
-makeLists.buildLists()
-makeDataSets.DSfnHandler(inrtsPath="./PiCam/RTS_list.txt",innrtsPath="./PiCam/NRTS_list.txt",inmrtsPath="./PiCam/MRTS_list.txt",inertsPath="./PiCam/ERTS_list.txt",intestrtsPath=None,intestnrtsPath=None,intestmrtsPath=None,intestertsPath=None,inoldMethod=False)
+listStatus = makeLists.buildLists()
+if listStatus:
+    makeDataSets.DSfnHandler(inrtsPath="./PiCam/RTS_list.txt",innrtsPath="./PiCam/NRTS_list.txt",inmrtsPath="./PiCam/MRTS_list.txt",inertsPath="./PiCam/ERTS_list.txt",intestrtsPath=None,intestnrtsPath=None,intestmrtsPath=None,intestertsPath=None,inoldMethod=False)
