@@ -349,7 +349,7 @@ def dataFactors (arrayLen, dataMax,  supRow, supCol, name=None):
         elif (settingsData.find('{}Loss='.format(name))>=0):
             posbValue = settingsData.find('{}Loss='.format(name))
             poseValue = settingsData[posbValue:].find('\n')
-            out="{}Loss".format(name)+"'binary_crossentropy'\n"
+            out="{}Loss=".format(name)+"'binary_crossentropy'\n"
             settingsData= settingsData[:posbValue]+out+settingsData[(posbValue+poseValue):]
 
         if (settingsData.find('{}dataShape='.format(name))<0):

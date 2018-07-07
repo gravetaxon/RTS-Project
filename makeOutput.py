@@ -17,8 +17,19 @@ if os.name == 'posix':
     os.nice(10)
 # Open the file for future output
 def openModel(name):
-    RTSRes = open("./PiCam/model_Out.txt","w")
-    SavedModels =settings.Saved
+    RTSRes = open("./PiCam/model_Out_{}.txt".format(str(name)),"w")
+    if type(name) == str:
+        if name == 'RTS':
+            SavedModels =settings.RTSSaved
+        elif name == 'MRTS':
+            SavedModels =settings.MRTSSaved
+        elif name == 'ERTS':
+            SavedModels =settings.ERTSSaved
+        elif name == 'NRTS':
+            SavedModels =settings.NRTSSaved
+        else:
+            # default behavior
+            SavedModels = settings.Saved
     NumModels = len(SavedModels)
     DataShape = settings.dataShape
     # For testing purposes reducing col and rows by a handicap

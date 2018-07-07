@@ -15,8 +15,7 @@ Example array
  2  5   0  2  1  4  2  2  2  4  1  3
  3  1   4  2  2  2  4  1  3  2  1  0
 
-New functions that NEED to be debugged
-  are starred
+New functions that NEED to be debugged are starred
 
 Loader functions
   ensureFolder
@@ -29,10 +28,12 @@ makeLists functions
   buildLists
 makeDataSets functions
   makeTrainingData
-  makeTestingData *
-  dataFactors *
-  DScommandlineHandler *
-  DSfnHandler *
+  makeTestingData
+  dataFactors
+  DScommandlineHandler
+  DSfnHandler
 Modeler3 functions
-  runModel *
-voter
+  runModel
+voter functions
+
+makeOutput functions

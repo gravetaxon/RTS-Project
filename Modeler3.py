@@ -30,11 +30,32 @@ def runModel(name=''):
     #Y_test = np.expand_dims(y_test, axis=2) # reshape (569, 30) to (569, 30, 1)
 
     # Grab the settings from the settings.py file
-
-    NumberHLayers=settings.HiddenLayers
-    FilterSize=settings.FilterSize
-    KernelSize=settings.KernelSizes
-
+    if name =='RTS':
+        NumberHLayers=settings.RTSHiddenLayers
+        FilterSize=settings.RTSFilterSize
+        KernelSize=settings.RTSKernelSizes
+        loss=settings.RTSLoss
+    elif name =='MRTS':
+        NumberHLayers=settings.MRTSHiddenLayers
+        FilterSize=settings.MRTSFilterSize
+        KernelSize=settings.MRTSKernelSizes
+        loss=settings.MRTSLoss
+    elif name =='ERTS':
+        NumberHLayers=settings.ERTSHiddenLayers
+        FilterSize=settings.ERTSFilterSize
+        KernelSize=settings.ERTSKernelSizes
+        loss=settings.ERTSLoss
+    elif name =='NRTS':
+        NumberHLayers=settings.NRTSHiddenLayers
+        FilterSize=settings.NRTSFilterSize
+        KernelSize=settings.NRTSKernelSizes
+        loss=settings.NRTSLoss
+    else:
+        print ("DEBUG: ERROR expecting named model, loading default modeling systems. Please be sure that this is expected behavior")
+        NumberHLayers=settings.HiddenLayers
+        FilterSize=settings.FilterSize
+        KernelSize=settings.KernelSizes
+        loss=settings.Loss
     #NumberHLayers = 4             # Number of hidden layers (excluding input and output layers
     #FilterSize=[62,62,62,62,62,62]      # Filter size for each of the layers
     #KernelSize=[11,7,5,5,11,3]          # The kernel size for each hidden layer plus
@@ -56,7 +77,7 @@ def runModel(name=''):
     DropPercent =0.5                    # Dropout rate is 50%
     AxisCount = 1
     BatchSize = 16
-    Epochs    = 50
+    Epochs    = 5
 
     score = []
     saved = []
@@ -91,7 +112,7 @@ def runModel(name=''):
         model.add(GlobalAveragePooling1D())
         model.add(Dense(units=AxisCount, activation='sigmoid'))
         print("adding output layer")
-        model.compile(loss=settings.Loss,
+        model.compile(loss,
                   optimizer='rmsprop',
                   metrics=['accuracy'])
         model.fit(X_train, y_train, batch_size=BatchSize, epochs=Epochs)
@@ -143,5 +164,8 @@ def runModel(name=''):
     settingsFile.close()
     timeEnd = timer()
     print("Total time elapsed: {}".format(timeEnd-timeStart))
-
-    print("Run makeOutput.py next to generate output list")
+    if len(saved)>0:
+        print("Run makeOutput.py next to generate output list")
+        return True
+    else:
+        return False
