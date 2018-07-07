@@ -106,7 +106,7 @@ def makeTrainingData(args, pixel, minSize, sigType):
                 inputList = ""
         else:
             print("DEBUG: signal file not found")
-            return (False,0,0,-2)
+            return (False,0,0,-2,None)
         print("DEBUG: generating dataset from file {}".format(szfilePath))
         deadList = 0
         listLen = len(inputList)
@@ -128,14 +128,14 @@ def makeTrainingData(args, pixel, minSize, sigType):
                     deadList+=1
 
             if abs(tr_count-listLen)>delta:
-                return (False, 0,0,-1)
+                return (False, 0,0,-1,None)
             else:
-                return (True, x_train,y_train, tr_count)
+                return (True, x_train,y_train, tr_count,inputList)
         else:
             print("DEBUG: Dataset is too small")
 # ENDOF makeTrainingData
 
-def makeTestingData (args, pixel, minSize, sigType):
+def makeTestingData (args, pixel, minSize, sigType, list=None):
     #inputs:
     # args     -> all commandline arguments
     # pixel    -> dataset
@@ -212,15 +212,28 @@ def makeTestingData (args, pixel, minSize, sigType):
             print("DEBUG: creating testing data from random samples of the input data")
             # Sample the data set that we have
             #random.sample(source, count)
-            
-            
-            
-            
-             
-            
-             
-            return (False,0,0,-2)
-            
+            # Does list have any data?
+            if( list != None):
+                if len(list) >0 and len(list)>minSize:
+                    cutList = 0
+                    for each in list:
+                        if each == '':
+                            cutList +=1
+                    listTemp = list[0:(len(list)-cutList)]
+                    # Is the length of listTemp greater than 30?
+                    if len(listTemp)>100:
+                        # List is long enough to sample
+                        sampleSize = 0.30 * len(listTemp)
+                        sampleSize = math.ceil(sampleSize)
+                        inputList = random.sample(listTemp, sampleSize)
+                        print("DEBUG: list generated from directory listing")
+
+                else:
+                    print("DEBUG: list is below the minimum size")
+                    return (False,0,0,-2)
+            else:
+                return (False,0,0,-2)
+
         deadList = 0
         testLen  = len(inputList)
         if (testLen >= minSize):
@@ -255,7 +268,7 @@ def makeTestingData (args, pixel, minSize, sigType):
             print("DEBUG: Too small of dataset, less than {} for all of the data types (testing bin)".format(testingTrainSize))
 #ENDOF makeTestingData
 
-def dataFactors ( name, arrayLen, dataMax,  supRow, supCol):
+def dataFactors ( name=None, arrayLen, dataMax,  supRow, supCol):
     # Here we do the prime magic on the training dataset!
     # take the length of the training dataset and use prime factorization on it
     if (arrayLen > 0):
@@ -492,25 +505,25 @@ def DSfnHandler (inrtsPath=None,innrtsPath=None,inmrtsPath=None,inertsPath=None,
     # RTS testing and training
     # Need to add signal list as an out from the training data creation to feed into the testing
     # data maker which can be an extra variable output from the training data function.
-    (trainStatus_1, x_train_1,y_train_1, dataCount_1)  = makeTrainingData(args,pixel,testingSizeTrain,rtsSig)
-    (testStatus_1, x_test_1,y_test_1,testCount_1)     = makeTestingData(args,pixel,testingSizeTest,rtsSig)
+    (trainStatus_1, x_train_1,y_train_1, dataCount_1, outList)  = makeTrainingData(args,pixel,testingSizeTrain,rtsSig)
+    (testStatus_1, x_test_1,y_test_1,testCount_1)     = makeTestingData(args,pixel,testingSizeTest,rtsSig, outList)
     # mRTS testing and training
-    (trainStatus_2, x_train_2,y_train_2, dataCount_2)  = makeTrainingData(args,pixel,testingSizeTrain,mrtsSig)
-    (testStatus_2, x_test_2,y_test_2,testCount_2)     = makeTestingData(args,pixel,testingSizeTest,mrtsSig)
+    (trainStatus_2, x_train_2,y_train_2, dataCount_2, outList)  = makeTrainingData(args,pixel,testingSizeTrain,mrtsSig)
+    (testStatus_2, x_test_2,y_test_2,testCount_2)     = makeTestingData(args,pixel,testingSizeTest,mrtsSig, outList)
     # eRTS testing and training
-    (trainStatus_3, x_train_3,y_train_3, dataCount_3)  = makeTrainingData(args,pixel,testingSizeTrain,ertsSig)
-    (testStatus_3, x_test_3,y_test_3,testCount_3)     = makeTestingData(args,pixel,testingSizeTest,ertsSig)
+    (trainStatus_3, x_train_3,y_train_3, dataCount_3, outList)  = makeTrainingData(args,pixel,testingSizeTrain,ertsSig)
+    (testStatus_3, x_test_3,y_test_3,testCount_3)     = makeTestingData(args,pixel,testingSizeTest,ertsSig, outList)
     # nRTS testing and training
-    (trainStatus_4, x_train_4,y_train_4, dataCount_4)  = makeTrainingData(args,pixel,testingSizeTrain,nrtsSig)
-    (testStatus_4, x_test_4,y_test_4,testCount_4)     = makeTestingData(args,pixel,testingSizeTest,nrtsSig)
+    (trainStatus_4, x_train_4,y_train_4, dataCount_4, outList)  = makeTrainingData(args,pixel,testingSizeTrain,nrtsSig)
+    (testStatus_4, x_test_4,y_test_4,testCount_4)     = makeTestingData(args,pixel,testingSizeTest,nrtsSi, outList)
 
     trainStatus = trainStatus_1 and trainStatus_2 and trainStatus_3 and trainStatus_4
     testStatus = testStatus_1 and testStatus_2 and testStatus_3 and testStatus_4
     countStatus = False
     dataCountStatus = False
     testCountStatus = False
-    dataCount =0
-    testCount =0
+    dataCount = 0
+    testCount = 0
     if dataCount_1 >=0 and dataCount_2 >=0 and dataCount_3 >=0 and dataCount_4 >=0:
         dataCountStatus = True
         dataCount = dataCount_1+dataCount_2+dataCount_3+dataCount_4
@@ -531,7 +544,11 @@ def DSfnHandler (inrtsPath=None,innrtsPath=None,inmrtsPath=None,inertsPath=None,
 
     if type(x_train) == np.ndarray and type(y_train) == np.ndarray and type(x_test) == np.ndarray and type(y_test) == np.ndarray:
         arrayLen = x_train.shape[0]
-        statusFactor                    = dataFactors (dataCount, dataMax,  supRow, supCol)
+        statusFactor                    = dataFactors ('RTS',dataCount_1, dataMax,  supRow, supCol)
+        statusFactor                    = dataFactors ('NRTS',dataCount_2, dataMax,  supRow, supCol)
+        statusFactor                    = dataFactors ('MRTS',dataCount_3, dataMax,  supRow, supCol)
+        statusFactor                    = dataFactors ('ERTS',dataCount_4, dataMax,  supRow, supCol)
+
     else:
         statusFactor = False
     if trainStatus :
@@ -589,5 +606,13 @@ def DSfnHandler (inrtsPath=None,innrtsPath=None,inmrtsPath=None,inertsPath=None,
         np.save('./PiCam/x_test_ERTS.npy',x_test)
         np.save('./PiCam/y_train_ERTS.npy',y_train)
         np.save('./PiCam/y_test_ERTS.npy',y_test)
+        x_train = np.concatenate((x_train_4,x_train_4),axis=0)
+        y_train = np.concatenate((y_train_4,y_train_4),axis=0)
+        x_test  = np.concatenate((x_test_4,x_test_4),axis=0)
+        y_test  = np.concatenate((y_test_4,y_test_4),axis=0)
+        np.save('./PiCam/x_train_NRTS.npy',x_train) # ERTS
+        np.save('./PiCam/x_test_NRTS.npy',x_test)
+        np.save('./PiCam/y_train_NRTS.npy',y_train)
+        np.save('./PiCam/y_test_NRTS.npy',y_test)
     else:
         print("DEBUG: We had an error in writing settings data and have not written incompatible training and/or testing data")

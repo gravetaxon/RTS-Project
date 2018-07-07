@@ -1,4 +1,4 @@
-#
+# MakeList.py
 #
 #
 #
@@ -12,6 +12,7 @@ import math
 import os
 import fnmatch
 import re
+
 def buildLists():
 
     rtsList = []    # RTS files
@@ -26,7 +27,7 @@ def buildLists():
     loader.ensureFolder("./PiCam/Plots/MRTS") and # maybe RTS
     loader.ensureFolder("./PiCam/Plots/ERTS")): # Erratic RTS
         print ("DEBUG: We are good to go!")
-        for each in os.listdir('./PiCam/Plots'):
+        for each in [name for name in os.listdir('./PiCam/Plots') if os.path.isdir(os.path.join('./PiCam/Plots', name))]:
             if each == "RTS":
                 rtsList = os.listdir('./PiCam/Plots/RTS')
             elif each == 'NRTS':
