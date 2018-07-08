@@ -501,8 +501,8 @@ def DSfnHandler (inrtsPath=None,innrtsPath=None,inmrtsPath=None,inertsPath=None,
     testingSizeTest  = 30
     testingSizeTrain = 100
 
-
-    pixel = loader.load()
+    print("DEBUG: Loading large dataset")
+    pixel = loader.load(True)        # Change to true to load new dataset
     (dataMax, supRow, supCol) = pixel.shape
 
     # RTS testing and training

@@ -76,7 +76,7 @@ def runModel(name=''):
 
     DropPercent =0.5                    # Dropout rate is 50%
     AxisCount = 1
-    BatchSize = 16
+    BatchSize = 1024                     # 16 -> 128 double the utilization 
     Epochs    = 25
 
     score = []
@@ -153,7 +153,7 @@ def runModel(name=''):
     settingsData = settingsFile.read()
     settingsFile.close()
     if  (settingsData.find('{}Saved='.format(name))<0):
-        settingsData+='{}Saved=['.format(name)+out+']'
+        settingsData+='{}Saved=['.format(name)+out+']\n'
     elif (settingsData.find('{}Saved='.format(name))>=0):
         posbValue = settingsData.find("{}Saved=".format(name))
         poseValue = settingsData[posbValue:].find('\n')

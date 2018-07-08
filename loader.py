@@ -25,11 +25,15 @@ def ensureFolder(file_path):
 def load(type=False):
     print ("Loading dataset, please wait...")
     if type != True:
-        mat = h5py.File('A5_pipe1_32C.mat') # testing dataset
+        mat = h5py.File('A5_p1_32C.mat') # testing dataset
+        print ("Converting matlab dataset into numpy")
+        matpixel = mat['p1']
     else:
         mat = h5py.File('A5_stack_32C.mat') # Full dataset
-    print ("Converting matlab dataset into numpy")
-    matpixel = mat["p1"]
+        print("Dataset is huge, caching on disk")
+
+        print ("Converting matlab dataset into numpy")
+        matpixel = mat["pixel"]
     pixel = np.array(matpixel)
     print("Done loading and coverting dataset")
     return (pixel)

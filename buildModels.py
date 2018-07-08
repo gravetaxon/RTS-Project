@@ -21,8 +21,8 @@ import loader
 import makeLists
 import makeDataSets
 import Modeler3 as m3
-#import voter
-import makeOutput
+#import voter        #The following imports were migrated to their own script to separate the output from the modeling systems. 
+#import makeOutput
 
 listStatus = makeLists.buildLists()
 if listStatus:
@@ -33,4 +33,4 @@ if listStatus:
     m3.runModel('MRTS') # <- Modeling the possible signal type vs non signals
     m3.runModel('ERTS') # <- Erratic model
     m3.runModel('NRTS') # <- Control model
-    # Since all of the models have been run and saved in the settings let's load up the models in a voting framework 
+    # Since all of the models have been run and saved in the settings let's load up the models in a voting framework
