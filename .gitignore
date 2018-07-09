@@ -115,3 +115,4 @@ Scripts/
 .mypy_cache/
 .DS_Store
 pip-selfcheck.json
+A5_stack_32c.npy
