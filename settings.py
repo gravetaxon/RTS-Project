@@ -1,6 +1,6 @@
 SigmaStep = 1.5
 DecisionStep =0.51
-NumberRoutines=5
+NumberRoutines=25
 RTSKernelSizes=[5,3,103,2]
 RTSHiddenLayers=2
 RTSFilterSize=[8,8,8,8]
@@ -41,14 +41,22 @@ RTSHiddenLayers=2
 NRTSHiddenLayers=2
 MRTSHiddenLayers=3
 ERTSHiddenLayers=2
-RTSSaved=[0,1,2,3,4]
+RTSSaved=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24]
 
-MRTSSaved=[0,2,3,4]
+MRTSSaved=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,17,18,19,20,21,22,23,24]
 
-ERTSSaved=[0,1,2,3,4]
+ERTSSaved=[0,1,2,3,5,6,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24]
 
-NRTSSaved=[0,1,2,3,4]
+NRTSSaved=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24]
 
+RTSHiddenLayers=2
+NRTSHiddenLayers=2
+MRTSHiddenLayers=3
+ERTSHiddenLayers=2
+RTSHiddenLayers=2
+NRTSHiddenLayers=2
+MRTSHiddenLayers=3
+ERTSHiddenLayers=2
 RTSHiddenLayers=2
 NRTSHiddenLayers=2
 MRTSHiddenLayers=3
