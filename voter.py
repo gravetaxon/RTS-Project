@@ -61,8 +61,24 @@ def runVotes():
     # next for each row and col ask the "voters" to vote on the respective model type
     # Since each vote is between 0 and 1, use expected value formula to determine the category
     #
-    dataShap = settings.dataShape
-    votesArray = np.array()
+    dataShape = settings.dataShape
+    votesArray = np.array(())
+    # Load models
+    modelRTS = openModel('RTS')
+    modelMRTS = openModel('MRTS')
+    modelERTS = openModel('ERTS')
+    pixel = loader.load(True)
+    for i in range(0,dataShape[1]):
+        for j in range(0,dataShape[2]):
+            pix = pixel[0:dataShape[0],i,j]
+            ppix = pix[None,:,None]
+            # Have RTS Vote
+            rtsVote = askVoter('RTS',modelRTS,ppix)
+            # Have MRTS Vote
+            mrtsVote = askVoter('MRTS',modelMRTS,ppix)
+            # Have ERTS Vote
+            ertsVote = askVoter('ERTS',modelERTS,ppix)
+            # Take expected value
 
 def makeOutput(voterDB):
     # each of the votes are to be compiled into an matrix with the cat as the data point
