@@ -72,3 +72,50 @@ def smallest_power(x,m):
         return m
 def mean(x):
     return float(sum(numbers)) / max(len(numbers), 1)
+
+def setSetting(filename,settingsTag ,settingsData):
+    # filename -> where to write setting
+    # settingsTag -> what to look for
+    # settingsData -> what to write (explicitly)
+    fileSettings = open(str(filename),'r')
+    fileData = fileSettings.read()
+    fileSettings.close()
+    if (fileData.find(settingsTag) < 0):
+        fileData += settingsTag
+        fileData += settingsData
+        if settingsData[-1]!= '\n':
+            fileData += '\n'
+    elif(fileData.find(settingsTag) >= 0 ):
+        beginValue = fileData.find(settingsTag)
+        offset = fileData[beginValue:].find('\n')
+        if settingsData[-1] != '\n':
+            settingsData +='\n'
+        fileData = fileData[:beginValue] + settingsTag + settingsData + fileData[(beginValue+offset):]
+    fileSettings = open(str(filename),'w')
+    numBytes = fileSettings.write(fileData)
+    fileSettings.close()
+    if numBytes >0:
+        return True
+    else:
+        return False
+
+def getSetting(filename, settingsTag):
+    fileSettings = open(str(filename),'r')
+    fileData = fileSettings.read()
+    fileSettings.close()
+
+    if(fileData.find(settingsTag)>=0):
+        beginValue = fileData.find(settingsTag)
+        offset = fileData[beginValue:].find('\n')
+        settingsData = fileData[beginValue:(beginValue+offset)]
+        return settingsData
+    else:
+        settingsData = ''
+        return None
+def move(source,dest):
+    sFile = open(source,'r')
+    dFile = open(dest,'w')
+    data=sFile.read()
+    dFile.write(data)
+    sFile.close()
+    dFile.close()

@@ -13,6 +13,8 @@ from sklearn.preprocessing import scale
 from timeit import default_timer as timer
 from scipy import stats
 import math
+from loader import getSetting
+from loader import setSetting
 
 timeStart = timer()
 
@@ -39,32 +41,12 @@ def runModel(name=''):
     #Y_test = np.expand_dims(y_test, axis=2) # reshape (569, 30) to (569, 30, 1)
 
     # Grab the settings from the settings.py file
-    if name =='RTS':
-        NumberHLayers=settings.RTSHiddenLayers
-        FilterSize=settings.RTSFilterSize
-        KernelSize=settings.RTSKernelSizes
-        inloss=settings.RTSLoss
-    elif name =='MRTS':
-        NumberHLayers=settings.MRTSHiddenLayers
-        FilterSize=settings.MRTSFilterSize
-        KernelSize=settings.MRTSKernelSizes
-        inloss=settings.MRTSLoss
-    elif name =='ERTS':
-        NumberHLayers=settings.ERTSHiddenLayers
-        FilterSize=settings.ERTSFilterSize
-        KernelSize=settings.ERTSKernelSizes
-        inloss=settings.ERTSLoss
-    elif name =='NRTS':
-        NumberHLayers=settings.NRTSHiddenLayers
-        FilterSize=settings.NRTSFilterSize
-        KernelSize=settings.NRTSKernelSizes
-        inloss=settings.NRTSLoss
-    else:
-        print ("DEBUG: ERROR expecting named model, loading default modeling systems. Please be sure that this is expected behavior")
-        NumberHLayers=settings.HiddenLayers
-        FilterSize=settings.FilterSize
-        KernelSize=settings.KernelSizes
-        inloss=settings.Loss
+
+    NumberHLayers=getSetting('./settings.txt','{}HiddenLayers='.format(name))
+    FilterSize=getSettings('./settings.txt', '{}FilterSize='.format(name))
+    KernelSize=getSettings('./settings.txt','{}KernelSizes='.format(name))
+    inloss=getSetting('./settings.txt', 'Loss=')
+
     #NumberHLayers = 4             # Number of hidden layers (excluding input and output layers
     #FilterSize=[62,62,62,62,62,62]      # Filter size for each of the layers
     #KernelSize=[11,7,5,5,11,3]          # The kernel size for each hidden layer plus
@@ -94,7 +76,10 @@ def runModel(name=''):
     accuracy=[]
 
     #DEBUG: NumberRoutines was 50
-    NumberRoutines = settings.NumberRoutines
+
+
+    #NumberRoutines = settings.NumberRoutines
+    NumberRoutines = getSetting('./settings.txt','NumberRoutines=')
     for each in range(NumberRoutines):
         print (each)
         model = Sequential()
@@ -157,20 +142,8 @@ def runModel(name=''):
         out +=str(each)+','
     out = out[:-1]
 
-
-    settingsFile = open('./settings.py','r')
-    settingsData = settingsFile.read()
-    settingsFile.close()
-    if  (settingsData.find('{}Saved='.format(name))<0):
-        settingsData+='{}Saved=['.format(name)+out+']\n'
-    elif (settingsData.find('{}Saved='.format(name))>=0):
-        posbValue = settingsData.find("{}Saved=".format(name))
-        poseValue = settingsData[posbValue:].find('\n')
-        settingsData = settingsData[:posbValue]+'{}Saved=['.format(name)+str(out) +']\n'+settingsData[(posbValue+poseValue):]
-
-    settingsFile = open('./settings.py','w')
-    settingsFile.write(settingsData)
-    settingsFile.close()
+    setSetting('./settings.txt','{}Saved='.format(name),out)
+    
     timeEnd = timer()
     print("Total time elapsed: {}".format(timeEnd-timeStart))
     if len(saved)>0:

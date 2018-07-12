@@ -13,7 +13,7 @@ import loader
 import settings
 import sys
 import random
-
+from loader import getSetting
 ## Signal definitions
 nrtsSig = 0 # Signal is not a rts frame
 rtsSig  = 3 # Signal is a rts frame
@@ -29,19 +29,10 @@ if os.name == 'posix':
 def openModel(name):
     RTSRes = open("./PiCam/model_Out_{}.txt".format(str(name)),"w")
     if type(name) == str:
-        if name == 'RTS':
-            SavedModels =settings.RTSSaved
-        elif name == 'MRTS':
-            SavedModels =settings.MRTSSaved
-        elif name == 'ERTS':
-            SavedModels =settings.ERTSSaved
-        elif name == 'NRTS':
-            SavedModels =settings.NRTSSaved
-        else:
-            # default behavior
-            SavedModels = settings.Saved
+        SavedModels = getSetting('./settings.txt','{}Saved='.format(name))
     NumModels = len(SavedModels)
-    DataShape = settings.dataShape
+    DataShape = getSetting('./settings.txt','dataShape=')
+    decisionStep = getSettings('./settings.txt','DecisionStep=')
     # For testing purposes reducing col and rows by a handicap
     TestPercent = 1
     loopData = (int(DataShape[0]),int(DataShape[1]*TestPercent),int(DataShape[2]*TestPercent))
@@ -72,7 +63,7 @@ def openModel(name):
             for voter in random.sample(models,voterCount):
                 mp = model.predict(ppix) # how does this work with multiple categories?
                 print(mp)
-                if (mp[0] <settings.DecisionStep):
+                if (mp[0] <decisionStep):
                     # model voted yes
                     votes.append(int(1))
                 else:

@@ -1,5 +1,8 @@
 #!/usr/local/bin/python3
 
+
+##### This is a pre-run filter
+
 import settings
 import matplotlib
 matplotlib.use('Agg')

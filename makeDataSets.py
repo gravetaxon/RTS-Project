@@ -18,6 +18,8 @@ from pathlib import Path
 import random
 import math
 import re
+from loader import getSetting
+from loader import setSetting
 
 delta = loader.Delta
 maxSig = 5
@@ -232,26 +234,25 @@ def makeTestingData (args, pixel, minSize, sigType, list=None):
                         inputList = random.sample(listTemp, sampleSize)
                         print("DEBUG: list generated from directory listing(test)")
                         # Output list to file
-
-                            if type(sigType) == str:
-                                sigName = sigType
-                            elif type(sigType) == int:
-                                if sigType == 0:
-                                    sigName = 'NRTS'
-                                elif sigType ==1:
-                                    sigName = 'RTS'
-                                elif sigType ==2:
-                                    sigName = 'MRTS'
-                                elif sigType ==3:
-                                    sigName = 'ERTS'
-                                elif sigType ==4:
-                                    sigName = 'resv1'
-                                elif sigType ==5:
-                                    sigName = 'resv2'
-                                else:
-                                    sigName=''
+                        if type(sigType) == str:
+                            sigName = sigType
+                        elif type(sigType) == int:
+                            if sigType == 0:
+                                sigName = 'NRTS'
+                            elif sigType ==1:
+                                sigName = 'RTS'
+                            elif sigType ==2:
+                                sigName = 'MRTS'
+                            elif sigType ==3:
+                                sigName = 'ERTS'
+                            elif sigType ==4:
+                                sigName = 'resv1'
+                            elif sigType ==5:
+                                sigName = 'resv2'
                             else:
-                                sigName = ''
+                                sigName=''
+                        else:
+                            sigName = ''
                         listFile = open('./PiCam/{}test_list.txt'.format(sigName),'w')
                         for each in inputList:
                             listFile.write((each+"\n").replace('.png','').replace('_', ' '))
@@ -339,58 +340,12 @@ def dataFactors (arrayLen, dataMax,  supRow, supCol, name=None):
         KernelSizes+=']'
         print("DEBUG: Kernel Size: "+KernelSizes)
         print("DEBUG: Filter Size: "+str(FilterSize_out))
-        settingsFile = open('./settings.py','r')
-        settingsData = settingsFile.read()
-        print("Current settings data:\n{}".format(settingsData))
-        settingsFile.close()
-
-        if (settingsData.find('{}KernelSizes='.format(name))<0):
-            settingsData+="{}KernelSizes=".format(name)+KernelSizes+'\n'
-        elif (settingsData.find('{}KernelSizes='.format(name))>=0):
-            posbValue=settingsData.find('{}KernelSizes='.format(name)) # What position does the string start
-            poseValue=settingsData[posbValue:].find('\n')        # and where does it end? On the first newline
-            settingsData=settingsData[:posbValue]+"{}KernelSizes=".format(name)+KernelSizes+'\n'+settingsData[(posbValue+poseValue):]
-
-        if (settingsData.find('{}HiddenLayers=')<0):
-            settingsData+="{}HiddenLayers=".format(name)+str(HiddenLayers_out)+'\n'
-        elif (settingsData.find('{}HiddenLayers='.format(name))>=0):
-            posbValue = settingsData.find('{}HiddenLayers='.format(name))
-            poseValue = settingsData[posbValue:].find('\n')
-            settingsData = settingsData[:posbValue]+"{}HiddenLayers=".format(name)+str(HiddenLayers_out)+'\n'+settingsData[(posbValue+poseValue):]
-
-        if (settingsData.find('{}FilterSize='.format(name))<0):
-            out = (str(FilterSize_out)+',')*(len(factors))
-            out = '['+out[:-1]+']'
-            settingsData+="{}FilterSize=".format(name)+out+'\n'
-        elif (settingsData.find('{}FilterSize='.format(name))>=0):
-            out = (str(FilterSize_out)+',')*(len(factors))
-            out = '['+out[:-1]+']'
-            posbValue = settingsData.find('{}FilterSize='.format(name))
-            poseValue = settingsData[posbValue:].find('\n')
-
-            settingsData=settingsData[:posbValue]+'{}FilterSize='.format(name)+out+'\n'+settingsData[(posbValue+poseValue):]
-        if (settingsData.find('{}Loss='.format(name))<0):
-            settingsData +="{}Loss='binary_crossentropy'\n".format(name)
-        elif (settingsData.find('{}Loss='.format(name))>=0):
-            posbValue = settingsData.find('{}Loss='.format(name))
-            poseValue = settingsData[posbValue:].find('\n')
-            out="{}Loss=".format(name)+"'binary_crossentropy'\n"
-            settingsData= settingsData[:posbValue]+out+settingsData[(posbValue+poseValue):]
-
-        if (settingsData.find('dataShape=')<0):
-            settingsData +="dataShape=({},{},{})".format(dataMax, supRow, supCol)+'\n'
-        elif (settingsData.find('dataShape=')>=0):
-            posbValue = settingsData.find('dataShape=')
-            poseValue = settingsData[posbValue:].find('\n')
-            out = "dataShape=({},{},{})".format(dataMax, supRow, supCol)+'\n'
-            settingsData = settingsData[:posbValue]+out+settingsData[(posbValue+poseValue):]
-        settingsFile = open('./settings.py','w')
-        settingsData= settingsData.replace('\n\n','\n').replace('\n \n','\n')
-        print ("Data to be written:\n{}".format(settingsData))
-        bytesWritten = settingsFile.write(settingsData)
-        settingsFile.close()
-        if (len(settingsData)==bytesWritten):
-            status = True
+        ksStatus = setSetting('./settings.txt','{}KernelSizes='.format(str(name)), KernelSizes)
+        hlStatus = setSetting('./settings.txt','{}HiddenLayers='.format(str(name)),str(HiddenLayers_out)+'\n')
+        fsStatus = setSetting('./settings.txt','{}FilterSize='.format(str(name)), (str(FilterSize_out)+',')*(len(factors)))
+        lStatus  = setSetting('./settings.txt','Loss=', 'binary_crossentropy')
+        dsStatus = setSetting('./settings.txt','dataShape=', '({},{},{})\n'.format(dataMax, supRow, supCol))
+        status = ksStatus & hlStatus & fsStatus & lStatus & dsStatus
         return status
     else:
         print("DEBUG: we had a failure to communicate...")
@@ -525,8 +480,8 @@ def DSfnHandler (inrtsPath=None,innrtsPath=None,inmrtsPath=None,inertsPath=None,
     testingSizeTest  = 30
     testingSizeTrain = 100
 
-    print("DEBUG: Loading large dataset")
-    pixel = loader.load(True)        # Change to true to load new dataset
+    print("DEBUG: Loading small dataset for testing and training data")
+    pixel = loader.load(False)        # Change to true to load new dataset
     (dataMax, supRow, supCol) = pixel.shape
 
     # RTS testing and training

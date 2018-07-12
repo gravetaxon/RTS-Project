@@ -44,3 +44,5 @@ if listStatus:
     #m3.runModel('NRTS') # <- Control model
     # Since all of the models have been run and saved in the settings let's load up the models in a voting framework
     print("DEBUG: Run buildModels")
+    # copy setings.txt to setting.property
+    loader.copy('./settings.txt', './settings.py')

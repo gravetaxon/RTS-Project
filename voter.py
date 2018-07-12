@@ -16,6 +16,8 @@ import loader
 import settings
 import sys
 import random
+from loader import getSetting
+from loader import setSetting
 
 ## Signal definitions
 nrtsSig = 0 # Signal is not a rts frame
@@ -28,21 +30,11 @@ resv2   = 5 # Reserved for future use.
 
 def openModel(name):
     if type(name) == str:
-        if name == 'RTS':
-            SavedModels =settings.RTSSaved
-        elif name == 'MRTS':
-            SavedModels =settings.MRTSSaved
-        elif name == 'ERTS':
-            SavedModels =settings.ERTSSaved
-        elif name == 'NRTS':
-            SavedModels =settings.NRTSSaved
-        else:
-            # default behavior
-            SavedModels = settings.Saved
+        SavedModels = getSetting('./settings.txt','{}Saved='.format(name))
     # Saved Models has the model numbers that are to be loaded
     NumModel = len(SavedModels)
-    DataShape = settings.dataShape
-    TestPercent = 0.01 # set this to the percentage of the data you want to use
+    DataShape = getSetting('./settings.txt','dataShape=')
+    TestPercent = 1 # set this to the percentage of the data you want to use
     loopData = (int(DataShape[0]),int(DataShape[1]*TestPercent),int(DataShape[2]*TestPercent))
     ModelsUsed =str(name)+":"
     for each in SavedModels:
@@ -83,7 +75,7 @@ def runVotes():
     # next for each row and col ask the "voters" to vote on the respective model type
     # Since each vote is between 0 and 1, use expected value formula to determine the category
     #
-    dataShape = settings.dataShape
+    dataShape = getSetting('./settings.txt','dataShape=')
     # Load models
     (modelRTS,numRts)    = openModel('RTS')
     (modelMRTS,numMrts)  = openModel('MRTS')
@@ -120,7 +112,7 @@ def runVotes():
 def makeOutput(voterDB=None):
     # each of the votes are to be compiled into an matrix with the cat as the data point
     # Store it into a textfile or numpy file at voterDB
-    dataShape = settings.dataShape
+    dataShape = getSetting('./settings.txt','dataShape=')
     outarry = runVotes()
     if type(voterDB)==None:
         # Runs and print the array

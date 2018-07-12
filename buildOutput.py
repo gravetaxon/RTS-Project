@@ -6,4 +6,5 @@
   vdbPath = Path(vdb).expanduser()
   print(type(vdbPath))
   print(vdbPath)
+  loader.move('./settings.txt', './settings.py')
   makeOutput(vdbPath)
