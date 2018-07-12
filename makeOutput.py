@@ -62,7 +62,7 @@ def openModel(name):
     voterCount = min(3,len(models)) # either the size of the array or the number of appeallete judges reviewing a case
 
 
-    pixel = loader.load() # Change to True to load big data
+    pixel = loader.load(True) # Change to True to load big data
     for i in range(1,loopData[1]):
         print("status ",(i/loopData[1])*100,"%" )
         for j in range(1,loopData[2]):

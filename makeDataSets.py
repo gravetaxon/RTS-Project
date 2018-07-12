@@ -232,10 +232,9 @@ def makeTestingData (args, pixel, minSize, sigType, list=None):
                         inputList = random.sample(listTemp, sampleSize)
                         print("DEBUG: list generated from directory listing(test)")
                         # Output list to file
-
-                            if type(sigType) == str:
+                        if type(sigType) == str:
                                 sigName = sigType
-                            elif type(sigType) == int:
+                        elif type(sigType) == int:
                                 if sigType == 0:
                                     sigName = 'NRTS'
                                 elif sigType ==1:
@@ -250,7 +249,7 @@ def makeTestingData (args, pixel, minSize, sigType, list=None):
                                     sigName = 'resv2'
                                 else:
                                     sigName=''
-                            else:
+                        else:
                                 sigName = ''
                         listFile = open('./PiCam/{}test_list.txt'.format(sigName),'w')
                         for each in inputList:
@@ -424,7 +423,7 @@ def DScommandlineHandler ():
     testingSizeTrain = 200
 
 
-    pixel = loader.load()
+    pixel = loader.load(True)
     (dataMax, supRow, supCol) = pixel.shape
 
     # RTS testing and training

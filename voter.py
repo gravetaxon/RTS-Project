@@ -89,13 +89,13 @@ def runVotes():
     (modelMRTS,numMrts)  = openModel('MRTS')
     (modelERTS,numErts)  = openModel('ERTS')
     (modelNRTS, numNrts) = openModel('NRTS')
-    #pixel = loader.load(True) # Load the big guy
-    #maxRow = dataShape[1]
-    #maxCol = dataShape[2]
+    pixel = loader.load(True) # Load the big guy
+    maxRow = dataShape[1]
+    maxCol = dataShape[2]
     # TESTING SETUP
-    pixel = loader.load(False) # Load the small guy
-    maxRow = 10
-    maxCol = 10
+    #pixel = loader.load(False) # Load the small guy
+    #maxRow = 10
+    #maxCol = 10
     # END OF TESTING SETUP
     votesArray = np.zeros((maxRow,maxCol))
     print("DEBUG: votesArray size: {}".format(votesArray.shape))

@@ -70,7 +70,7 @@ def runModel(name=''):
     #KernelSize=[11,7,5,5,11,3]          # The kernel size for each hidden layer plus
                                   # the input and output layers as the last two data points
 
-    MinAccuracy = 0.90   # Maximize accuracy
+    MinAccuracy = 0.80   # Maximize accuracy
     MaxLosses   = 1.05   # Minimize losses
     InitialSeed = 311967 # semi-random number to have stablity in the model
 
