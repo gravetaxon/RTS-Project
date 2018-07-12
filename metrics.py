@@ -1,4 +1,3 @@
-<<<<<<< current
 """ Metrics.py
 Input:
 
@@ -28,20 +27,3 @@ if (InputFile.isfile()):
     FileIn = open(fname,'r')
     DataIn = FileIn.read()
     # load dataset
-=======
-""" Metric.py
--- Inputs --
-    directory listing of the confirmed RTS signals
-
-or
-
-    model output from the RTS modeler (or voters)
-
--- Outputs --
-
-
-
-
-
-"""
->>>>>>> before discard
