@@ -16,6 +16,15 @@ import math
 
 timeStart = timer()
 
+## Signal definitions
+nrtsSig = 0 # Signal is not a rts frame
+rtsSig  = 1 # Signal is a rts frame
+mrtsSig = 2 # Signal is a possible rts frame
+ertsSig = 3 # Signal is an erratic signal frame
+resv1   = 4 # Reserved for future use.
+resv2   = 5 # Reserved for future use.
+
+
 if os.name == 'posix':
     os.nice(10)
 
@@ -61,8 +70,8 @@ def runModel(name=''):
     #KernelSize=[11,7,5,5,11,3]          # The kernel size for each hidden layer plus
                                   # the input and output layers as the last two data points
 
-    MinAccuracy = 0.75
-    MaxLosses   = 1.05
+    MinAccuracy = 0.90   # Maximize accuracy
+    MaxLosses   = 1.05   # Minimize losses
     InitialSeed = 311967 # semi-random number to have stablity in the model
 
     # Control group - Ben's initial attempt.
@@ -76,7 +85,7 @@ def runModel(name=''):
 
     DropPercent =0.5                    # Dropout rate is 50%
     AxisCount = 1
-    BatchSize = 1024                     # 16 -> 128 double the utilization 
+    BatchSize = 1024                     # 16 -> 128 double the utilization
     Epochs    = 25
 
     score = []

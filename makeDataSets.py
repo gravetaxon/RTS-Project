@@ -17,6 +17,7 @@ import os, os.path
 from pathlib import Path
 import random
 import math
+import re
 
 delta = loader.Delta
 maxSig = 5
@@ -24,9 +25,9 @@ minSig = 0
 
 ## Signal definitions
 nrtsSig = 0 # Signal is not a rts frame
-rtsSig  = 1 # Signal is a rts frame
+rtsSig  = 3 # Signal is a rts frame
 mrtsSig = 2 # Signal is a possible rts frame
-ertsSig = 3 # Signal is an erratic signal frame
+ertsSig = 1 # Signal is an erratic signal frame
 resv1   = 4 # Reserved for future use.
 resv2   = 5 # Reserved for future use.
 
@@ -230,7 +231,31 @@ def makeTestingData (args, pixel, minSize, sigType, list=None):
                         sampleSize = math.ceil(sampleSize)
                         inputList = random.sample(listTemp, sampleSize)
                         print("DEBUG: list generated from directory listing(test)")
+                        # Output list to file
 
+                            if type(sigType) == str:
+                                sigName = sigType
+                            elif type(sigType) == int:
+                                if sigType == 0:
+                                    sigName = 'NRTS'
+                                elif sigType ==1:
+                                    sigName = 'RTS'
+                                elif sigType ==2:
+                                    sigName = 'MRTS'
+                                elif sigType ==3:
+                                    sigName = 'ERTS'
+                                elif sigType ==4:
+                                    sigName = 'resv1'
+                                elif sigType ==5:
+                                    sigName = 'resv2'
+                                else:
+                                    sigName=''
+                            else:
+                                sigName = ''
+                        listFile = open('./PiCam/{}test_list.txt'.format(sigName),'w')
+                        for each in inputList:
+                            listFile.write((each+"\n").replace('.png','').replace('_', ' '))
+                        listFile.close()
                 else:
                     print("DEBUG: list is below the minimum size (test)")
                     return (False,0,0,-2)

@@ -1,12 +1,20 @@
 # RTS-PROJECT
 
+Version 2.0
+
+Requirements:
+  * Must have python 3.0+ (up to python 3.6)
+  * Must have a data file, see loader.py for which file is needed
+  * Able to run almost all operating systems, excluding FreeBSD and ArchLinux due to issues with versioning for the CUDA libraries
+
 Usage:
-   run the program in the following method:
-   + preprocess.py   -> to create a list of possible rts signals and generate folder structure
-         + (optional) makePlots.py -> to generate all whitenoise plots
-         + (optional) makeRTSGuess.py -> to generate all rts plots from the guesses made from preprocess
-   + makeLists.py    -> to make the dataset lists for the next stage from the directory structure
-   + makeDataSets.py -> compiles the numpy datasets for training and testing along with generating
-                        the modeler's settings file
-   + Modeler3.py     -> compiles the model in a string of 50 instances and saves only the top ten models
-   + makeOutput.py   -> generates a list of plots that matches each of the categories 
+  - install the environment with pip install -r requirements.txt or pip install -r requirements-gpu.txt
+  - run python buildSets.py
+  - then run python buildModels.py
+  - then run python buildOutput.py
+  - Signal Definitions (as of build )
+
+      Signal number of 0 indicates a signal is not a rts frame
+      Signal number of 3 indicates a signal is a rts frame
+      Signal number of 2 indicates a signal is a possible rts frame
+      Signal number of 1 indicates a signal is an erratic signal frame
