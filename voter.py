@@ -42,14 +42,27 @@ def openModel(name):
 
     print("DEBUG: Loading models...")
     for each in SavedModels:
-        model_name = './PiCam/CNNlin_model{}.h5'.format(str(each))
+        model_name = './PiCam/CNNlin_model_{}_{}.h5'.format(str(name),str(each))
         model = load_model(model_name)
         models.append(model)
     return (model, len(model))
 
-def askVoter(name, modelIn, row, col):
+def askVoter(name, modelIn, dataIn):
     # Ask a group of models from modelIn to judge on a pixel
     # name    <- Name of the model/voter
     # modelIn <- group of models to use
-    # row     <- what row to look at
-    # col     <- what col to look at
+    # dataIn  <- pixel data from runVotes loop
+    # Output  -> float number
+
+
+def runVotes():
+    # load RTS, ERTS, and MRTS models
+    # then load dataset
+    # next for each row and col ask the "voters" to vote on the respective model type
+    # Since each vote is between 0 and 1, use expected value formula to determine the category
+    #
+    dataShap = settings.dataShape
+    votesArray = np.array()
+
+def makeOutput(voterDB):
+    # each of the votes are to be compiled into an matrix with the cat as the data point

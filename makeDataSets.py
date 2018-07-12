@@ -352,13 +352,12 @@ def dataFactors (arrayLen, dataMax,  supRow, supCol, name=None):
             out="{}Loss=".format(name)+"'binary_crossentropy'\n"
             settingsData= settingsData[:posbValue]+out+settingsData[(posbValue+poseValue):]
 
-        if (settingsData.find('{}dataShape='.format(name))<0):
-            settingsData +="{}dataShape=({},{},{})".format(name,dataMax, supRow, supCol)+'\n'
-        elif (settingsData.find('{}dataShape='.format(name))>=0):
-
-            posbValue = settingsData.find('{}dataShape='.format(name))
+        if (settingsData.find('dataShape='<0):
+            settingsData +="dataShape=({},{},{})".format(dataMax, supRow, supCol)+'\n'
+        elif (settingsData.find('dataShape='>=0):
+            posbValue = settingsData.find('dataShape=')
             poseValue = settingsData[posbValue:].find('\n')
-            out = "{}dataShape=({},{},{})".format(name, dataMax, supRow, supCol)+'\n'
+            out = "dataShape=({},{},{})".format(dataMax, supRow, supCol)+'\n'
             settingsData = settingsData[:posbValue]+out+settingsData[(posbValue+poseValue):]
         settingsFile = open('./settings.py','w')
         settingsData= settingsData.replace('\n\n','\n').replace('\n \n','\n')
