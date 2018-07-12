@@ -354,7 +354,7 @@ def dataFactors (arrayLen, dataMax,  supRow, supCol, name=None):
 
         if (settingsData.find('dataShape='<0)):
             settingsData +="dataShape=({},{},{})".format(dataMax, supRow, supCol)+'\n'
-        elif (settingsData.find('dataShape='>=0):
+        elif (settingsData.find('dataShape='>=0)):
             posbValue = settingsData.find('dataShape=')
             poseValue = settingsData[posbValue:].find('\n')
             out = "dataShape=({},{},{})".format(dataMax, supRow, supCol)+'\n'
