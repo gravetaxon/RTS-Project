@@ -379,7 +379,7 @@ def DScommandlineHandler ():
     testingSizeTrain = 200
 
 
-    pixel = loader.load()
+    pixel = loader.load(True)
     (dataMax, supRow, supCol) = pixel.shape
 
     # RTS testing and training
