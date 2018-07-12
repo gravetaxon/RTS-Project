@@ -26,3 +26,7 @@ RTSHiddenLayers=2
 NRTSHiddenLayers=2
 MRTSHiddenLayers=3
 ERTSHiddenLayers=2
+RTSHiddenLayers=2
+NRTSHiddenLayers=2
+MRTSHiddenLayers=3
+ERTSHiddenLayers=2

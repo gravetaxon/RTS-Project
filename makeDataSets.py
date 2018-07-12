@@ -338,25 +338,23 @@ def dataFactors (arrayLen, dataMax,  supRow, supCol, name=None):
         KernelSizes+=']'
         print("DEBUG: Kernel Size: "+KernelSizes)
         print("DEBUG: Filter Size: "+str(FilterSize_out))
+        # Writing out settings for model type name
         settingsFile = open('./settings.py','r')
         settingsData = settingsFile.read()
         print("Current settings data:\n{}".format(settingsData))
         settingsFile.close()
-
         if (settingsData.find('{}KernelSizes='.format(name))<0):
             settingsData+="{}KernelSizes=".format(name)+KernelSizes+'\n'
-        elif (settingsData.find('{}KernelSizes='.format(name))>=0):
+        elif (settingsData.find('{}KernelSizes='.format(name)) >= 0):
             posbValue=settingsData.find('{}KernelSizes='.format(name)) # What position does the string start
             poseValue=settingsData[posbValue:].find('\n')        # and where does it end? On the first newline
             settingsData=settingsData[:posbValue]+"{}KernelSizes=".format(name)+KernelSizes+'\n'+settingsData[(posbValue+poseValue):]
-
         if (settingsData.find('{}HiddenLayers=')<0):
             settingsData+="{}HiddenLayers=".format(name)+str(HiddenLayers_out)+'\n'
-        elif (settingsData.find('{}HiddenLayers='.format(name))>=0):
+        elif (settingsData.find('{}HiddenLayers='.format(name)) >= 0):
             posbValue = settingsData.find('{}HiddenLayers='.format(name))
             poseValue = settingsData[posbValue:].find('\n')
             settingsData = settingsData[:posbValue]+"{}HiddenLayers=".format(name)+str(HiddenLayers_out)+'\n'+settingsData[(posbValue+poseValue):]
-
         if (settingsData.find('{}FilterSize='.format(name))<0):
             out = (str(FilterSize_out)+',')*(len(factors))
             out = '['+out[:-1]+']'
@@ -366,7 +364,6 @@ def dataFactors (arrayLen, dataMax,  supRow, supCol, name=None):
             out = '['+out[:-1]+']'
             posbValue = settingsData.find('{}FilterSize='.format(name))
             poseValue = settingsData[posbValue:].find('\n')
-
             settingsData=settingsData[:posbValue]+'{}FilterSize='.format(name)+out+'\n'+settingsData[(posbValue+poseValue):]
         if (settingsData.find('{}Loss='.format(name))<0):
             settingsData +="{}Loss='binary_crossentropy'\n".format(name)
@@ -375,7 +372,6 @@ def dataFactors (arrayLen, dataMax,  supRow, supCol, name=None):
             poseValue = settingsData[posbValue:].find('\n')
             out="{}Loss=".format(name)+"'binary_crossentropy'\n"
             settingsData= settingsData[:posbValue]+out+settingsData[(posbValue+poseValue):]
-
         if (settingsData.find('dataShape=')<0):
             settingsData +="dataShape=({},{},{})".format(dataMax, supRow, supCol)+'\n'
         elif (settingsData.find('dataShape=')>=0):
