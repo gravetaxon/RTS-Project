@@ -297,7 +297,7 @@ def makeTestingData (args, pixel, minSize, sigType, list=None):
             print("DEBUG: Too small of dataset, less than {} for all of the data types (testing bin)".format(testingTrainSize))
 #ENDOF makeTestingData
 
-def dataFactors (arrayLen, dataMax,  supRow, supCol, name=None):
+def dataFactors (arrayLen, dataMax,  supRow, supCol, name):
     # Here we do the prime magic on the training dataset!
     # take the length of the training dataset and use prime factorization on it
     if (arrayLen > 0):
@@ -337,15 +337,65 @@ def dataFactors (arrayLen, dataMax,  supRow, supCol, name=None):
         for each in factors:
             KernelSizes+=str(each)+','
         KernelSizes=KernelSizes[:-1]
-        KernelSizes+=']'
+        KernelSizes+=']\n'
+        FilterSizes = (str(FilterSize_out)+',')*len(factors)
+        FilterSizes = FilterSizes[:-1]+'\n'
         print("DEBUG: Kernel Size: "+KernelSizes)
         print("DEBUG: Filter Size: "+str(FilterSize_out))
-        ksStatus = setSetting('./settings.txt','{}KernelSizes='.format(str(name)), KernelSizes)
-        hlStatus = setSetting('./settings.txt','{}HiddenLayers='.format(str(name)),str(HiddenLayers_out)+'\n')
-        fsStatus = setSetting('./settings.txt','{}FilterSize='.format(str(name)), (str(FilterSize_out)+',')*(len(factors)))
-        lStatus  = setSetting('./settings.txt','Loss=', 'binary_crossentropy')
-        dsStatus = setSetting('./settings.txt','dataShape=', '({},{},{})\n'.format(dataMax, supRow, supCol))
-        status = ksStatus & hlStatus & fsStatus & lStatus & dsStatus
+        print("DEBUG: Writing for {}".format(name))
+        settingsFile = open('./settings.txt','r')
+        settingsData = settingsFile.read()
+        settingsFile.close()
+        if (settingsData.find('{}KernelSizes='.format(name))<0):
+            settingsData+="{}KernelSizes=".format(name)+KernelSizes+'\n'
+        elif (settingsData.find('{}KernelSizes='.format(name))>=0):
+            posbValue=settingsData.find('{}KernelSizes='.format(name)) # What position does the string start
+            poseValue=settingsData[posbValue:].find('\n')        # and where does it end? On the first newline
+            settingsData=settingsData[:posbValue]+"{}KernelSizes=".format(name)+KernelSizes+'\n'+settingsData[(posbValue+poseValue):]
+        if (settingsData.find('{}HiddenLayers='.format(name))<0):
+            settingsData+="{}HiddenLayers=".format(name)+str(HiddenLayers_out)+'\n'
+        elif (settingsData.find('{}HiddenLayers='.format(name))>=0):
+            posbValue = settingsData.find('{}HiddenLayers='.format(name))
+            poseValue = settingsData[posbValue:].find('\n')
+            settingsData = settingsData[:posbValue]+"{}HiddenLayers=".format(name)+str(HiddenLayers_out)+'\n'+settingsData[(posbValue+poseValue):]
+        if (settingsData.find('{}FilterSize='.format(name))<0):
+            out = (str(FilterSize_out)+',')*(len(factors))
+            out = '['+out[:-1]+']'
+            settingsData+="{}FilterSize=".format(name)+out+'\n'
+        elif (settingsData.find('{}FilterSize='.format(name))>=0):
+            out = (str(FilterSize_out)+',')*(len(factors))
+            out = '['+out[:-1]+']'
+            posbValue = settingsData.find('{}FilterSize='.format(name))
+            poseValue = settingsData[posbValue:].find('\n')
+            settingsData=settingsData[:posbValue]+'{}FilterSize='.format(name)+out+'\n'+settingsData[(posbValue+poseValue):]
+        if (settingsData.find('Loss=')<0):
+            settingsData +='Loss='
+            settingsData +="'binary_crossentropy'\n"
+        elif (settingsData.find('Loss=')>=0):
+            posbValue = settingsData.find('Loss=')
+            poseValue = settingsData[posbValue:].find('\n')
+            out='Loss='
+            out+="'binary_crossentropy'\n"
+            settingsData= settingsData[:posbValue]+out+settingsData[(posbValue+poseValue):]
+        if (settingsData.find('dataShape=')<0):
+            settingsData +="dataShape=({},{},{})".format(dataMax, supRow, supCol)+'\n'
+        elif (settingsData.find('dataShape=')>=0):
+            posbValue = settingsData.find('dataShape=')
+            poseValue = settingsData[posbValue:].find('\n')
+            out = "dataShape=({},{},{})".format(dataMax, supRow, supCol)+'\n'
+            settingsData = settingsData[:posbValue]+out+settingsData[(posbValue+poseValue):]
+        settingsFile = open('./settings.txt','w')
+        settingsData= settingsData.replace('\n\n','\n').replace('\n \n','\n')
+        print ("Data to be written:\n{}".format(settingsData))
+        bytesWritten = settingsFile.write(settingsData)
+        settingsFile.close()
+        #ksStatus = setSetting('./settings.txt','{}KernelSizes='.format(str(name)), KernelSizes)
+        #hlStatus = setSetting('./settings.txt','{}HiddenLayers='.format(str(name)),str(HiddenLayers_out)+'\n')
+        #fsStatus = setSetting('./settings.txt','{}FilterSize='.format(FilterSizes),FilterSizes)
+        #lStatus  = setSetting('./settings.txt','Loss=', "\'binary_crossentropy\'\n")
+        #dsStatus = setSetting('./settings.txt','dataShape=', '({},{},{})'.format(dataMax, supRow, supCol))
+        if (len(settingsData)==bytesWritten):
+            status = True
         return status
     else:
         print("DEBUG: we had a failure to communicate...")

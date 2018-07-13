@@ -83,14 +83,11 @@ def setSetting(filename,settingsTag ,settingsData):
     if (fileData.find(settingsTag) < 0):
         fileData += settingsTag
         fileData += settingsData
-        if settingsData[-1]!= '\n':
-            fileData += '\n'
     elif(fileData.find(settingsTag) >= 0 ):
         beginValue = fileData.find(settingsTag)
         offset = fileData[beginValue:].find('\n')
-        if settingsData[-1] != '\n':
-            settingsData +='\n'
         fileData = fileData[:beginValue] + settingsTag + settingsData + fileData[(beginValue+offset):]
+    print(settingsTag+settingsData)
     fileSettings = open(str(filename),'w')
     numBytes = fileSettings.write(fileData)
     fileSettings.close()
@@ -107,11 +104,12 @@ def getSetting(filename, settingsTag):
     if(fileData.find(settingsTag)>=0):
         beginValue = fileData.find(settingsTag)
         offset = fileData[beginValue:].find('\n')
-        settingsData = fileData[beginValue:(beginValue+offset)]
+        settingsData = fileData[(beginValue+len(settingsTag)):(beginValue+offset)]
         return settingsData
     else:
         settingsData = ''
         return None
+
 def move(source,dest):
     sFile = open(source,'r')
     dFile = open(dest,'w')
