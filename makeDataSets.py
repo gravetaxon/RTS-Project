@@ -237,17 +237,17 @@ def makeTestingData (args, pixel, minSize, sigType, list=None):
                         if type(sigType) == str:
                             sigName = sigType
                         elif type(sigType) == int:
-                            if sigType == 0:
+                            if sigType == nrtsSig:
                                 sigName = 'NRTS'
-                            elif sigType ==1:
+                            elif sigType == rtsSig:
                                 sigName = 'RTS'
-                            elif sigType ==2:
+                            elif sigType == mrtsSig:
                                 sigName = 'MRTS'
-                            elif sigType ==3:
+                            elif sigType == ertsSig:
                                 sigName = 'ERTS'
-                            elif sigType ==4:
+                            elif sigType == resv1:
                                 sigName = 'resv1'
-                            elif sigType ==5:
+                            elif sigType == resv2:
                                 sigName = 'resv2'
                             else:
                                 sigName=''
@@ -276,7 +276,7 @@ def makeTestingData (args, pixel, minSize, sigType, list=None):
                     (row,col)=(int(row),int(col)) # convert the text strings into numbers
                     if (row<=supRow) and (col<=supCol):
                         x_test[td_count] = (pixel[0:dataMax,row,col])
-                        y_test[td_count] = sigType
+                        y_test[td_count] = int(sigType)
                         td_count +=1
                     else:
                         print("DEBUG: Error data out of range (test)")

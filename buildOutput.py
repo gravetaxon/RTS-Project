@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 # buildOutput.py
 import loader 
 from voter import makeOutput

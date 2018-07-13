@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import Modeler3 as m3
 import os
 import loader

@@ -1,3 +1,5 @@
+#/usr/bin/env python3
+
 """Run everything in the following order:
 
 + Run preprocess.py to ident possible signals
