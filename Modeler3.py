@@ -42,10 +42,19 @@ def runModel(name=''):
 
     # Grab the settings from the settings.py file
 
-    NumberHLayers=getSetting('./settings.txt','{}HiddenLayers='.format(name))
-    FilterSize=getSettings('./settings.txt', '{}FilterSize='.format(name))
-    KernelSize=getSettings('./settings.txt','{}KernelSizes='.format(name))
-    inloss=getSetting('./settings.txt', 'Loss=')
+    NumberHLayers=int(getSetting('./settings.txt','{}HiddenLayers='.format(name)))
+    tmpFilterSize=getSetting('./settings.txt', '{}FilterSize='.format(name)).strip('[]').split(',')
+    tmpKernelSize=getSetting('./settings.txt','{}KernelSizes='.format(name)).strip('[]').split(',')
+    inloss=getSetting('./settings.txt', 'Loss=').strip("\'")
+    #NumberRoutines = settings.NumberRoutines
+    NumberRoutines = int(getSetting('./settings.txt','NumberRoutines='))
+    # each of the above settings that are arrays, integers, etc... need to be converted from a string back into there format
+    FilterSize =[]
+    KernelSize =[]
+    for each in tmpFilterSize:
+       FilterSize.append(int(each))
+    for each in tmpKernelSize:
+       KernelSize.append(int(each))
 
     #NumberHLayers = 4             # Number of hidden layers (excluding input and output layers
     #FilterSize=[62,62,62,62,62,62]      # Filter size for each of the layers
@@ -67,7 +76,7 @@ def runModel(name=''):
 
     DropPercent =0.5                    # Dropout rate is 50%
     AxisCount = 1
-    BatchSize = 1024                     # 16 -> 128 double the utilization
+    BatchSize = 128       # 16 -> 128 double the utilization
     Epochs    = 25
 
     score = []
@@ -78,8 +87,6 @@ def runModel(name=''):
     #DEBUG: NumberRoutines was 50
 
 
-    #NumberRoutines = settings.NumberRoutines
-    NumberRoutines = getSetting('./settings.txt','NumberRoutines=')
     for each in range(NumberRoutines):
         print (each)
         model = Sequential()
@@ -140,7 +147,7 @@ def runModel(name=''):
     out = ''
     for each in saved:
         out +=str(each)+','
-    out = out[:-1]
+    out = out[:-1]+'\n'
 
     setSetting('./settings.txt','{}Saved='.format(name),out)
     

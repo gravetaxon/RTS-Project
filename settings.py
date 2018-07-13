@@ -13,5 +13,10 @@ MRTSKernelSizes=[7,5,3,41,2]
 MRTSHiddenLayers=3
 MRTSFilterSize=[64,64,64,64,64]
 ERTSKernelSizes=[5,3,367,2]
+
 ERTSHiddenLayers=2
 ERTSFilterSize=[8,8,8,8]
+RTSSaved=
+MRTSSaved=0,1,2,3,4
+ERTSSaved=0,1,2,3,4
+NRTSSaved=0,1,2,3,4

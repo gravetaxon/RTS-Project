@@ -1,5 +1,6 @@
 import Modeler3 as m3
 import os
+import loader
 from pathlib import Path
 
 # buildModels
