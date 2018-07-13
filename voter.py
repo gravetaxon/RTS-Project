@@ -81,7 +81,7 @@ def runVotes():
     (modelMRTS,numMrts)  = openModel('MRTS')
     (modelERTS,numErts)  = openModel('ERTS')
     (modelNRTS, numNrts) = openModel('NRTS')
-    pixel = loader.load(True) # Load the big guy
+    pixel = loader.load(False) # Load the big guy
     maxRow = dataShape[1]
     maxCol = dataShape[2]
     # TESTING SETUP
