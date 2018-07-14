@@ -251,7 +251,7 @@ def makeTestingData (args, pixel, minSize, sigType, list=None):
                     # Is the length of listTemp greater than 30?
                     if len(listTemp)>100:
                         # List is long enough to sample
-                        sampleSize = 0.30 * len(listTemp)
+                        sampleSize = max(75,0.30 * len(listTemp))
                         sampleSize = math.ceil(sampleSize)
                         inputList = random.sample(listTemp, sampleSize)
                         print("DEBUG: list generated from directory listing(test)")
