@@ -2,6 +2,7 @@
 
 # buildOutput.py
 import loader 
+from pathlib import Path
 from voter import makeOutput
 
 print ("Where would you like to put the voter database?")

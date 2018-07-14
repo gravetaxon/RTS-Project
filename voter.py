@@ -30,10 +30,14 @@ resv2   = 5 # Reserved for future use.
 
 def openModel(name):
     if type(name) == str:
-        SavedModels = getSetting('./settings.txt','{}Saved='.format(name))
+        SavedModels = getSetting('./settings.txt','{}Saved='.format(name)).split(',')
     # Saved Models has the model numbers that are to be loaded
     NumModel = len(SavedModels)
     DataShape = getSetting('./settings.txt','dataShape=')
+    tmpDataShape = DataShape.strip("\'()").split(',')
+    DataShape = []
+    for each in tmpDataShape:
+        DataShape.append(int(each))
     TestPercent = 1 # set this to the percentage of the data you want to use
     loopData = (int(DataShape[0]),int(DataShape[1]*TestPercent),int(DataShape[2]*TestPercent))
     ModelsUsed =str(name)+":"
@@ -75,15 +79,19 @@ def runVotes():
     # next for each row and col ask the "voters" to vote on the respective model type
     # Since each vote is between 0 and 1, use expected value formula to determine the category
     #
-    dataShape = getSetting('./settings.txt','dataShape=')
+    DataShape = getSetting('./settings.txt','dataShape=')
+    tmpDataShape = DataShape.strip("\'()").split(',')
+    DataShape = []
+    for each in tmpDataShape:
+        DataShape.append(int(each))
     # Load models
     (modelRTS,numRts)    = openModel('RTS')
     (modelMRTS,numMrts)  = openModel('MRTS')
     (modelERTS,numErts)  = openModel('ERTS')
     (modelNRTS, numNrts) = openModel('NRTS')
     pixel = loader.load(False) # Load the big guy
-    maxRow = dataShape[1]
-    maxCol = dataShape[2]
+    maxRow = DataShape[1]
+    maxCol = DataShape[2]
     # TESTING SETUP
     #pixel = loader.load(False) # Load the small guy
     #maxRow = 10
@@ -93,7 +101,7 @@ def runVotes():
     print("DEBUG: votesArray size: {}".format(votesArray.shape))
     for i in range(0,maxRow):
         for j in range(0,maxCol):
-            pix = pixel[0:dataShape[0],i,j]
+            pix = pixel[0:DataShape[0],i,j]
             ppix = pix[None,:,None]
             # Have RTS Vote
             rtsVote = askVoter('RTS',modelRTS,numRts,ppix)
@@ -112,11 +120,17 @@ def runVotes():
 def makeOutput(voterDB=None):
     # each of the votes are to be compiled into an matrix with the cat as the data point
     # Store it into a textfile or numpy file at voterDB
-    dataShape = getSetting('./settings.txt','dataShape=')
+    DataShape = getSetting('./settings.txt','dataShape=')
+    tmpDataShape = DataShape.strip("\'()").split(',')
+    DataShape = []
+    for each in tmpDataShape:
+        DataShape.append(int(each))
+
     outarry = runVotes()
     if type(voterDB)==None:
         # Runs and print the array
         print(outarry)
+    elif type(voterDB)=
     else:
         # check if the file exists and write to it
         print(outarry)
