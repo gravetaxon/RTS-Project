@@ -16,6 +16,8 @@ import loader
 import settings
 import sys
 import random
+import pathlib
+from pathlib import Path
 from loader import getSetting
 from loader import setSetting
 
@@ -89,13 +91,13 @@ def runVotes():
     (modelMRTS,numMrts)  = openModel('MRTS')
     (modelERTS,numErts)  = openModel('ERTS')
     (modelNRTS, numNrts) = openModel('NRTS')
-    pixel = loader.load(False) # Load the big guy
-    maxRow = DataShape[1]
-    maxCol = DataShape[2]
+#    pixel = loader.load(False) # Load the big guy
+ #   maxRow = DataShape[1]
+  #  maxCol = DataShape[2]
     # TESTING SETUP
-    #pixel = loader.load(False) # Load the small guy
-    #maxRow = 10
-    #maxCol = 10
+    pixel = loader.load(False) # Load the small guy
+    maxRow = 5
+    maxCol = 5
     # END OF TESTING SETUP
     votesArray = np.zeros((maxRow,maxCol))
     print("DEBUG: votesArray size: {}".format(votesArray.shape))
@@ -130,7 +132,9 @@ def makeOutput(voterDB=None):
     if type(voterDB)==None:
         # Runs and print the array
         print(outarry)
-    elif type(voterDB)=
+    elif type(voterDB)==pathlib.PosixPath or type(voterDB)==pathlib.WindowsPath:
+        # We have been given a path, might be good?
+        np.savetxt(voterDB,outarry,delimiter=',',fmt='%1.2f')	# Matlab compatible fmt	
     else:
         # check if the file exists and write to it
         print(outarry)
