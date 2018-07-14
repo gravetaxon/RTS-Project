@@ -1,6 +1,7 @@
+runMode = False
 SigmaStep=1.5
 DecisionStep=0.51
-NumberRoutines=5
+NumberRoutines=15
 RTSKernelSizes=[5,3,103,2]
 RTSHiddenLayers=2
 RTSFilterSize=[8,8,8,8]

@@ -91,13 +91,13 @@ def runVotes():
     (modelMRTS,numMrts)  = openModel('MRTS')
     (modelERTS,numErts)  = openModel('ERTS')
     (modelNRTS, numNrts) = openModel('NRTS')
-#    pixel = loader.load(False) # Load the big guy
- #   maxRow = DataShape[1]
-  #  maxCol = DataShape[2]
+    pixel = loader.load(settings.runMode) # Load the big guy
+    maxRow = DataShape[1]
+    maxCol = DataShape[2]
     # TESTING SETUP
-    pixel = loader.load(False) # Load the small guy
-    maxRow = 5
-    maxCol = 5
+    # pixel = loader.load(False) # Load the small guy
+    # maxRow = 5
+    # maxCol = 5
     # END OF TESTING SETUP
     votesArray = np.zeros((maxRow,maxCol))
     print("DEBUG: votesArray size: {}".format(votesArray.shape))
@@ -134,7 +134,11 @@ def makeOutput(voterDB=None):
         print(outarry)
     elif type(voterDB)==pathlib.PosixPath or type(voterDB)==pathlib.WindowsPath:
         # We have been given a path, might be good?
-        np.savetxt(voterDB,outarry,delimiter=',',fmt='%1.2f')	# Matlab compatible fmt	
+        #np.savetxt(voterDB,outarry,delimiter=',',fmt='%1.2f')	# Matlab compatible fmt	
+        scipy.io.savemat(voterDB,mdict={'votes':outarry})
+        print("File outputted")
+        # Pythonic loading of matlab file:
+        # scipy.io.loadmat(filepath)['name of array']
     else:
         # check if the file exists and write to it
         print(outarry)
