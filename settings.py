@@ -16,3 +16,7 @@ ERTSKernelSizes=[5,3,367,2]
 
 ERTSHiddenLayers=2
 ERTSFilterSize=[8,8,8,8]
+RTSSaved=0,1,2,3,4
+MRTSSaved=0,1,2,3,4
+ERTSSaved=0,1,2,3,4
+NRTSSaved=0,1,2,3,4

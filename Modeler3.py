@@ -18,14 +18,6 @@ from loader import setSetting
 
 timeStart = timer()
 
-## Signal definitions
-nrtsSig = 0 # Signal is not a rts frame
-rtsSig  = 1 # Signal is a rts frame
-mrtsSig = 2 # Signal is a possible rts frame
-ertsSig = 3 # Signal is an erratic signal frame
-resv1   = 4 # Reserved for future use.
-resv2   = 5 # Reserved for future use.
-
 
 if os.name == 'posix':
     os.nice(10)
@@ -76,8 +68,8 @@ def runModel(name=''):
 
     DropPercent =0.5                    # Dropout rate is 50%
     AxisCount = 1
-    BatchSize = 128       # 16 -> 128 double the utilization
-    Epochs    = 25
+    BatchSize = 256 # 16 -> 128 double the utilization
+    Epochs    = 5
 
     score = []
     saved = []
