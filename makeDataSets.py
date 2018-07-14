@@ -115,11 +115,33 @@ def makeTrainingData(args, pixel, minSize, sigType):
         deadList = 0
         listLen = len(inputList)
         print("DEBUG: SigType: {} DataLen: {}".format(sigType,listLen))
+
         if listLen >= minSize:
             # Start analysis
             x_train = np.zeros((listLen,dataMax))
             y_train = np.zeros(listLen) # output is a "binary value" i.e it either is or is not the signal
                                     # if it is the signal then the model pushes out a one else a zero
+            if sigType == nrtsSig:
+                sigName = 'NRTS'
+                testRes = 0
+            elif sigType == rtsSig:
+                sigName = 'RTS'
+                testRes = 1
+            elif sigType == mrtsSig:
+                sigName = 'MRTS'
+                testRes = 1
+            elif sigType == ertsSig:
+                sigName = 'ERTS'
+                testRes = 1
+            elif sigType == resv1:
+                sigName = 'resv1'
+                testRes = 1
+            elif sigType == resv2:
+                sigName = 'resv2'
+                testRes = 1
+            else:
+                sigName=''
+                testRes = 0
             tr_count =0 # index of where we are in the training set
             for each in inputList:
                 if (each != ''):
@@ -127,7 +149,7 @@ def makeTrainingData(args, pixel, minSize, sigType):
                     (row,col)=(int(row),int(col)) # convert the text strings into numbers
                     if (row <= supRow) and (col <= supCol) and (row >= 0) and (col >= 0):
                         x_train[tr_count]=(pixel[0:dataMax,row,col])
-                        y_train[tr_count]= int(sigType)
+                        y_train[tr_count]= int(testRes)
                         tr_count +=1
                 else:
                     deadList+=1
@@ -239,18 +261,25 @@ def makeTestingData (args, pixel, minSize, sigType, list=None):
                         elif type(sigType) == int:
                             if sigType == nrtsSig:
                                 sigName = 'NRTS'
+                                testRes = 0
                             elif sigType == rtsSig:
                                 sigName = 'RTS'
+                                testRes = 1
                             elif sigType == mrtsSig:
                                 sigName = 'MRTS'
+                                testRes = 1
                             elif sigType == ertsSig:
                                 sigName = 'ERTS'
+                                testRes = 1
                             elif sigType == resv1:
                                 sigName = 'resv1'
+                                testRes = 1
                             elif sigType == resv2:
                                 sigName = 'resv2'
+                                testRes = 1
                             else:
                                 sigName=''
+                                testRes = 0
                         else:
                             sigName = ''
                         listFile = open('./PiCam/{}test_list.txt'.format(sigName),'w')
@@ -276,7 +305,7 @@ def makeTestingData (args, pixel, minSize, sigType, list=None):
                     (row,col)=(int(row),int(col)) # convert the text strings into numbers
                     if (row<=supRow) and (col<=supCol):
                         x_test[td_count] = (pixel[0:dataMax,row,col])
-                        y_test[td_count] = int(sigType)
+                        y_test[td_count] = int(testRes) # can only be either 0 or 1
                         td_count +=1
                     else:
                         print("DEBUG: Error data out of range (test)")
@@ -600,7 +629,7 @@ def DSfnHandler (inrtsPath=None,innrtsPath=None,inmrtsPath=None,inertsPath=None,
     # catchall for all possible errors
     status = statusFactor & statusTest & statusTraining & countStatus
 
-    if (status == True and args.oldMethod):
+    if (status == True and args.oldMethod == True):
         print("DEBUG: Saving new numpy datasets")
         np.save('./PiCam/x_train.npy',x_train)
         np.save('./PiCam/x_test.npy',x_test)
