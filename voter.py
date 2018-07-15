@@ -20,6 +20,7 @@ import pathlib
 from pathlib import Path
 from loader import getSetting
 from loader import setSetting
+from scipy.io import savemat
 
 ## Signal definitions
 nrtsSig = 0 # Signal is not a rts frame
@@ -29,7 +30,7 @@ ertsSig = 1 # Signal is an erratic signal frame
 resv1   = 4 # Reserved for future use.
 resv2   = 5 # Reserved for future use.
 # from 0.01 to 1 scales the dataset for debugging purposes
-DebugPercent=1 # Release model
+DebugPercent=0.01 # Release model
 ReleaseModel= True # Which model to load?
 def openModel(name):
     if type(name) == str:
@@ -137,7 +138,7 @@ def makeOutput(voterDB=None):
     elif type(voterDB)==pathlib.PosixPath or type(voterDB)==pathlib.WindowsPath:
         # We have been given a path, might be good?
         #np.savetxt(voterDB,outarry,delimiter=',',fmt='%1.2f')	# Matlab compatible fmt	
-        scipy.io.savemat(voterDB,mdict={'votes':outarry})
+        savemat(voterDB,mdict={'votes':outarry})
         print("File outputted")
         # Pythonic loading of matlab file:
         # scipy.io.loadmat(filepath)['name of array']
