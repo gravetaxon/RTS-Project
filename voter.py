@@ -29,8 +29,8 @@ ertsSig = 1 # Signal is an erratic signal frame
 resv1   = 4 # Reserved for future use.
 resv2   = 5 # Reserved for future use.
 # from 0.01 to 1 scales the dataset for debugging purposes
-DebugPercent=0.1
-
+DebugPercent=1 # Release model
+ReleaseModel= True # Which model to load?
 def openModel(name):
     if type(name) == str:
         SavedModels = getSetting('./settings.txt','{}Saved='.format(name)).split(',')
@@ -92,7 +92,7 @@ def runVotes():
     (modelMRTS,numMrts)  = openModel('MRTS')
     (modelERTS,numErts)  = openModel('ERTS')
     (modelNRTS, numNrts) = openModel('NRTS')
-    pixel = loader.load(settings.runMode) # Load the big guy
+    pixel = loader.load(ReleaseModel) # Load the big guy
     maxRow = int(round(DataShape[1]*DebugPercent))
     maxCol = int(round(DataShape[2]*DebugPercent))
     # TESTING SETUP
