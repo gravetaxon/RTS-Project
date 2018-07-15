@@ -146,7 +146,7 @@ def runModel(name=''):
     timeEnd = timer()
     print("Total time elapsed: {}".format(timeEnd-timeStart))
     if len(saved)>0:
-        print("Run makeOutput.py next to generate output list")
+        print("Run completed for {}'s model".format(name))
         return True
     else:
         return False
