@@ -32,6 +32,7 @@ resv2   = 5 # Reserved for future use.
 # from 0.01 to 1 scales the dataset for debugging purposes
 DebugPercent=0.01 # Release has DebugPercent = 1.00 (100% of data)
 ReleaseModel= True # Which model to load? True -> big data, False -> Small dataset
+
 def openModel(name):
     if type(name) == str:
         SavedModels = getSetting('./settings.txt','{}Saved='.format(name)).split(',')
@@ -42,7 +43,7 @@ def openModel(name):
     DataShape = []
     for each in tmpDataShape:
         DataShape.append(int(each))
-    TestPercent = 1 # set this to the percentage of the data you want to use
+    TestPercent = 1# set this to the percentage of the data you want to use from runVotes
     loopData = (int(DataShape[0]),int(DataShape[1]*TestPercent),int(DataShape[2]*TestPercent))
     ModelsUsed =str(name)+":"
     for each in SavedModels:
