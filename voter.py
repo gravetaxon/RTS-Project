@@ -30,7 +30,7 @@ ertsSig = 3 # Signal is an erratic signal frame
 resv1   = 4 # Reserved for future use.
 resv2   = 5 # Reserved for future use.
 # from 0.01 to 1 scales the dataset for debugging purposes
-DebugPercent=0.01 # Release has DebugPercent = 1.00 (100% of data)
+DebugPercent=0.50 # Release has DebugPercent = 1.00 (100% of data)
 ReleaseModel= True # Which model to load? True -> big data, False -> Small dataset
 
 def openModel(name):
