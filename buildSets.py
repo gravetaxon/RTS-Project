@@ -14,11 +14,8 @@ only the top 5 models will be saved for possible usage.
 + run makeOutput.py with the argument of which model number you wish to use for output
 + makeOutput will output a csv file to show which column, row, and type each of the pixels are according to the model.
 
-
-
-
-
 """
+
 import loader
 import makeLists
 import makeDataSets

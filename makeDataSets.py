@@ -148,7 +148,7 @@ def makeTrainingData(args, pixel, minSize, sigType):
                     (row,col)=each.split() # we have row col pair, split and test
                     (row,col)=(int(row),int(col)) # convert the text strings into numbers
                     if (row <= supRow) and (col <= supCol) and (row >= 0) and (col >= 0):
-                        x_train[tr_count]=(pixel[0:dataMax,row,col])
+                        x_train[tr_count]=(pixel[0:dataMax,row,col]) # 
                         y_train[tr_count]= int(testRes)
                         tr_count +=1
                 else:

@@ -38,13 +38,6 @@ def openModel(name):
         SavedModels = getSetting('./settings.txt','{}Saved='.format(name)).split(',')
     # Saved Models has the model numbers that are to be loaded
     NumModel = len(SavedModels)
-    DataShape = getSetting('./settings.txt','dataShape=')
-    tmpDataShape = DataShape.strip("\'()").split(',')
-    DataShape = []
-    for each in tmpDataShape:
-        DataShape.append(int(each))
-    TestPercent = 1# set this to the percentage of the data you want to use from runVotes
-    loopData = (int(DataShape[0]),int(DataShape[1]*TestPercent),int(DataShape[2]*TestPercent))
     ModelsUsed =str(name)+":"
     for each in SavedModels:
         ModelsUsed+=str(each)+','
@@ -57,7 +50,9 @@ def openModel(name):
         print("Loading model {}".format(each))
         model = load_model(model_name)
         models.append(model)
-    return (models, len(models))
+    modelLoad = min(5,NumModel) # Load no more than five of the models
+    modelOut = random.sample(models,modelLoad)
+    return (modelOut, len(modelOut))
 
 
 def askVoter(name, modelIn, numModel, dataIn):
@@ -69,8 +64,7 @@ def askVoter(name, modelIn, numModel, dataIn):
     # Output   -> float number between 0 and 1
     vote = 0
     votes =[]
-    voterCount = min(5,numModel) # Max voters is 2 per model
-    for voter in random.sample(modelIn,voterCount):
+    for voter in modelIn:
         mp = voter.predict(dataIn)
         votes.append(mp[0])
     #print("DEBUG: {} Votes: {}".format(name,votes))
@@ -84,30 +78,21 @@ def runVotes():
     # next for each row and col ask the "voters" to vote on the respective model type
     # Since each vote is between 0 and 1, use expected value formula to determine the category
     #
-    DataShape = getSetting('./settings.txt','dataShape=')
-    tmpDataShape = DataShape.strip("\'()").split(',')
-    DataShape = []
-    for each in tmpDataShape:
-        DataShape.append(int(each))
     # Load models
     (modelRTS,numRts)    = openModel('RTS')
     (modelMRTS,numMrts)  = openModel('MRTS')
     (modelERTS,numErts)  = openModel('ERTS')
     (modelNRTS, numNrts) = openModel('NRTS')
     pixel = loader.load(ReleaseModel) # Load the big guy
-    maxRow = int(round(DataShape[1]*DebugPercent))
-    maxCol = int(round(DataShape[2]*DebugPercent))
-    # TESTING SETUP
-    # pixel = loader.load(False) # Load the small guy
-    # maxRow = 5
-    # maxCol = 5
-    # END OF TESTING SETUP
-    votesArray = np.zeros((maxRow,maxCol))
+    DataShape = pixel.shape
+    maxRow = int(round(DataShape[1]*DebugPercent)) #1944
+    maxCol = int(round(DataShape[2]*DebugPercent)) #2592
+    votesArray = np.zeros((maxRow,maxCol)) # 1944 x 2592
     print("DEBUG: votesArray size: {}".format(votesArray.shape))
     for i in range(0,maxRow):
         print("Percent complete: {}".format(float(i*100.0/maxRow)))
         for j in range(0,maxCol):
-            pix = pixel[0:DataShape[0],i,j]
+            pix = pixel[0:DataShape[0],i,j]  # HOTFIX: Rotated the data set back to proper position had row and columns swapped
             ppix = pix[None,:,None]
             # Have RTS Vote
             rtsVote = askVoter('RTS',modelRTS,numRts,ppix)
@@ -122,15 +107,14 @@ def runVotes():
             #print(round(nrtsVote ,2), round(rtsVote,2),round(mrtsVote,2),round(ertsVote,2))
             votesArray[i,j]=round(nrtsVote * nrtsSig,2)+ round(rtsVote*rtsSig,2)+round(mrtsVote*mrtsSig,2)+round(ertsVote*ertsSig,2)
     return votesArray
+# Threading requires an even split of the dataset so find the intersection of the
+# shape of the data's main parameters that we want to split across (row & column)
+# pixel.split(N) should split the data into N even blocks
+
 
 def makeOutput(voterDB=None):
     # each of the votes are to be compiled into an matrix with the cat as the data point
     # Store it into a textfile or numpy file at voterDB
-    DataShape = getSetting('./settings.txt','dataShape=')
-    tmpDataShape = DataShape.strip("\'()").split(',')
-    DataShape = []
-    for each in tmpDataShape:
-        DataShape.append(int(each))
 
     outarry = runVotes()
     if type(voterDB)==None:
