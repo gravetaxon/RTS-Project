@@ -84,7 +84,7 @@ def voterThread (id, data,RTSModel,MRTSModel,ERTSModel,NRTSModel,Output):
     outArray = np.zeros((maxRow,maxCol))
     for i in range(0,maxRow):
         if i % 243 == 0:
-            print("DEBUG: Thread-{}  Percent Complete: {}".format(id,float(i/maxRow*100.0)))
+            print("Thread-{}\n  Percent Complete: {:2.2f}".format(id,float(i/maxRow)))
         for j in range(0,maxCol):
             pix = data[0:dataShape[0],i,j]
             ppix = pix[None,:,None] # Rotate into a column vector
@@ -129,13 +129,17 @@ def runVotes(threaded=False):
                 # Have NRTS Vote
                 nrtsVote = askVoter('NRTS',modelNRTS,numNrts,ppix)
                 # Take expected value
-                #print ("nrts, rts,mrts,erts")
+                #print("nrts, rts,mrts,erts")
                 #print(round(nrtsVote ,2), round(rtsVote,2),round(mrtsVote,2),round(ertsVote,2))
                 votesArray[i,j]=round(nrtsVote * nrtsSig,2)+ round(rtsVote*rtsSig,2)+round(mrtsVote*mrtsSig,2)+round(ertsVote*ertsSig,2)
         return votesArray
     else:
-        # Split block into 4 for the 4 threads
-        blocks = np.split(pixel,4,axis=1)
+        DataShape = pixel.shape
+        maxRow = int(round(DataShape[1]*DebugPercent)) #1944
+        maxCol = int(round(DataShape[2]*DebugPercent)) #2592
+        # Scaling with DebugPercent only works from (0,0) to the scaled endpoints, need to use the split function from numpy to 
+        # split the data block into 4x4 for the 16 threads
+        blocks = np.split(pixel[0:DataShape[0],0:maxRow,0:maxCol],4,axis=1)
         for i in range(len(blocks)):
             blocks[i] = np.split(blocks[i],4,axis=2)
         threadLock =  threading.Lock()
@@ -153,7 +157,7 @@ def runVotes(threaded=False):
         for id in range(len(threads)):
             threads[id].join()
         tmpArray = blockThreads
-        print(tmpArray)
+        #print(tmpArray)
         tmpMatrix=[]
         while tmpArray!=[]:
             tmpMatrix.append(tmpArray[:4])
@@ -163,7 +167,7 @@ def runVotes(threaded=False):
         for i in range(len(tmpMatrix)):
             rows.append(np.concatenate(tmpMatrix[i],axis=1))
         votesArray =np.concatenate(rows[:],axis=0)
-        return votesArray
+        return votesArray # Was missing in the previous iteration
 
 # Threading requires an even split of the dataset so find the intersection of the
 # shape of the data's main parameters that we want to split across (row & column)
@@ -186,5 +190,6 @@ def makeOutput(voterDB=None,Threaded=False):
         # Pythonic loading of matlab file:
         # scipy.io.loadmat(filepath)['name of array']
     else:
-        # check if the file exists and write to it
+        # No file to be written, just dump to the terminal
+        print("Voters on dataset:\n")
         print(outarry)
