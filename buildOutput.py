@@ -15,6 +15,12 @@ if response == 'Y':
   print(type(vdbPath))
   print(vdbPath)
   loader.move('./settings.txt', './settings.py')
-  makeOutput(vdbPath)
+  print("Do you wish to run the multithreaded version?")
+  res = input("Yes/No: ")
+  res = str(res).upper()[0] # Only need the first ascii char for a response
+  if res =='Y':
+    makeOutput(vdbPath,True)
+  else:
+    makeOutput(vdbPath,False)
 else:
-  makeOutput()
+  makeOutput(None,False)

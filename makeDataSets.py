@@ -123,7 +123,7 @@ def makeTrainingData(args, pixel, minSize, sigType):
                                     # if it is the signal then the model pushes out a one else a zero
             if sigType == nrtsSig:
                 sigName = 'NRTS'
-                testRes = 0
+                testRes = 1
             elif sigType == rtsSig:
                 sigName = 'RTS'
                 testRes = 1
@@ -261,7 +261,7 @@ def makeTestingData (args, pixel, minSize, sigType, list=None):
                         elif type(sigType) == int:
                             if sigType == nrtsSig:
                                 sigName = 'NRTS'
-                                testRes = 0
+                                testRes = 1
                             elif sigType == rtsSig:
                                 sigName = 'RTS'
                                 testRes = 1
