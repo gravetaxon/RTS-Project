@@ -31,7 +31,7 @@ ertsSig = 3 # Signal is an erratic signal frame
 resv1   = 4 # Reserved for future use.
 resv2   = 5 # Reserved for future use.
 # from 0.01 to 1 scales the dataset for debugging purposes
-DebugPercent=1.0 # Release has DebugPercent = 1.00 (100% of data)
+DebugPercent=1.00 # Release has DebugPercent = 1.00 (100% of data)
 ReleaseModel= True # Which model to load? True -> big data, False -> Small dataset
 
 def openModel(name):
@@ -39,12 +39,14 @@ def openModel(name):
         SavedModels = getSetting('./settings.txt','{}Saved='.format(name)).split(',')
     # Saved Models has the model numbers that are to be loaded
     NumModel = len(SavedModels)
-    ModelsUsed =str(name)+":"
+    ModelsUsed ='{}:'.format(name)
     for each in SavedModels:
         ModelsUsed+=str(each)+','
     ModelsUsed=ModelsUsed[:-1]
-    print ("DEBUG: Using the following models: {}".format(ModelsUsed))
+    print ("DEBUG: Using the following models: {}".format(str(name)+':'+ModelsUsed))
     models = []
+    modelLoad = min(5,NumModel)
+    SavedModels = random.sample(SavedModels,modelLoad)
     print("DEBUG: Loading models...")
     for each in SavedModels:
         model_name = './PiCam/CNNlin_model_{}_{}.h5'.format(str(name),str(each))
@@ -55,7 +57,7 @@ def openModel(name):
         model.predict(np.expand_dims(dummyset,axis=2))
         models.append(model)
     modelLoad = min(5,NumModel) # Load no more than five of the models
-    modelOut = random.sample(models,modelLoad)
+    modelOut = models
     return (modelOut, len(modelOut))
 
 
@@ -83,8 +85,8 @@ def voterThread (id, data,RTSModel,MRTSModel,ERTSModel,NRTSModel,Output):
     maxCol =int(dataShape[2])
     outArray = np.zeros((maxRow,maxCol))
     for i in range(0,maxRow):
-        if i % 243 == 0:
-            print("Thread-{}\n  Percent Complete: {:2.2f}".format(id,float(i/maxRow)))
+        #if i % 243 == 0:
+        print("Thread-{} Percent Complete: {}".format(id,float(i/maxRow)))
         for j in range(0,maxCol):
             pix = data[0:dataShape[0],i,j]
             ppix = pix[None,:,None] # Rotate into a column vector
@@ -109,6 +111,7 @@ def runVotes(threaded=False):
     (modelNRTS, numNrts) = openModel('NRTS')
     pixel = loader.load(ReleaseModel) # Load the big guy
     if threaded == False:
+        print("Running unithread revsion")
         DataShape = pixel.shape
         maxRow = int(round(DataShape[1]*DebugPercent)) #1944
         maxCol = int(round(DataShape[2]*DebugPercent)) #2592
@@ -134,6 +137,7 @@ def runVotes(threaded=False):
                 votesArray[i,j]=round(nrtsVote * nrtsSig,2)+ round(rtsVote*rtsSig,2)+round(mrtsVote*mrtsSig,2)+round(ertsVote*ertsSig,2)
         return votesArray
     else:
+        print("Running multithreaded model")
         DataShape = pixel.shape
         maxRow = int(round(DataShape[1]*DebugPercent)) #1944
         maxCol = int(round(DataShape[2]*DebugPercent)) #2592
