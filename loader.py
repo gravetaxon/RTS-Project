@@ -3,7 +3,7 @@ import h5py
 import numpy as np
 import os
 import errno
-
+import psutil
 Delta = 5
 
 ## Signal definitions
@@ -34,12 +34,16 @@ def load(type=False):
     print ("Loading dataset, please wait...")
     if type != True:
         mat = h5py.File('A5_pipe1_32C.mat') # testing dataset
+        sizeofMat=int(round(mat["p1"].size/2.**30))
+        if(int(psutil.virtual_memory()[4]/2.**30)>sizeofMat):
+            print("Dataset is huge, caching on disk")
         print ("Converting matlab dataset into numpy")
         matpixel = mat['p1']
     else:
         mat = h5py.File('A5_stack_32C.mat') # Full dataset
-        print("Dataset is huge, caching on disk")
-
+        sizeofMat=int(round(mat["pixel"].size/2.**30))
+        if(int(psutil.virtual_memory()[4]/2.**30)>sizeofMat):
+            print("Dataset is huge, caching on disk")
         print ("Converting matlab dataset into numpy")
         matpixel = mat["pixel"]
     print ("DEBUG: {}".format(list(mat)))
