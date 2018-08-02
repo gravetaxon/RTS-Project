@@ -108,7 +108,7 @@ def runVotes(threaded=False):
     (modelRTS,numRts)    = openModel('RTS')
     (modelMRTS,numMrts)  = openModel('MRTS')
     (modelERTS,numErts)  = openModel('ERTS')
-    (modelNRTS, numNrts) = openModel('NRTS')
+    #(modelNRTS, numNrts) = openModel('NRTS')
     pixel = loader.load(ReleaseModel) # Load the big guy
     if threaded == False:
         print("Running unithread revsion")
@@ -130,7 +130,8 @@ def runVotes(threaded=False):
                 # Have ERTS Vote
                 ertsVote = askVoter('ERTS',modelERTS,numErts,ppix)
                 # Have NRTS Vote
-                nrtsVote = askVoter('NRTS',modelNRTS,numNrts,ppix)
+                #nrtsVote = askVoter('NRTS',modelNRTS,numNrts,ppix)
+                nrtsVote =1   # Remove NRTS for final version 
                 # Take expected value
                 #print("nrts, rts,mrts,erts")
                 #print(round(nrtsVote ,2), round(rtsVote,2),round(mrtsVote,2),round(ertsVote,2))
