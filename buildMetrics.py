@@ -26,6 +26,22 @@ import numpy as np
 import glob
 from scipy import stats
 
+
+def dataGrab(input, dataLen,row, col ):
+    # input   -> input file of type numpy.Array
+    # col     -> column number of type int
+    # row     -> row number of type of row
+    # dataLen -> how many data points to pull
+    # Returns a list of values
+    out = []
+    if type (row)==int and type (col) == int and type(input)==np.ndarray and type(dataLen)==int:
+        for i in range(dataLen):
+            out.append(input[i][row][col])
+    else:
+        for i in range(int(dataLen)):
+            out.append(input[i][int(row)][int(col)])
+    return out
+
 print ("Which grid file do you wish to open?")
 fileList = glob.glob('*.mat')
 selectionList = {i: fileList[i] for i in range(len(fileList))}
@@ -52,13 +68,15 @@ else:
     exit(2)
 
 pixel = ld.load(dataFile)
+(maxData,maxRow,maxCol)=pixel.shape
 rtsValues = []
 rtsAmps = []
 mask = (votes>0.5)&(votes<1.5) # Create a mask for the signals that we want
-for i in range(len(mask)):
-    for j in range(len(mask[i])):
-        if mask[i][j] ==True:
-            data = pixel[:][i][j]
+(maxRowM,maxColM) =mask.shape
+for i in range(maxRowM):
+    for j in range(maxColM):
+        if mask[i][j] ==True and i < min(maxRow,maxRowM) and j < min(maxCol,maxColM):
+            data =pixel[0:int(maxData),int(i),int(j)]
             minData = min(data)
             maxData = max(data)
             amplitude = (minData+maxData)*0.5
@@ -77,3 +95,5 @@ modeAmp = stats.mode(np.array(rtsAmps)[:,2])[0][0]
 (histCount,histCats) =  np.histogram(np.array(rtsAmps)[:,2])
 # histCount -> how many signals per category
 # histCat -> what kind of categories are we dealing with
+print (histCount)
+print(histCats)
