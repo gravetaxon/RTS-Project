@@ -31,3 +31,6 @@ Usage:
       resv1   = 4 # Reserved for future use.
       resv2   = 5 # Reserved for future use.
       ```
+
+
+Note: Respository has been made public as of December 18 2018. Please enjoy the code responsibly!
